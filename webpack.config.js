@@ -63,6 +63,7 @@ module.exports = env => {
 			'rxjs/operators': 'rxjs/operators',
 			'react-dom': 'react-dom',
 			'react-router-dom': 'react-router-dom',
+			'@datorama/akita': '@datorama/akita',
 			'@redactie/react-router-guards': '@redactie/react-router-guards',
 			'@redactie/redactie-core': '@redactie/redactie-core',
 			'@redactie/utils': '@redactie/utils',
@@ -70,7 +71,7 @@ module.exports = env => {
 			'@redactie/translations-module': '@redactie/translations-module',
 			'@acpaas-ui/react-components': '@acpaas-ui/react-components',
 			'@acpaas-ui/react-editorial-components': '@acpaas-ui/react-editorial-components',
-			'@datorama/akita': '@datorama/akita',
+			'@redactie/form-renderer-module': '@redactie/form-renderer-module',
 		},
 		output: {
 			filename: `${kebabCase(packageJSON.name)}.umd.js`,
