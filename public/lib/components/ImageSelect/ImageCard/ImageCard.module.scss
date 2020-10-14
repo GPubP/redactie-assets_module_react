@@ -1,0 +1,74 @@
+/**
+* Image card
+* ----
+*/
+
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.c-image-card {
+	height: 100%;
+	cursor: pointer;
+
+	/**
+	 * Elements
+	 */
+
+	.c-image-card__body {
+		padding: $spacer-xs $spacer-xs $spacer-sm;
+	}
+
+	.c-image-card__preview {
+		width: 100%;
+		height: rem(120px);
+		background-position: center;
+		background-size: cover;
+		transition: opacity $animation-normal;
+	}
+
+	.c-image-card__footer {
+		display: flex;
+		justify-content: space-between;
+		padding-top: $spacer-xs;
+	}
+
+	.c-image-card__check {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: $spacer;
+		height: $spacer;
+		border-radius: 50%;
+		border: 1px solid $border-color;
+		color: $grey;
+		transition-property: border-color, background-color;
+		transition-duration: $animation-duration;
+		transition-timing-function: $animation-easing;
+	}
+
+	.c-image-card__check-icon {
+		transition: color $animation-normal;
+	}
+
+	/**
+	 * Modifiers
+	 */
+
+	&.c-image-card--selected {
+		border-color: $state-success;
+		background-color: mix($state-success, $white, 10%);
+
+		.c-image-card__check {
+			border-color: $state-success;
+			background-color: $state-success;
+			color: $white;
+		}
+	}
+
+	// States
+	&:focus,
+	&:hover {
+		.c-image-card__preview {
+			opacity: 0.8;
+		}
+	}
+}
