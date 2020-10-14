@@ -6,8 +6,8 @@
 @import '~@a-ui/core/dist/assets/styles/_quarks';
 
 .c-image-card {
-	height: 100%;
 	cursor: pointer;
+	transition: background-color $animation-normal;
 
 	/**
 	 * Elements
@@ -19,7 +19,7 @@
 
 	.c-image-card__preview {
 		width: 100%;
-		height: rem(120px);
+		height: rem(240px);
 		background-position: center;
 		background-size: cover;
 		transition: opacity $animation-normal;
@@ -65,10 +65,11 @@
 	}
 
 	// States
-	&:focus,
 	&:hover {
-		.c-image-card__preview {
-			opacity: 0.8;
+		&:not(.c-image-card--selected) {
+			.c-image-card__preview {
+				opacity: 0.8;
+			}
 		}
 	}
 }

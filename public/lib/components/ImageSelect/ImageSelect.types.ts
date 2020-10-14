@@ -5,6 +5,7 @@ export interface ImageSelectItem {
 }
 
 export interface ImageSelectProps {
+	className?: string;
 	dataKey?: string;
 	items: ImageSelectItem[];
 	selection: (ImageSelectItem | string)[];

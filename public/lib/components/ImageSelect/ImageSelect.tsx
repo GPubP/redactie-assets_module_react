@@ -1,10 +1,15 @@
+import classnames from 'classnames';
 import { equals } from 'ramda';
 import React, { FC } from 'react';
 
 import { ImageCard } from './ImageCard';
+import styles from './ImageSelect.module.scss';
 import { ImageSelectItem, ImageSelectProps } from './ImageSelect.types';
 
+const cx = classnames.bind(styles);
+
 const ImageSelect: FC<ImageSelectProps> = ({
+	className,
 	dataKey,
 	items = [],
 	selection = [],
@@ -19,7 +24,7 @@ const ImageSelect: FC<ImageSelectProps> = ({
 	};
 
 	return (
-		<div className="row">
+		<div className={cx(className, 'row')}>
 			{items.map((item, index) => {
 				const key = `c-image-card-${dataKey ? item[dataKey] : index}`;
 				const selected = isSelected(item);
