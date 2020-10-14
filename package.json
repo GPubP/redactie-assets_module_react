@@ -43,6 +43,7 @@
     "@babel/preset-typescript": "7.8.3",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
+    "@datorama/akita": "^4.22.1",
     "@redactie/form-renderer-module": "^0.12.2",
     "@redactie/module-webpack-plugin": "2.0.0",
     "@redactie/react-router-guards": "^1.0.2",
@@ -89,5 +90,8 @@
     "webpack-cli": "3.3.10"
   },
   "author": "Andry Charlier<andry.charlier@digipolis.be>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "query-string": "6.12.1"
+  }
 }
