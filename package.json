@@ -6,7 +6,10 @@
   "module": "dist/redactie-assets-module.umd.js",
   "types": "dist/public/index.d.ts",
   "jsnext:main": "dist/redactie-assets-module.umd.js",
-  "files": ["dist", "public"],
+  "files": [
+    "dist",
+    "public"
+  ],
   "scripts": {
     "prepublish": "npm run test && npm run build",
     "build:types": "tsc --emitDeclarationOnly",
