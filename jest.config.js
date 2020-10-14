@@ -10,4 +10,9 @@ module.exports = {
 
 	// Module file extensions for importing
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+
+	// Module names that allow to stub out resources, like images or styles with a single module.
+	moduleNameMapper: {
+		'^.+\\.(css|less|scss)$': 'identity-obj-proxy',
+	},
 };
