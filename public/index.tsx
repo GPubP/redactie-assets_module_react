@@ -1,4 +1,4 @@
-// Init module and access other modules api here
+import './main.scss';
 
 import { IMAGE_FIELD_SETTINGS_NAME } from './lib/assets.const';
 import { ImageFieldSettings } from './lib/components/Fields';

@@ -24,13 +24,35 @@ module.exports = env => {
 					include: [/public/, /node_modules\/@redactie\/translations-module/],
 				},
 				{
-					test: /\.s[ac]ss$/i,
+					test: /\.module\.s[ac]ss$/i,
 					use: [
 						'style-loader',
 						{
 							loader: 'css-loader',
 							options: {
 								modules: true,
+								importLoaders: 1,
+							},
+						},
+						{
+							loader: 'postcss-loader',
+							options: {
+								ident: 'postcss',
+								plugins: () => [postcssPresetEnv(), cssnano({ preset: 'default' })],
+							},
+						},
+						'sass-loader',
+					],
+					include: [/public/, /node_modules\/@a-ui\/core/],
+				},
+				{
+					test: /\.s[ac]ss$/i,
+					exclude: /\.module\.s[ac]ss$/i,
+					use: [
+						'style-loader',
+						{
+							loader: 'css-loader',
+							options: {
 								importLoaders: 1,
 							},
 						},

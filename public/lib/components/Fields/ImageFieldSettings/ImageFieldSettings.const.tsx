@@ -3,54 +3,20 @@ import { TranslateFunc } from '@redactie/translations-module';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React from 'react';
 
-import { CropMethods, CropTableRow } from './ImageFieldSettings.types';
+import { CROP_METHODS, CropMethods } from '../../Forms/ImageCropSettingsForm';
 
-export interface CropMethodFieldOption {
-	key: string;
-	value: string;
-	label: string;
-	guideline: string;
-}
-
-export const CROP_METHODS: CropMethodFieldOption[] = [
-	{
-		key: '1',
-		value: CropMethods.FREE,
-		label: 'Vrije crop',
-		guideline: 'De afbeelding mag vrij bijgesneden worden.',
-	},
-	{
-		key: '2',
-		value: CropMethods.EXACT,
-		label: 'Exact crop',
-		guideline:
-			'De afbeelding wordt bijgesneden aan de hand van de opgegeven hoogte en breedte.',
-	},
-	{
-		key: '3',
-		value: CropMethods.BOUNDS,
-		label: 'Begrensde crop',
-		guideline: 'De afbeelding mag vrij bijgesneden worden binnen bepaalde grenzen.',
-	},
-	{
-		key: '4',
-		value: CropMethods.RATIO,
-		label: 'Ratio crop',
-		guideline:
-			'De afbleelding wordt bijgesneden aan de hand van het opgegeven formaat (bv: 16:9)',
-	},
-];
+import { CropOption } from './ImageFieldSettings.types';
 
 export const IMAGE_CROP_COLUMNS = (t: TranslateFunc, onClick: (id: string) => void): any[] => [
 	{
 		label: t(CORE_TRANSLATIONS.TABLE_NAME),
 		value: 'name',
 		disableSorting: true,
-		component(value: string, rowData: CropTableRow) {
+		component(value: string, rowData: CropOption) {
 			const { guideline } = rowData;
 			return (
 				<>
-					<label>{value}</label>
+					<p>{value}</p>
 					{guideline && <small>{guideline}</small>}
 				</>
 			);
@@ -69,13 +35,14 @@ export const IMAGE_CROP_COLUMNS = (t: TranslateFunc, onClick: (id: string) => vo
 		label: '',
 		classList: ['u-text-right'],
 		disableSorting: true,
-		component(value: unknown, rowData: CropTableRow) {
+		component(value: unknown, rowData: CropOption) {
 			const { id } = rowData;
 
 			return (
 				<Button
 					ariaLabel="Edit"
 					icon="edit"
+					htmlType="button"
 					onClick={() => onClick(id)}
 					type="primary"
 					transparent
@@ -84,3 +51,24 @@ export const IMAGE_CROP_COLUMNS = (t: TranslateFunc, onClick: (id: string) => vo
 		},
 	},
 ];
+
+export const INITIAL_IMAGE_CROP_SETTINGS_FORM_VALUES: CropOption = {
+	id: '',
+	name: '',
+	guideline: '',
+	method: CropMethods.FREE,
+	ratioDimensions: {
+		x: 0,
+		y: 0,
+	},
+	boundsDimensions: {
+		minWidth: 0,
+		minHeight: 0,
+		maxWidth: 0,
+		maxHeight: 0,
+	},
+	exactDimensions: {
+		width: 0,
+		height: 0,
+	},
+};

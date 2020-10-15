@@ -5,6 +5,7 @@ export interface ImageFieldSettingsFormState {
 }
 
 export interface CropOption {
+	id: string;
 	name: string;
 	guideline: string;
 	method: string;
@@ -22,15 +23,4 @@ export interface CropOption {
 		width: number;
 		height: number;
 	};
-}
-
-export interface CropTableRow extends CropOption {
-	id: string;
-}
-
-export enum CropMethods {
-	FREE = 'free',
-	EXACT = 'exact',
-	BOUNDS = 'bounds',
-	RATIO = 'ratio',
 }

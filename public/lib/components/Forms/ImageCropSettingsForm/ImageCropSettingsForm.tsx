@@ -1,15 +1,16 @@
 import { Select, Textarea, TextField } from '@acpaas-ui/react-components';
+import { ErrorMessage } from '@redactie/utils';
 import { Field, Formik, FormikProps } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
+import { CropOption } from '../../Fields/ImageFieldSettings';
+
+import { CROP_METHODS, IMAGE_CROP_SETTINGS_VALIDATION_SCHEMA } from './ImageCropSettingsForm.const';
 import {
-	CROP_METHODS,
 	CropMethodFieldOption,
 	CropMethods,
-	CropOption,
-} from '../../Fields/ImageFieldSettings';
-
-import { ImageCropSettingsFormProps } from './ImageCropSettingsForm.types';
+	ImageCropSettingsFormProps,
+} from './ImageCropSettingsForm.types';
 
 const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 	initialValues,
@@ -29,26 +30,39 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 	const renderMethodOptionsFields = (method: string): ReactElement | null => {
 		if (method === CropMethods.EXACT) {
 			return (
-				<div className="row">
-					<div className="col-xs-6">
-						<Field
-							as={TextField}
-							type="number"
-							min={0}
-							id="exactDimensions.width"
-							name="exactDimensions.width"
-							label="Breedte"
-						/>
-					</div>
-					<div className="col-xs-6">
-						<Field
-							as={TextField}
-							type="number"
-							min={0}
-							id="exactDimensions.height"
-							name="exactDimensions.height"
-							label="Hoogte"
-						/>
+				<div className="row u-margin-bottom">
+					<div className="col-xs-12 col-md-8 row">
+						<div className="col-xs-5 row middle-xs flex-no-wrap">
+							<div className="col-xs-10">
+								<Field
+									as={TextField}
+									type="number"
+									min={0}
+									id="exactDimensions.width"
+									name="exactDimensions.width"
+									label="Breedte"
+								/>
+							</div>
+							<div className="col-xs-2 u-margin-top">
+								<small className="suffix-neg-margin-left">px</small>
+							</div>
+						</div>
+						<div className="col-xs-2 flex-align-self-center u-margin-top">op</div>
+						<div className="col-xs-5 row middle-xs flex-no-wrap">
+							<div className="col-xs-10">
+								<Field
+									as={TextField}
+									type="number"
+									min={0}
+									id="exactDimensions.height"
+									name="exactDimensions.height"
+									label="Hoogte"
+								/>
+							</div>
+							<div className="col-xs-2 u-margin-top">
+								<small className="suffix-neg-margin-left">px</small>
+							</div>
+						</div>
 					</div>
 				</div>
 			);
@@ -56,81 +70,127 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 
 		if (method === CropMethods.BOUNDS) {
 			return (
-				<div className="row">
-					<div className="col-xs-8 row">
-						<div className="col-xs-12 row">
-							<div className="col-xs-6">
-								<Field
-									as={TextField}
-									type="number"
-									min={0}
-									id="boundsDimensions.minWidth"
-									name="boundsDimensions.minWidth"
-									label="Minimumbreedte"
-								/>
-							</div>
-							<div className="col-xs-6">
-								<Field
-									as={TextField}
-									type="number"
-									min={0}
-									id="boundsDimensions.minHeight"
-									name="boundsDimensions.minHeight"
-									label="Minimumhoogte"
-								/>
+				<>
+					<div className="row u-margin-bottom">
+						<div className="col-xs-12 row u-margin-bottom">
+							<div className="col-xs-12 col-md-8 row">
+								<div className="col-xs-5 row middle-xs flex-no-wrap">
+									<div className="col-xs-10">
+										<Field
+											as={TextField}
+											type="number"
+											min={0}
+											id="boundsDimensions.minWidth"
+											name="boundsDimensions.minWidth"
+											label="Minimumbreedte"
+										/>
+									</div>
+									<div className="col-xs-2 u-margin-top">
+										<small className="suffix-neg-margin-left">px</small>
+									</div>
+								</div>
+								<div className="col-xs-2 flex-align-self-center u-margin-top">
+									op
+								</div>
+								<div className="col-xs-5 row middle-xs flex-no-wrap">
+									<div className="col-xs-10">
+										<Field
+											as={TextField}
+											type="number"
+											min={0}
+											id="boundsDimensions.minHeight"
+											name="boundsDimensions.minHeight"
+											label="Minimumhoogte"
+										/>
+									</div>
+									<div className="col-xs-2 u-margin-top">
+										<small className="suffix-neg-margin-left">px</small>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div className="col-xs-12 row">
-							<div className="col-xs-6">
-								<Field
-									as={TextField}
-									type="number"
-									min={0}
-									id="boundsDimensions.maxWidth"
-									name="boundsDimensions.maxWidth"
-									label="Maximumbreedte"
-								/>
+						<div className="col-xs-12 row u-margin-bottom">
+							<div className="col-xs-12 col-md-8 row">
+								<div className="col-xs-5 row middle-xs flex-no-wrap">
+									<div className="col-xs-10">
+										<Field
+											as={TextField}
+											type="number"
+											min={0}
+											id="boundsDimensions.maxWidth"
+											name="boundsDimensions.maxWidth"
+											label="Maximumbreedte"
+										/>
+									</div>
+									<div className="col-xs-2 u-margin-top">
+										<small className="suffix-neg-margin-left">px</small>
+									</div>
+								</div>
+								<div className="col-xs-2 flex-align-self-center u-margin-top">
+									op
+								</div>
+								<div className="col-xs-5 row middle-xs flex-no-wrap">
+									<div className="col-xs-10">
+										<Field
+											as={TextField}
+											type="number"
+											min={0}
+											id="boundsDimensions.maxHeight"
+											name="boundsDimensions.maxHeight"
+											label="Maximumhoogte"
+										/>
+									</div>
+									<div className="col-xs-2 u-margin-top">
+										<small className="suffix-neg-margin-left">px</small>
+									</div>
+								</div>
 							</div>
-							<div className="col-xs-6">
-								<Field
-									as={TextField}
-									type="number"
-									min={0}
-									id="boundsDimensions.maxHeight"
-									name="boundsDimensions.maxHeight"
-									label="Maximumhoogte"
-								/>
+							<div className="a-input">
+								<small className="u-margin-left-xs">
+									Bepaal de breedte en/of hoogte voor de afbeelding
+								</small>
 							</div>
 						</div>
 					</div>
-					<div className="col-xs-4"></div>
-					<small>Bepaal de breedte en/of hoogte voor de afbeelding</small>
-				</div>
+				</>
 			);
 		}
 
 		if (method === CropMethods.RATIO) {
 			return (
-				<div className="row">
-					<div className="col-xs-6">
-						<Field
-							as={TextField}
-							type="number"
-							min={0}
-							id="ratioDimensions.x"
-							name="ratioDimensions.x"
-							label="Verhouding X"
-						/>
-					</div>
-					<div className="col-xs-6">
-						<Field
-							as={TextField}
-							type="number"
-							min={0}
-							id="ratioDimensions.y"
-							name="ratioDimensions.y"
-							label="Verhouding Y"
-						/>
+				<div className="row u-margin-bottom">
+					<div className="col-xs-12 col-md-8 row">
+						<div className="col-xs-5 row middle-xs flex-no-wrap">
+							<div className="col-xs-10">
+								<Field
+									as={TextField}
+									type="number"
+									min={0}
+									id="ratioDimensions.x"
+									name="ratioDimensions.x"
+									label="Verhouding X"
+								/>
+							</div>
+							<div className="col-xs-2 u-margin-top">
+								<small className="suffix-neg-margin-left">px</small>
+							</div>
+						</div>
+						<div className="col-xs-2 flex-align-self-center u-margin-top">op</div>
+						<div className="col-xs-5 row middle-xs flex-no-wrap">
+							<div className="col-xs-10">
+								<Field
+									as={TextField}
+									type="number"
+									min={0}
+									id="ratioDimensions.y"
+									name="ratioDimensions.y"
+									label="Verhouding Y"
+								/>
+							</div>
+							<div className="col-xs-2 u-margin-top">
+								<small className="suffix-neg-margin-left">px</small>
+							</div>
+						</div>
 					</div>
 				</div>
 			);
@@ -140,46 +200,58 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 	};
 
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit}>
+		<Formik
+			initialValues={initialValues}
+			onSubmit={onSubmit}
+			validationSchema={IMAGE_CROP_SETTINGS_VALIDATION_SCHEMA}
+		>
 			{props => {
 				return (
 					<>
-						<div className="row">
+						<div className="row u-margin-bottom">
 							<div className="col-xs-12">
-								<Field as={TextField} id="name" name="name" label="Naam" />
+								<Field as={TextField} id="name" required name="name" label="Naam" />
+								<ErrorMessage
+									className="u-text-danger u-margin-top-xs"
+									component="p"
+									name="name"
+								/>
 							</div>
 						</div>
-						<div className="row">
-							<div className="col-xs-12">
+						<div className="row u-margin-bottom">
+							<div className="col-xs-12 a-input">
 								<Field
 									as={Textarea}
+									required
 									id="guideline"
 									name="guideline"
 									label="Richtlijn"
 									description="Geef een richtlijn op voor de redacteur."
 								/>
-							</div>
-						</div>
-						<div className="row">
-							<div className="col-xs-12">
-								<Field
-									as={TextField}
-									id="guideline"
+								<small>Geef een richtlijn op voor de redacteur.</small>
+								<ErrorMessage
+									className="u-text-danger u-margin-top-xs"
+									component="p"
 									name="guideline"
-									label="Richtlijn"
-									description="Geef een richtlijn op voor de redacteur."
 								/>
 							</div>
 						</div>
-						<div className="row">
-							<div className="col-xs-6">
+						<div className="row u-margin-bottom">
+							<div className="col-xs-6 a-input">
 								<Field
 									as={Select}
+									required
 									id="method"
 									name="method"
 									label="Methode"
+									options={CROP_METHODS}
 									placeholder="Methode"
-									description={getCropMethod(props.values.method)?.guideline}
+								/>
+								<small>{getCropMethod(props.values.method)?.guideline}</small>
+								<ErrorMessage
+									className="u-text-danger u-margin-top-xs"
+									component="p"
+									name="method"
 								/>
 							</div>
 						</div>
