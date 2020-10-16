@@ -3,17 +3,11 @@ import { ErrorMessage } from '@redactie/utils';
 import { Field, Formik, FormikProps } from 'formik';
 import React, { FC } from 'react';
 
+import { IMAGE_META_INITIAL_FORM_STATE, IMAGE_META_VALIDATION_SCHEMA } from './ImageMetaForm.const';
 import { ImageMetaFormProps, ImageMetaFormState } from './ImageMetaForm.types';
-import { IMAGE_META_VALIDATION_SCHEMA } from './ImageMeteForm.const';
 
 const ImageMetaForm: FC<ImageMetaFormProps> = ({
-	initialValues = {
-		name: '',
-		title: '',
-		alt: '',
-		description: '',
-		copyright: '',
-	},
+	initialValues = IMAGE_META_INITIAL_FORM_STATE,
 	onSubmit = () => null,
 	children,
 }) => {

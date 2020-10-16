@@ -1,3 +1,3 @@
-export { default as ImageMeteForm } from './ImageMetaForm';
+export { default as ImageMetaForm } from './ImageMetaForm';
 export * from './ImageMetaForm.types';
-export * from './ImageMeteForm.const';
+export * from './ImageMetaForm.const';
