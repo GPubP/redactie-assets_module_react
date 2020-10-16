@@ -8,6 +8,8 @@ import {
 import { InputFieldProps } from '@redactie/form-renderer-module';
 import React, { FC, useState } from 'react';
 
+import { Uploader } from './Uploader';
+
 const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 	console.log({ fieldProps, fieldSchema });
 
@@ -33,7 +35,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 		<Card>
 			<CardBody>
 				<h5></h5>
-				<FileUploadZone onCustomClick={handleCustomUpload}>
+				<FileUploadZone uploader={Uploader} onCustomClick={handleCustomUpload}>
 					<FileUploadMessage>
 						<Icon name="picture-o" />
 						<p className="u-text-primary">Selecteer of sleep een afbeelding</p>
