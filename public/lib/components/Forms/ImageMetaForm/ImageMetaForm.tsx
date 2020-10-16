@@ -1,10 +1,10 @@
 import { Textarea, TextField } from '@acpaas-ui/react-components';
 import { ErrorMessage } from '@redactie/utils';
-import { Field, Formik, FormikProps } from 'formik';
+import { Field, Formik } from 'formik';
 import React, { FC } from 'react';
 
 import { IMAGE_META_INITIAL_FORM_STATE, IMAGE_META_VALIDATION_SCHEMA } from './ImageMetaForm.const';
-import { ImageMetaFormProps, ImageMetaFormState } from './ImageMetaForm.types';
+import { ImageMetaFormProps } from './ImageMetaForm.types';
 
 const ImageMetaForm: FC<ImageMetaFormProps> = ({
 	initialValues = IMAGE_META_INITIAL_FORM_STATE,
@@ -84,10 +84,7 @@ const ImageMetaForm: FC<ImageMetaFormProps> = ({
 							description="Geef de bron op van de afbeelding."
 						/>
 					</div>
-					{children &&
-						(children as (bag: FormikProps<ImageMetaFormState>) => React.ReactNode)(
-							props
-						)}
+					{children && children(props)}
 				</>
 			)}
 		</Formik>

@@ -2,7 +2,7 @@ import { FormikProps } from 'formik';
 
 export interface ImageMetaFormProps {
 	initialValues?: ImageMetaFormState;
-	children?: ((props: FormikProps<ImageMetaFormState>) => React.ReactNode) | React.ReactNode;
+	children?: (props: FormikProps<ImageMetaFormState>) => React.ReactNode;
 	onSubmit: (values: ImageMetaFormState) => void;
 }
 
