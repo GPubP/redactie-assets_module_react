@@ -30,7 +30,7 @@ describe('<ImageSelect />', () => {
 		);
 		const cardEl = container.querySelectorAll('.o-image-card')[randomIndex];
 
-		expect(cardEl).toHaveClass('c-image-card--selected');
+		expect(cardEl).toHaveClass('o-image-card--selected');
 	});
 
 	it('Should set the correct selected items based on `dataKey`', () => {
@@ -39,6 +39,6 @@ describe('<ImageSelect />', () => {
 		const { container } = render(imageSelectComponent({ selection: [selectedItem.id] }));
 		const cardEl = container.querySelectorAll('.o-image-card')[randomIndex];
 
-		expect(cardEl).toHaveClass('c-image-card--selected');
+		expect(cardEl).toHaveClass('o-image-card--selected');
 	});
 });

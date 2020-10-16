@@ -14,7 +14,7 @@ const imageCardComponent = (partialProps: Partial<ImageCardProps> = defaultProps
 describe('<ImageCard />', () => {
 	it('Should show an image when given', () => {
 		const { container } = render(imageCardComponent());
-		const imageEl = container.querySelector('.c-image-card__preview');
+		const imageEl = container.querySelector('.o-image-card__preview');
 		const imageElStyles = imageEl ? window.getComputedStyle(imageEl).backgroundImage : '';
 
 		expect(imageEl).not.toBeNull();
@@ -23,7 +23,7 @@ describe('<ImageCard />', () => {
 
 	it('Should show a title when given', () => {
 		const { container } = render(imageCardComponent());
-		const titleEl = container.querySelector('.c-image-card__footer p');
+		const titleEl = container.querySelector('.o-image-card__footer p');
 
 		expect(titleEl).not.toBeNull();
 		expect(titleEl).toHaveTextContent(defaultProps.title);
@@ -31,15 +31,15 @@ describe('<ImageCard />', () => {
 
 	it('Should set the correct className if selected', () => {
 		const { container } = render(imageCardComponent({ selected: true }));
-		const rootEl = container.querySelector('.c-image-card');
+		const rootEl = container.querySelector('.o-image-card');
 
-		expect(rootEl).toHaveClass('c-image-card--selected');
+		expect(rootEl).toHaveClass('o-image-card--selected');
 	});
 
 	it('Should trigger onClick when given and card is clicked', () => {
 		const onClick = jest.fn();
 		const { container } = render(imageCardComponent({ onClick }));
-		const rootEl = container.querySelector('.c-image-card');
+		const rootEl = container.querySelector('.o-image-card');
 
 		fireEvent.click(rootEl as Element);
 

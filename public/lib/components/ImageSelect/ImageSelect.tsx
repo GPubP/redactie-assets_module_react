@@ -26,7 +26,7 @@ const ImageSelect: FC<ImageSelectProps> = ({
 	return (
 		<div className={cx(className, 'row')}>
 			{items.map((item, index) => {
-				const key = `c-image-card-${dataKey ? item[dataKey] : index}`;
+				const key = `o-image-card-${dataKey ? item[dataKey] : index}`;
 				const selected = isSelected(item);
 
 				return (
