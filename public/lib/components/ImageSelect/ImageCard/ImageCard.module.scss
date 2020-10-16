@@ -1,0 +1,75 @@
+/**
+* Image card
+* ----
+*/
+
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.o-image-card {
+	cursor: pointer;
+	transition: background-color $animation-normal;
+
+	/**
+	 * Elements
+	 */
+
+	.o-image-card__body {
+		padding: $spacer-xs $spacer-xs $spacer-sm;
+	}
+
+	.o-image-card__preview {
+		width: 100%;
+		height: rem(240px);
+		background-position: center;
+		background-size: cover;
+		transition: opacity $animation-normal;
+	}
+
+	.o-image-card__footer {
+		display: flex;
+		justify-content: space-between;
+		padding-top: $spacer-xs;
+	}
+
+	.o-image-card__check {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: $spacer;
+		height: $spacer;
+		border-radius: 50%;
+		border: 1px solid $border-color;
+		color: $grey;
+		transition-property: border-color, background-color;
+		transition-duration: $animation-duration;
+		transition-timing-function: $animation-easing;
+	}
+
+	.o-image-card__check-icon {
+		transition: color $animation-normal;
+	}
+
+	/**
+	 * Modifiers
+	 */
+
+	&.o-image-card--selected {
+		border-color: $state-success;
+		background-color: mix($state-success, $white, 10%);
+
+		.o-image-card__check {
+			border-color: $state-success;
+			background-color: $state-success;
+			color: $white;
+		}
+	}
+
+	// States
+	&:hover {
+		&:not(.o-image-card--selected) {
+			.o-image-card__preview {
+				opacity: 0.8;
+			}
+		}
+	}
+}
