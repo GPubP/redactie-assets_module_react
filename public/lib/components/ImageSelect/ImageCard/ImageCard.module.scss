@@ -5,7 +5,7 @@
 
 @import '~@a-ui/core/dist/assets/styles/_quarks';
 
-.c-image-card {
+.o-image-card {
 	cursor: pointer;
 	transition: background-color $animation-normal;
 
@@ -13,11 +13,11 @@
 	 * Elements
 	 */
 
-	.c-image-card__body {
+	.o-image-card__body {
 		padding: $spacer-xs $spacer-xs $spacer-sm;
 	}
 
-	.c-image-card__preview {
+	.o-image-card__preview {
 		width: 100%;
 		height: rem(240px);
 		background-position: center;
@@ -25,13 +25,13 @@
 		transition: opacity $animation-normal;
 	}
 
-	.c-image-card__footer {
+	.o-image-card__footer {
 		display: flex;
 		justify-content: space-between;
 		padding-top: $spacer-xs;
 	}
 
-	.c-image-card__check {
+	.o-image-card__check {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -45,7 +45,7 @@
 		transition-timing-function: $animation-easing;
 	}
 
-	.c-image-card__check-icon {
+	.o-image-card__check-icon {
 		transition: color $animation-normal;
 	}
 
@@ -53,11 +53,11 @@
 	 * Modifiers
 	 */
 
-	&.c-image-card--selected {
+	&.o-image-card--selected {
 		border-color: $state-success;
 		background-color: mix($state-success, $white, 10%);
 
-		.c-image-card__check {
+		.o-image-card__check {
 			border-color: $state-success;
 			background-color: $state-success;
 			color: $white;
@@ -66,8 +66,8 @@
 
 	// States
 	&:hover {
-		&:not(.c-image-card--selected) {
-			.c-image-card__preview {
+		&:not(.o-image-card--selected) {
+			.o-image-card__preview {
 				opacity: 0.8;
 			}
 		}

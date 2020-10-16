@@ -19,23 +19,23 @@ const ImageCard: FC<ImageCardProps> = ({
 
 	return (
 		<div
-			className={cx(className, 'm-card', 'c-image-card', {
-				'c-image-card--no-img': !imageSrc,
-				'c-image-card--selected': selected,
+			className={cx(className, 'm-card', 'o-image-card', {
+				'o-image-card--no-img': !imageSrc,
+				'o-image-card--selected': selected,
 			})}
 			onClick={onClick}
 			onKeyPress={onClick}
 			role="button"
 			tabIndex={0}
 		>
-			<div className={cx('c-image-card__body')}>
-				<div className={cx('c-image-card__preview')} role="img" style={setImageStyles()}>
+			<div className={cx('o-image-card__body')}>
+				<div className={cx('o-image-card__preview')} role="img" style={setImageStyles()}>
 					<span className="u-screen-reader-only">{title}</span>
 				</div>
-				<div className={cx('c-image-card__footer')}>
+				<div className={cx('o-image-card__footer')}>
 					<p className="u-no-margin">{title}</p>
-					<div className={cx('c-image-card__check')}>
-						<Icon className={cx('c-image-card__check-icon')} name="check" />
+					<div className={cx('o-image-card__check')}>
+						<Icon className={cx('o-image-card__check-icon')} name="check" />
 					</div>
 				</div>
 			</div>

@@ -32,6 +32,7 @@ const ImageSelect: FC<ImageSelectProps> = ({
 				return (
 					<div key={key} className="col-xs-12 col-md-3">
 						<ImageCard
+							className={cx('o-image-select__card')}
 							onClick={() => onSelect(item)}
 							selected={selected}
 							imageSrc={item.src}
