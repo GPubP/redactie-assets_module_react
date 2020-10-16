@@ -7,7 +7,7 @@ import { Field, Formik } from 'formik';
 import React, { FC, ReactElement, useMemo, useState } from 'react';
 
 import { useCoreTranslation } from '../../../connectors/translations';
-import { ImageCropSettingsForm } from '../../Forms';
+import { ImageCropSettingsForm, ImageMeteForm } from '../../Forms';
 
 import {
 	IMAGE_CROP_COLUMNS,
