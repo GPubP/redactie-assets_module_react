@@ -13,3 +13,12 @@ export const UPLOAD_OPTIONS_DEFAULT: ImageUploadOptions = {
 	url: '',
 	messages: VALIDATION_MESSAGES_DEFAULT,
 };
+
+export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
+	allowedFileTypes: [],
+	guideline: '',
+	imageConfig: {
+		minWidth: 0,
+		minHeight: 0,
+	},
+};

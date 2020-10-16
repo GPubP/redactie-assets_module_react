@@ -6,24 +6,43 @@ import {
 	FileUploadZone,
 } from '@acpaas-ui/react-editorial-components';
 import { InputFieldProps } from '@redactie/form-renderer-module';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
+import { IMAGE_SETTINGS_DEFAULT_CONFIG } from './ImageUpload.const';
 import { Uploader } from './Uploader';
 
 const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
-	console.log({ fieldProps, fieldSchema });
+	const { field } = fieldProps;
+	const { config = IMAGE_SETTINGS_DEFAULT_CONFIG } = fieldSchema;
+	const { guideline, imageConfig } = config;
+	const { minWidth, minHeight } = imageConfig;
 
 	/**
 	 * Hooks
 	 */
 	const [showModal, setShowModal] = useState(false);
+	const [uploader, setUploader] = useState<Uploader | null>(null);
+
+	useEffect(() => {
+		let options = {};
+
+		if (fieldSchema.config) {
+			const { allowedFileTypes = [] } = fieldSchema.config;
+			options = { allowedFileTypes: allowedFileTypes.split(',') };
+		}
+
+		setUploader(new Uploader(options));
+	}, [config, fieldSchema.config]);
 
 	/**
 	 * Methods
 	 */
 
 	const handleCustomUpload = (): void => {
-		console.log('Custom upload');
+		setShowModal(true);
+	};
+
+	const handleCustomDrop = (): void => {
 		setShowModal(true);
 	};
 
@@ -34,14 +53,24 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 	return (
 		<Card>
 			<CardBody>
-				<h5></h5>
-				<FileUploadZone uploader={Uploader} onCustomClick={handleCustomUpload}>
+				<h6>{field?.name}</h6>
+				{guideline && <p className="u-margin-top u-margin-bottom">{guideline}</p>}
+				<FileUploadZone
+					uploader={uploader}
+					onCustomClick={handleCustomUpload}
+					onCustomDrop={handleCustomDrop}
+				>
 					<FileUploadMessage>
-						<Icon name="picture-o" />
-						<p className="u-text-primary">Selecteer of sleep een afbeelding</p>
+						<div className="u-text-primary">
+							<Icon name="picture-o" />
+							<p>Selecteer of sleep een afbeelding</p>
+						</div>
 					</FileUploadMessage>
-					<FileUploadDescription>Optional description message</FileUploadDescription>
+					<FileUploadDescription>
+						Laad een afbeelding op van minimum {minWidth}px breed en {minHeight}px hoog
+					</FileUploadDescription>
 				</FileUploadZone>
+
 				<ControlledModal onClose={() => setShowModal(false)} show={showModal}>
 					<div>TODO: add modal flow</div>
 				</ControlledModal>

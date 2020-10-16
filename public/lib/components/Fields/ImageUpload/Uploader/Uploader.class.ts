@@ -19,6 +19,7 @@ export class Uploader {
 		};
 	}
 
+	// TODO: update this with upload for assets
 	uploadFiles(files = []): Observable<unknown> {
 		const formData = this.filesToFormData(files);
 
