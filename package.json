@@ -97,6 +97,7 @@
   "license": "ISC",
   "dependencies": {
     "@a-ui/core": "^4.2.2",
+    "@mindspace-io/react": "^1.1.6",
     "query-string": "6.12.1"
   }
 }
