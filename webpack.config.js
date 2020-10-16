@@ -24,13 +24,35 @@ module.exports = env => {
 					include: [/public/, /node_modules\/@redactie\/translations-module/],
 				},
 				{
-					test: /\.s[ac]ss$/i,
+					test: /\.module\.s[ac]ss$/i,
 					use: [
 						'style-loader',
 						{
 							loader: 'css-loader',
 							options: {
 								modules: true,
+								importLoaders: 1,
+							},
+						},
+						{
+							loader: 'postcss-loader',
+							options: {
+								ident: 'postcss',
+								plugins: () => [postcssPresetEnv(), cssnano({ preset: 'default' })],
+							},
+						},
+						'sass-loader',
+					],
+					include: [/public/, /node_modules\/@a-ui\/core/],
+				},
+				{
+					test: /\.s[ac]ss$/i,
+					exclude: /\.module\.s[ac]ss$/i,
+					use: [
+						'style-loader',
+						{
+							loader: 'css-loader',
+							options: {
 								importLoaders: 1,
 							},
 						},
@@ -63,6 +85,7 @@ module.exports = env => {
 			'rxjs/operators': 'rxjs/operators',
 			'react-dom': 'react-dom',
 			'react-router-dom': 'react-router-dom',
+			'@datorama/akita': '@datorama/akita',
 			'@redactie/react-router-guards': '@redactie/react-router-guards',
 			'@redactie/redactie-core': '@redactie/redactie-core',
 			'@redactie/utils': '@redactie/utils',
@@ -70,7 +93,7 @@ module.exports = env => {
 			'@redactie/translations-module': '@redactie/translations-module',
 			'@acpaas-ui/react-components': '@acpaas-ui/react-components',
 			'@acpaas-ui/react-editorial-components': '@acpaas-ui/react-editorial-components',
-			'@datorama/akita': '@datorama/akita',
+			'@redactie/form-renderer-module': '@redactie/form-renderer-module',
 		},
 		output: {
 			filename: `${kebabCase(packageJSON.name)}.umd.js`,
