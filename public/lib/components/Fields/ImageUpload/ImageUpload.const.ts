@@ -1,7 +1,7 @@
 import { Tab } from '../../../assets.types';
 import { ImageCrop, ImageMetaInfo, ImageSelection } from '../../../views';
 
-import { ImageUploadOptions, ModalViewMode } from './ImageUpload.types';
+import { ImageUploadOptions, ModalViewMode, ModalViewTarget } from './ImageUpload.types';
 
 export const VALIDATION_MESSAGES_DEFAULT = {
 	INVALID_FILE_TYPE: 'INVALID_FILE_TYPE',
@@ -30,14 +30,14 @@ const MODAL_VIEW_ADD_TABS: Tab[] = [
 	{
 		active: true,
 		name: 'Selecteren',
-		target: 'select',
+		target: ModalViewTarget.ADD_SELECTION,
 		viewComponent: ImageSelection,
 	},
 	{
 		active: false,
 		disabled: true,
 		name: 'Opladen',
-		target: 'upload',
+		target: ModalViewTarget.ADD_UPLOAD,
 		viewComponent: () => null,
 	},
 ];
@@ -46,20 +46,20 @@ const MODAL_VIEW_EDIT_TABS: Tab[] = [
 	{
 		active: true,
 		name: 'Meta-informatie',
-		target: 'meta',
+		target: ModalViewTarget.EDIT_META,
 		viewComponent: ImageMetaInfo,
 	},
 	{
 		active: false,
 		name: 'Bijsnijden en schalen',
-		target: 'crop',
+		target: ModalViewTarget.EDIT_CROP,
 		viewComponent: ImageCrop,
 	},
 	{
 		active: false,
 		disabled: true,
 		name: 'Afbeelding vervangen',
-		target: 'change-image',
+		target: ModalViewTarget.EDIT_REPLACE,
 		viewComponent: () => null,
 	},
 ];

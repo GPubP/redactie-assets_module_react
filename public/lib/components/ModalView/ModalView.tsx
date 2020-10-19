@@ -1,19 +1,29 @@
 import { ContextHeader } from '@acpaas-ui/react-editorial-components';
 import classnames from 'classnames/bind';
-import React, { FC } from 'react';
-
-import { useModalViewContext } from '../../hooks';
+import React, { FC, useMemo } from 'react';
 
 import styles from './ModalView.module.scss';
+import { ModalViewProps } from './ModalView.types';
 
 const cx = classnames.bind(styles);
 
-const ModalView: FC = () => {
+const ModalView: FC<ModalViewProps> = ({ config, mode, onCancel, onViewChange, target }) => {
 	/**
 	 * Hooks
 	 */
 
-	const { activeTabs, title, target, ViewComponent, setModalView } = useModalViewContext();
+	const activeTabs = useMemo(() => {
+		return config[mode].tabs.map((tab, index) => ({
+			...tab,
+			active: target ? tab.target === target : index === 0,
+		}));
+	}, [config, mode, target]);
+	const ViewComponent = useMemo(() => {
+		const currentTab = activeTabs.find(tab => tab.target === target) || activeTabs[0];
+		return currentTab?.viewComponent;
+	}, [activeTabs, target]);
+
+	console.log(activeTabs);
 
 	/**
 	 * Methods
@@ -22,13 +32,13 @@ const ModalView: FC = () => {
 	const onTabClick = (e: MouseEvent, newTarget: string): void => {
 		e.preventDefault();
 
-		const clickedTab = activeTabs.find(tab => tab.target === target);
+		const clickedTab = activeTabs.find(tab => tab.target === newTarget);
 
 		if (!clickedTab || clickedTab?.disabled) {
 			return;
 		}
 
-		setModalView(newTarget);
+		onViewChange(newTarget);
 	};
 
 	/**
@@ -44,9 +54,9 @@ const ModalView: FC = () => {
 					onClick: (e: MouseEvent) => onTabClick(e, href),
 				})}
 				tabs={activeTabs}
-				title={title}
+				title={config[mode].title}
 			/>
-			<ViewComponent />
+			<ViewComponent onCancel={onCancel} onViewChange={onViewChange} />
 		</>
 	);
 };

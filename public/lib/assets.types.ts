@@ -6,5 +6,10 @@ export interface Tab {
 	id?: string;
 	name: string;
 	target: string;
-	viewComponent: FC;
+	viewComponent: FC<ModalViewComponentProps>;
+}
+
+export interface ModalViewComponentProps {
+	onCancel: () => void;
+	onViewChange: (target: string, mode?: string) => void;
 }

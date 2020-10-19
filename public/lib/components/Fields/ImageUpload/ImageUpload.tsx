@@ -9,12 +9,11 @@ import { InputFieldProps } from '@redactie/form-renderer-module';
 import classnames from 'classnames/bind';
 import React, { FC, useEffect, useState } from 'react';
 
-import { ModalViewContext } from '../../../context';
 import ModalView from '../../ModalView/ModalView';
 
 import { IMAGE_SETTINGS_DEFAULT_CONFIG, MODAL_VIEW_MODE_MAP } from './ImageUpload.const';
 import styles from './ImageUpload.module.scss';
-import { ModalViewMode } from './ImageUpload.types';
+import { ModalViewMode, ModalViewTarget } from './ImageUpload.types';
 import { Uploader } from './Uploader';
 
 const cx = classnames.bind(styles);
@@ -31,7 +30,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 
 	const [mode, setMode] = useState(ModalViewMode.EDIT);
 	const [showModal, setShowModal] = useState(false);
-	const [target, setTarget] = useState('meta');
+	const [target, setTarget] = useState<ModalViewTarget | null>(null);
 	const [uploader, setUploader] = useState<Uploader | null>(null);
 
 	// Instantiate Uploader class with options from fieldSchema
@@ -50,8 +49,9 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 	 * Methods
 	 */
 
-	const setModalView = (newTarget: string, newMode?: string): void => {
-		setTarget(newTarget);
+	const onModalViewChange = (newTarget: string, newMode?: string): void => {
+		setTarget(newTarget as ModalViewTarget);
+
 		if (newMode) {
 			setMode(newMode as ModalViewMode);
 		}
@@ -67,6 +67,11 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 		setShowModal(true);
 	};
 
+	const closeModal = (): void => {
+		setTarget(null);
+		setShowModal(false);
+	};
+
 	/**
 	 * Render
 	 */
@@ -76,40 +81,43 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 	}
 
 	return (
-		<ModalViewContext.Provider
-			value={{ config: MODAL_VIEW_MODE_MAP, mode, target, setModalView }}
-		>
-			<Card>
-				<CardBody>
-					<h6>{field?.name}</h6>
-					{guideline && <p className="u-margin-top u-margin-bottom">{guideline}</p>}
-					<FileUploadZone
-						uploader={uploader}
-						onCustomClick={handleCustomUpload}
-						onCustomDrop={handleCustomDrop}
-					>
-						<FileUploadMessage>
-							<span className="u-text-primary">
-								<Icon name="picture-o" />
-								<span className="u-block">Selecteer of sleep een afbeelding</span>
-							</span>
-						</FileUploadMessage>
-						<FileUploadDescription>
-							Laad een afbeelding op van minimum {minWidth}px breed en {minHeight}px
-							hoog
-						</FileUploadDescription>
-					</FileUploadZone>
+		<Card>
+			<CardBody>
+				<h6>{field?.name}</h6>
+				{guideline && <p className="u-margin-top u-margin-bottom">{guideline}</p>}
+				<FileUploadZone
+					uploader={uploader}
+					onCustomClick={handleCustomUpload}
+					onCustomDrop={handleCustomDrop}
+				>
+					<FileUploadMessage>
+						<span className="u-text-primary">
+							<Icon name="picture-o" />
+							<span className="u-block">Selecteer of sleep een afbeelding</span>
+						</span>
+					</FileUploadMessage>
+					<FileUploadDescription>
+						Laad een afbeelding op van minimum {minWidth}px breed en {minHeight}px hoog
+					</FileUploadDescription>
+				</FileUploadZone>
 
-					<ControlledModal
-						className={cx('o-image-upload__modal')}
-						onClose={() => setShowModal(false)}
-						show={showModal}
-					>
-						{showModal ? <ModalView /> : null}
-					</ControlledModal>
-				</CardBody>
-			</Card>
-		</ModalViewContext.Provider>
+				<ControlledModal
+					className={cx('o-image-upload__modal')}
+					onClose={closeModal}
+					show={showModal}
+				>
+					{showModal ? (
+						<ModalView
+							config={MODAL_VIEW_MODE_MAP}
+							mode={mode}
+							onCancel={closeModal}
+							onViewChange={onModalViewChange}
+							target={target || ''}
+						/>
+					) : null}
+				</ControlledModal>
+			</CardBody>
+		</Card>
 	);
 };
 
