@@ -5,8 +5,14 @@
 		max-width: none;
 		padding: 0 $spacer;
 
+		> div {
+			padding-bottom: 0;
+		}
+
 		h1 {
+			margin-top: 0;
 			margin-bottom: 0;
+			font-size: $font-size-h3;
 		}
 	}
 }

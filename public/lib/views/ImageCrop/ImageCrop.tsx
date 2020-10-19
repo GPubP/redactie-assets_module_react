@@ -1,7 +1,13 @@
 import React, { FC } from 'react';
 
+import { ModalViewContainer } from '../../components/ModalView';
+
 const ImageCrop: FC = () => {
-	return <h3>Bijsnijden en schalen</h3>;
+	return (
+		<ModalViewContainer>
+			<h3>Bijsnijden en schalen</h3>
+		</ModalViewContainer>
+	);
 };
 
 export default ImageCrop;

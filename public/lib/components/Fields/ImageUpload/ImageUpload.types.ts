@@ -8,3 +8,8 @@ export interface ImageUploadOptions {
 	messages: typeof VALIDATION_MESSAGES_DEFAULT;
 	requestHeader?: { key: string; value: string };
 }
+
+export enum ModalViewMode {
+	ADD = 'add',
+	EDIT = 'edit',
+}
