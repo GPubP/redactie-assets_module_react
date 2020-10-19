@@ -1,8 +1,8 @@
 import { Button } from '@acpaas-ui/react-components';
 import { TranslateFunc } from '@redactie/translations-module';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React from 'react';
 
+import { CORE_TRANSLATIONS } from '../../../connectors/translations';
 import { CROP_METHODS, CropMethods } from '../../Forms/ImageCropSettingsForm';
 
 import { CropOption } from './ImageFieldSettings.types';
