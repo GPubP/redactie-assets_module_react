@@ -1,0 +1,18 @@
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.o-modal-view__header {
+	:global(.u-container) {
+		max-width: none;
+		padding: 0 $spacer;
+
+		> div {
+			padding-bottom: $spacer-xs;
+		}
+
+		h1 {
+			margin-top: 0;
+			margin-bottom: 0;
+			font-size: $font-size-h4;
+		}
+	}
+}
