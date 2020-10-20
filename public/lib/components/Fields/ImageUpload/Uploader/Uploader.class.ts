@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-
 import { UPLOAD_OPTIONS_DEFAULT } from '../ImageUpload.const';
 import { ImageUploadOptions } from '../ImageUpload.types';
 
@@ -19,47 +17,8 @@ export class Uploader {
 		};
 	}
 
-	// TODO: update this with upload for assets
-	uploadFiles(files = []): Observable<unknown> {
-		const formData = this.filesToFormData(files);
-
-		return new Observable(observer => {
-			const xhr = new XMLHttpRequest();
-
-			// Progress callback
-			xhr.upload.addEventListener('progress', e => {
-				if (e.lengthComputable) {
-					const percentComplete = e.loaded / e.total;
-
-					observer.next({
-						progress: percentComplete,
-						data: null,
-					});
-				}
-			});
-
-			// Complete callback
-			xhr.onload = () => {
-				observer.next({
-					progress: 1,
-					data: xhr.response,
-				});
-				observer.complete();
-			};
-
-			// Do request
-			xhr.responseType = 'json';
-			xhr.open('post', this.options.url);
-
-			if (this.options.requestHeader && this.options.requestHeader.key) {
-				xhr.setRequestHeader(
-					this.options.requestHeader.key,
-					this.options.requestHeader.value
-				);
-			}
-
-			xhr.send(formData);
-		});
+	uploadFiles(): void {
+		// Placeholder function
 	}
 
 	validateFiles(files: File[] = []): ValidatedFiles {
