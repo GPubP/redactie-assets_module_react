@@ -23,8 +23,6 @@ const ModalView: FC<ModalViewProps> = ({ config, mode, onCancel, onViewChange, t
 		return currentTab?.viewComponent;
 	}, [activeTabs, target]);
 
-	console.log(activeTabs);
-
 	/**
 	 * Methods
 	 */
