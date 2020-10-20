@@ -10,13 +10,13 @@ const CoreConfig = Core.config.getValue('core') || {};
 
 // Create ky instance with defaults
 const api: KyInstance = ky.create({
-	prefixUrl: '/v1/proxy/',
+	prefixUrl: '/v1/proxy/admin/assets/v1/',
 	headers: {
 		'x-tenant-id': CoreConfig.tenantId,
 	},
 });
 
-export const parseSearchParams = (searchParams: SearchParams): string => {
+export const parseSearchParams = <Params = SearchParams>(searchParams: Params): string => {
 	return stringify(searchParams, { arrayFormat: 'comma', skipNull: true, skipEmptyString: true });
 };
 

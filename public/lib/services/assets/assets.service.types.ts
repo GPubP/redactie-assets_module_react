@@ -43,3 +43,12 @@ export interface AssetResponse {
 	};
 	uuid: string;
 }
+
+export interface AssetsSearchParams {
+	sort: string;
+	page: number;
+	pagesize: number;
+	search: string;
+	type: string;
+	category: string;
+}
