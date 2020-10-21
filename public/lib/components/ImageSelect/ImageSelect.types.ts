@@ -7,6 +7,7 @@ export interface ImageSelectItem {
 
 export interface ImageSelectProps {
 	className?: string;
+	compareSelected?: (item: ImageSelectItem) => boolean;
 	dataKey?: string;
 	items: ImageSelectItem[];
 	selection: (ImageSelectItem | string)[];
