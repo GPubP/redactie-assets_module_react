@@ -58,7 +58,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 	};
 
 	const handleCustomUpload = (): void => {
-		setMode(ModalViewMode.EDIT);
+		setMode(ModalViewMode.ADD);
 		setShowModal(true);
 	};
 
