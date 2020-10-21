@@ -34,7 +34,7 @@ const ImageSelect: FC<ImageSelectProps> = ({
 				const selected = isSelected(item);
 
 				return (
-					<div key={key} className="col-xs-12 col-md-3 u-margin-bottom">
+					<div key={key} className="col-xs-12 col-md-6 col-lg-3 u-margin-bottom">
 						<ImageCard
 							className={cx('o-image-select__card')}
 							disabled={item.disabled}

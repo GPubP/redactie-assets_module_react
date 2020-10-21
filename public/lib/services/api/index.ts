@@ -1,2 +1,2 @@
-export { default as api, parseSearchParams } from './api.service';
+export { default as apiService, parseSearchParams } from './api.service';
 export * from './api.service.types';

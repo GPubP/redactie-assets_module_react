@@ -11,6 +11,7 @@ import {
 } from '../../components/Fields/ImageUpload/ImageUpload.types';
 import { ModalViewActions, ModalViewContainer } from '../../components/ModalView';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
+import { getThumbnailUrl } from '../../helpers';
 import { useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
 
@@ -26,11 +27,15 @@ const ImageSelection: FC<ModalViewComponentProps> = ({ onCancel, onViewChange })
 	const [assetsLoading, assets, assetsMeta] = useAssets();
 	const [t] = useCoreTranslation();
 	const parsedAssets: ImageSelectItem[] = useMemo(() => {
+		if (!assets || assets.length === 0) {
+			return [];
+		}
+
 		return assets.map(({ data, uuid }) => ({
 			uuid,
 			data,
 			// disabled: false, // TODO: check if minWidth, minHeight and allowedFileTypes are correct
-			src: '', // data.thumbnail TODO: build link to get image thumbnail
+			src: getThumbnailUrl(data.thumbnail),
 			title: data.name,
 		}));
 	}, [assets]);
@@ -71,7 +76,7 @@ const ImageSelection: FC<ModalViewComponentProps> = ({ onCancel, onViewChange })
 		(e: ChangeEvent<HTMLInputElement>): void => {
 			setSearchParams({ ...searchParams, search: e.target.value });
 		},
-		300,
+		500,
 		{ leading: true }
 	);
 
