@@ -35,12 +35,9 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	 */
 	const [t] = useCoreTranslation();
 	const [, creatingState] = useAssets();
-	const [formValues, setFormValues] = useState<ImageMetaFormState>();
+	const [formValues, setFormValues] = useState<ImageMetaFormState>(initialValues);
 	const isSaving = useMemo(() => creatingState === LoadingState.Loading, [creatingState]);
-	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
-		true,
-		formValues || initialValues
-	);
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(true, formValues);
 
 	/**
 	 * Function
