@@ -28,8 +28,18 @@ const MODAL_VIEW_SELECT_TABS: Tab<ModalViewData>[] = [
 	},
 	{
 		active: false,
-		disabled: true,
 		name: 'Opladen',
+		onClick({ onManualUpload }) {
+			const fileInput = document.createElement('input');
+			fileInput.type = 'file';
+			fileInput.onchange = ({ target }: Event) => {
+				if (target) {
+					const { files } = target as HTMLInputElement;
+					onManualUpload(Array.from(files || []));
+				}
+			};
+			fileInput.click();
+		},
 		target: ModalViewTarget.ADD_UPLOAD,
 		viewComponent: () => null,
 	},

@@ -20,8 +20,9 @@ import {
 	ModalViewData,
 	ModalViewMode,
 	ModalViewTarget,
+	ReactiveModalViewData,
 } from './ImageUpload.types';
-import { Uploader } from './Uploader';
+import { InvalidFile, Uploader } from './Uploader';
 
 const cx = classnames.bind(styles);
 
@@ -35,16 +36,14 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	 * Hooks
 	 */
 
-	const [modalViewData, setModalViewData] = useState<ModalViewData>({
-		config,
+	const [modalViewData, setModalViewData] = useState<ReactiveModalViewData>({
 		queuedFiles: [],
 		selectedFiles: [],
-		setImageFieldValue: fieldHelperProps.setValue,
 	});
 	const [mode, setMode] = useState(ModalViewMode.EDIT);
 	const [options, setOptions] = useState<ImageUploadOptions | null>(null);
 	const [showModal, setShowModal] = useState(false);
-	const [invalidFiles, setInvalidFiles] = useState([]);
+	const [invalidFiles, setInvalidFiles] = useState<InvalidFile[]>([]);
 	const [target, setTarget] = useState<ModalViewTarget | null>(null);
 	const [uploader, setUploader] = useState<Uploader | null>(null);
 
@@ -97,7 +96,21 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		setShowModal(true);
 	};
 
-	const handleInvalidFiles = (invFiles: any): void => {
+	const handleManualUpload = (files: File[] = []): void => {
+		if (uploader && files.length) {
+			const uploaded = uploader.validateFiles(files);
+
+			if (uploaded.invalidFiles.length) {
+				setInvalidFiles(uploaded.invalidFiles);
+				setShowModal(false);
+			} else if (uploaded.validFiles.length) {
+				setModalViewData({ ...modalViewData, queuedFiles: uploaded.validFiles });
+				setMode(ModalViewMode.CREATE);
+			}
+		}
+	};
+
+	const handleInvalidFiles = (invFiles: InvalidFile[]): void => {
 		setInvalidFiles(invFiles);
 	};
 
@@ -158,7 +171,10 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 						<ModalView
 							data={{
 								...modalViewData,
+								config,
 								imageFieldValue: (field.value as unknown) as Record<string, any>,
+								onManualUpload: handleManualUpload,
+								setImageFieldValue: fieldHelperProps.setValue,
 							}}
 							config={MODAL_VIEW_MODE_MAP}
 							mode={mode}

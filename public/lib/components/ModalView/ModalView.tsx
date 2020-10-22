@@ -42,6 +42,10 @@ const ModalView = <Data extends Record<string, any>>({
 		if (!clickedTab || clickedTab?.disabled) {
 			return;
 		}
+		if (clickedTab.onClick) {
+			clickedTab.onClick(data);
+			return;
+		}
 
 		onViewChange(newTarget);
 	};
