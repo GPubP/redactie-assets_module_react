@@ -14,5 +14,5 @@ export const validateFileType = (allowedFileTypes: string[], file: File | AssetF
 	const toUpper = (x: string): string => x.toUpperCase();
 	const allowedFileTypesToUpper = allowedFileTypes.map(toUpper);
 
-	return !allowedFileTypesToUpper.includes(ext.toUpperCase());
+	return allowedFileTypesToUpper.includes(ext.toUpperCase());
 };

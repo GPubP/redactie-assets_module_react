@@ -42,7 +42,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 		return assets.map(({ data, uuid }) => ({
 			uuid,
 			data,
-			disabled: validateFileType(
+			disabled: !validateFileType(
 				parseAllowedFileTypes(viewData.config?.allowedFileTypes),
 				data.file
 			),
