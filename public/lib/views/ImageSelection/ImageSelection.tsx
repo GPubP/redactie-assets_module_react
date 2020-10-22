@@ -12,13 +12,18 @@ import {
 } from '../../components/Fields/ImageUpload/ImageUpload.types';
 import { ModalViewActions, ModalViewContainer } from '../../components/ModalView';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
-import { getThumbnailUrl } from '../../helpers';
+import { getThumbnailUrl, parseAllowedFileTypes, validateFileType } from '../../helpers';
 import { useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
 
 import { DEFAULT_SEARCH_PARAMS } from './ImageSelection.const';
+import { AssetSelectItem } from './ImageSelection.types';
 
-const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({ onCancel, onViewChange }) => {
+const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
+	data: viewData,
+	onCancel,
+	onViewChange,
+}) => {
 	/**
 	 * Hooks
 	 */
@@ -35,11 +40,14 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({ onCancel, 
 		return assets.map(({ data, uuid }) => ({
 			uuid,
 			data,
-			// disabled: false, // TODO: check if minWidth, minHeight and allowedFileTypes are correct
+			disabled: validateFileType(
+				parseAllowedFileTypes(viewData.config?.allowedFileTypes),
+				data.file
+			),
 			src: getThumbnailUrl(data.thumbnail),
 			title: data.name,
 		}));
-	}, [assets]);
+	}, [assets, viewData.config]);
 
 	// Fetch assets
 	useEffect(() => {

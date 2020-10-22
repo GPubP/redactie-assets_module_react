@@ -17,15 +17,7 @@ export interface AssetResponse {
 		category: string;
 		description: string;
 		copyright: string;
-		file: {
-			type: {
-				mime: string;
-				extension: string;
-			};
-			size: number;
-			reference: string;
-			name: string;
-		};
+		file: AssetFile;
 		parent: any;
 		thumbnail: string | null;
 		metaData: {
@@ -51,4 +43,14 @@ export interface AssetsSearchParams {
 	search: string;
 	type: string;
 	category: string;
+}
+
+export interface AssetFile {
+	type: {
+		mime: string;
+		extension: string;
+	};
+	size: number;
+	reference: string;
+	name: string;
 }

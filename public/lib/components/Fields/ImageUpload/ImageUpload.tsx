@@ -10,6 +10,7 @@ import { InputFieldProps } from '@redactie/form-renderer-module';
 import classnames from 'classnames/bind';
 import React, { FC, useEffect, useState } from 'react';
 
+import { parseAllowedFileTypes } from '../../../helpers';
 import ModalView from '../../ModalView/ModalView';
 
 import { IMAGE_SETTINGS_DEFAULT_CONFIG, MODAL_VIEW_MODE_MAP } from './ImageUpload.const';
@@ -49,11 +50,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 
 	// Instantiate Uploader class with options from fieldSchema
 	useEffect(() => {
-		const allowedFileTypes =
-			typeof config.allowedFileTypes === 'string'
-				? config.allowedFileTypes.replace('.', '').split(', ')
-				: config.allowedFileTypes;
-
+		const allowedFileTypes = parseAllowedFileTypes(config.allowedFileTypes);
 		const options: ImageUploadOptions = {
 			allowedFileTypes,
 			messages: {
