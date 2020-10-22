@@ -4,13 +4,15 @@ import debounce from 'lodash.debounce';
 import React, { ChangeEvent, FC, ReactElement, useEffect, useMemo, useState } from 'react';
 
 import { ModalViewComponentProps } from '../../assets.types';
-import { ImageSelect, ImageSelectItem } from '../../components';
 import {
+	ImageSelect,
+	ImageSelectItem,
+	ModalViewActions,
+	ModalViewContainer,
 	ModalViewData,
 	ModalViewMode,
 	ModalViewTarget,
-} from '../../components/Fields/ImageUpload/ImageUpload.types';
-import { ModalViewActions, ModalViewContainer } from '../../components/ModalView';
+} from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
 import { getThumbnailUrl, parseAllowedFileTypes, validateFileType } from '../../helpers';
 import { useAssets } from '../../hooks';

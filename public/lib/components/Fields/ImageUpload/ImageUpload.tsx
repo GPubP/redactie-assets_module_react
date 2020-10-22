@@ -11,7 +11,7 @@ import classnames from 'classnames/bind';
 import React, { FC, useEffect, useState } from 'react';
 
 import { parseAllowedFileTypes } from '../../../helpers';
-import ModalView from '../../ModalView/ModalView';
+import { ModalView } from '../../ModalView';
 
 import { IMAGE_SETTINGS_DEFAULT_CONFIG, MODAL_VIEW_MODE_MAP } from './ImageUpload.const';
 import styles from './ImageUpload.module.scss';

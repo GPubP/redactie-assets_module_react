@@ -1,15 +1,17 @@
 import { Button } from '@acpaas-ui/react-components';
-import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
 import { FormikOnChangeHandler, LoadingState, useDetectValueChanges } from '@redactie/utils';
 import React, { FC, useMemo, useState } from 'react';
 
 import { ModalViewComponentProps } from '../../assets.types';
-import { IMAGE_META_INITIAL_FORM_STATE, ImageMetaForm, ImageMetaFormState } from '../../components';
 import {
+	IMAGE_META_INITIAL_FORM_STATE,
+	ImageMetaForm,
+	ImageMetaFormState,
+	ModalViewActions,
 	ModalViewData,
 	ModalViewMode,
 	ModalViewTarget,
-} from '../../components/Fields/ImageUpload/ImageUpload.types';
+} from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
@@ -120,24 +122,22 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 					<FormikOnChangeHandler
 						onChange={values => setFormValues(values as ImageMetaFormState)}
 					/>
-					<ActionBar disablePortal isOpen>
-						<ActionBarContentSection>
-							<div className="u-wrapper row end-xs">
-								<Button onClick={onCancel} negative>
-									{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
-								</Button>
-								<Button
-									iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
-									disabled={isSaving || !hasChanges}
-									className="u-margin-left-xs"
-									onClick={submitForm}
-									type="success"
-								>
-									{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
-								</Button>
-							</div>
-						</ActionBarContentSection>
-					</ActionBar>
+					<ModalViewActions>
+						<div className="u-wrapper row end-xs">
+							<Button onClick={onCancel} negative>
+								{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
+							</Button>
+							<Button
+								iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
+								disabled={isSaving || !hasChanges}
+								className="u-margin-left-xs"
+								onClick={submitForm}
+								type="success"
+							>
+								{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
+							</Button>
+						</div>
+					</ModalViewActions>
 				</>
 			)}
 		</ImageMetaForm>
