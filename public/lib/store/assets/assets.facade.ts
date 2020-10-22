@@ -1,6 +1,6 @@
 import { BaseEntityFacade } from '@redactie/utils';
 
-import { AssetsApiService, assetsApiService } from '../../services/assets';
+import { AssetResponse, AssetsApiService, assetsApiService } from '../../services/assets';
 
 import { AssetsQuery, assetsQuery } from './assets.query';
 import { AssetsStore, assetsStore } from './assets.store';
@@ -29,6 +29,26 @@ export class AssetsFacade extends BaseEntityFacade<AssetsStore, AssetsApiService
 					error,
 					isFetching: false,
 				});
+			});
+	}
+
+	public createAsset(formData: FormData): Promise<AssetResponse> {
+		this.store.setIsCreating(true);
+
+		return this.service
+			.createAsset(formData)
+			.then(response => {
+				if (response) {
+					this.store.setIsCreating(false);
+				}
+				return response;
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isCreating: false,
+				});
+				return error;
 			});
 	}
 }

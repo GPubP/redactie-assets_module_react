@@ -1,7 +1,7 @@
 // import { SearchParams } from '../api';
-// import apiService, { parseSearchParams } from '../api/api.service';
+import apiService, { parseSearchParams } from '../api/api.service';
 
-import { AssetsResponse } from './assets.service.types';
+import { AssetResponse, AssetsResponse } from './assets.service.types';
 
 export class AssetsApiService {
 	public async getAssets(): Promise<AssetsResponse> {
@@ -120,6 +120,14 @@ export class AssetsApiService {
 				number: 1,
 			},
 		});
+	}
+
+	public async createAsset(formData: FormData): Promise<AssetResponse> {
+		return await apiService
+			.post('files', {
+				body: formData,
+			})
+			.json<AssetResponse>();
 	}
 }
 
