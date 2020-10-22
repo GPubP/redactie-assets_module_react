@@ -26,7 +26,7 @@ export interface ModalViewData {
 	config?: ImageUploadConfig;
 	queuedFiles?: File[];
 	selectedFiles: Pick<AssetResponse, 'uuid' | 'data'>[];
-	imageFieldValue?: Record<string, any>;
+	imageFieldValue?: ImageFieldValue;
 	setImageFieldValue: (value: any) => void;
 }
 
@@ -45,7 +45,7 @@ export enum ModalViewTarget {
 	EDIT_REPLACE = 'edit-replace',
 }
 
-export interface Image {
+export interface ImageFieldValue {
 	crops?: {
 		[key: string]: {
 			asset: {
