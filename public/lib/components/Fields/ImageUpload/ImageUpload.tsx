@@ -17,7 +17,6 @@ import { IMAGE_SETTINGS_DEFAULT_CONFIG, MODAL_VIEW_MODE_MAP } from './ImageUploa
 import styles from './ImageUpload.module.scss';
 import {
 	ImageUploadOptions,
-	ModalViewData,
 	ModalViewMode,
 	ModalViewTarget,
 	ReactiveModalViewData,
@@ -70,7 +69,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	const onModalViewChange = (
 		newTarget: string,
 		newMode?: string,
-		data?: Partial<ModalViewData>
+		data?: Partial<ReactiveModalViewData>
 	): void => {
 		setModalViewData({ ...modalViewData, ...data, queuedFiles: [] });
 		setTarget(newTarget as ModalViewTarget);
