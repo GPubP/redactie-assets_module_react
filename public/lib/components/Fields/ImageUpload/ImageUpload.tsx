@@ -104,6 +104,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema }) => {
 				<ControlledModal
 					className={cx('o-image-upload__modal')}
 					onClose={closeModal}
+					overlayClassName={cx('o-image-upload__overlay')}
 					show={showModal}
 				>
 					{showModal ? (
