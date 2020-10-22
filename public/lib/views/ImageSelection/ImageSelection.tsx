@@ -17,7 +17,7 @@ import { assetsFacade } from '../../store/assets';
 
 import { DEFAULT_SEARCH_PARAMS } from './ImageSelection.const';
 
-const ImageSelection: FC<ModalViewComponentProps> = ({ onCancel, onViewChange }) => {
+const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({ onCancel, onViewChange }) => {
 	/**
 	 * Hooks
 	 */

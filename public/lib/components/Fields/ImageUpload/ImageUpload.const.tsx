@@ -1,7 +1,15 @@
+import React from 'react';
+
 import { Tab } from '../../../assets.types';
 import { ImageCrop, ImageMetaInfo, ImageSelection } from '../../../views';
 
-import { ImageUploadOptions, ModalViewMode, ModalViewTarget } from './ImageUpload.types';
+import {
+	ImageUploadConfig,
+	ImageUploadOptions,
+	ModalViewData,
+	ModalViewMode,
+	ModalViewTarget,
+} from './ImageUpload.types';
 
 export const VALIDATION_MESSAGES_DEFAULT = {
 	INVALID_FILE_TYPE: 'INVALID_FILE_TYPE',
@@ -17,7 +25,7 @@ export const UPLOAD_OPTIONS_DEFAULT: ImageUploadOptions = {
 	messages: VALIDATION_MESSAGES_DEFAULT,
 };
 
-export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
+export const IMAGE_SETTINGS_DEFAULT_CONFIG: ImageUploadConfig = {
 	allowedFileTypes: [],
 	guideline: '',
 	imageConfig: {
@@ -26,7 +34,7 @@ export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
 	},
 };
 
-const MODAL_VIEW_ADD_TABS: Tab[] = [
+const MODAL_VIEW_SELECT_TABS: Tab<ModalViewData>[] = [
 	{
 		active: true,
 		name: 'Selecteren',
@@ -42,7 +50,7 @@ const MODAL_VIEW_ADD_TABS: Tab[] = [
 	},
 ];
 
-const MODAL_VIEW_EDIT_TABS: Tab[] = [
+const MODAL_VIEW_EDIT_TABS: Tab<ModalViewData>[] = [
 	{
 		active: true,
 		name: 'Meta-informatie',
@@ -64,10 +72,27 @@ const MODAL_VIEW_EDIT_TABS: Tab[] = [
 	},
 ];
 
-export const MODAL_VIEW_MODE_MAP: { [key in ModalViewMode]: { title: string; tabs: Tab[] } } = {
-	[ModalViewMode.ADD]: {
+const MODAL_VIEW_CREATE_TABS: Tab<ModalViewData>[] = [
+	{
+		active: true,
+		name: 'Meta-informatie',
+		target: ModalViewTarget.CREATE_META,
+		viewComponent(props) {
+			return <ImageMetaInfo {...props} />;
+		},
+	},
+];
+
+export const MODAL_VIEW_MODE_MAP: {
+	[key in ModalViewMode]: { title: string; tabs: Tab<ModalViewData>[] };
+} = {
+	[ModalViewMode.CREATE]: {
+		title: 'Bewerk afbeelding',
+		tabs: MODAL_VIEW_CREATE_TABS,
+	},
+	[ModalViewMode.SELECT]: {
 		title: 'Afbeelding toevoegen',
-		tabs: MODAL_VIEW_ADD_TABS,
+		tabs: MODAL_VIEW_SELECT_TABS,
 	},
 	[ModalViewMode.EDIT]: {
 		title: 'Bewerk afbeelding',
