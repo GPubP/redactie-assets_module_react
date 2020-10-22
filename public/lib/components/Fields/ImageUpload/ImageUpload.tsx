@@ -16,6 +16,7 @@ import { ModalView } from '../../ModalView';
 import { IMAGE_SETTINGS_DEFAULT_CONFIG, MODAL_VIEW_MODE_MAP } from './ImageUpload.const';
 import styles from './ImageUpload.module.scss';
 import {
+	ImageFieldValue,
 	ImageUploadOptions,
 	ModalViewMode,
 	ModalViewTarget,
@@ -171,7 +172,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 							data={{
 								...modalViewData,
 								config,
-								imageFieldValue: (field.value as unknown) as Record<string, any>,
+								imageFieldValue: (field.value as unknown) as ImageFieldValue,
 								onManualUpload: handleManualUpload,
 								setImageFieldValue: fieldHelperProps.setValue,
 							}}
