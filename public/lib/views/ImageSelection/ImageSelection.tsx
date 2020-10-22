@@ -6,6 +6,7 @@ import React, { ChangeEvent, FC, ReactElement, useEffect, useMemo, useState } fr
 import { ModalViewComponentProps } from '../../assets.types';
 import { ImageSelect, ImageSelectItem } from '../../components';
 import {
+	ModalViewData,
 	ModalViewMode,
 	ModalViewTarget,
 } from '../../components/Fields/ImageUpload/ImageUpload.types';
@@ -23,10 +24,10 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({ onCancel, 
 	 */
 
 	const [searchParams, setSearchParams] = useState(DEFAULT_SEARCH_PARAMS);
-	const [selectedImages, setSelectedImages] = useState<ImageSelectItem[]>([]);
-	const [assetsLoading, assets, assetsMeta] = useAssets();
+	const [selectedAssets, setSelectedAssets] = useState<AssetSelectItem[]>([]);
+	const [assetsLoading, , assets, assetsMeta] = useAssets();
 	const [t] = useCoreTranslation();
-	const parsedAssets: ImageSelectItem[] = useMemo(() => {
+	const parsedAssets: AssetSelectItem[] = useMemo(() => {
 		if (!assets || assets.length === 0) {
 			return [];
 		}
@@ -50,21 +51,26 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({ onCancel, 
 	 */
 
 	const findSelected = (item: ImageSelectItem): boolean =>
-		!!selectedImages.find(selected => selected.uuid === item.uuid);
+		!!selectedAssets.find(selected => selected.uuid === item.uuid);
 
 	const onContinue = (): void => {
-		// TODO: bubble selected images up to parent to pass it via data to other views
-		// This will be done with a third param for onViewChange
-		onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
+		onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT, {
+			// Don't pass image select component props
+			selectedFiles: selectedAssets.map(({ uuid, data }) => ({ uuid, data })),
+		});
 	};
 
 	const onImageSelect = (item: ImageSelectItem): void => {
 		const isSelected = findSelected(item);
 
 		if (isSelected) {
-			setSelectedImages(selectedImages.filter(selected => selected.uuid !== item.uuid));
+			setSelectedAssets(selectedAssets.filter(selected => selected.uuid !== item.uuid));
 		} else {
-			setSelectedImages(selectedImages.concat(item));
+			if (selectedAssets.length === 1) {
+				// For now, only allow to select 1 item
+				return;
+			}
+			setSelectedAssets(selectedAssets.concat(item as AssetSelectItem));
 		}
 	};
 
@@ -95,7 +101,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({ onCancel, 
 				<ImageSelect
 					compareSelected={findSelected}
 					items={parsedAssets}
-					selection={selectedImages}
+					selection={selectedAssets}
 					onSelect={onImageSelect}
 				/>
 				{assetsMeta && (
@@ -132,13 +138,18 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({ onCancel, 
 			</ModalViewContainer>
 
 			<ModalViewActions>
-				<div className="row end-xs">
+				<div className="row middle-xs end-xs">
+					{selectedAssets.length > 0 && (
+						<span className="u-text-success u-text-italic u-margin-right">
+							{selectedAssets.length} afbeelding(en) geselecteerd
+						</span>
+					)}
 					<Button negative onClick={onCancel}>
 						{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
 					</Button>
 					<Button
 						className="u-margin-left-xs"
-						disabled={selectedImages.length === 0}
+						disabled={selectedAssets.length === 0}
 						onClick={onContinue}
 					>
 						{t(CORE_TRANSLATIONS['BUTTON_NEXT'])}

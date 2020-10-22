@@ -1,6 +1,6 @@
-import { UPLOAD_OPTIONS_DEFAULT } from '../ImageUpload.const';
 import { ImageUploadOptions } from '../ImageUpload.types';
 
+import { UPLOAD_OPTIONS_DEFAULT } from './Uploader.class.const';
 import { ValidatedFiles } from './Uploader.class.types';
 
 export class Uploader {

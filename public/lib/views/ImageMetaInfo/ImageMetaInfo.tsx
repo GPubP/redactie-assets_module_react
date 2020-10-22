@@ -19,14 +19,15 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	onCancel,
 	onViewChange,
 }) => {
-	const { imageFieldValue } = data;
-	const initialValues = data.imageFieldValue
+	const { imageFieldValue, selectedFiles } = data;
+	const currentValue = selectedFiles.length ? selectedFiles[0].data : imageFieldValue?.meta;
+	const initialValues = currentValue
 		? {
-				name: imageFieldValue?.meta.name ?? '',
-				alt: imageFieldValue?.meta.alt ?? '',
-				title: imageFieldValue?.meta.title ?? '',
-				description: imageFieldValue?.meta.description ?? '',
-				copyright: imageFieldValue?.meta.copyright ?? '',
+				name: currentValue.name ?? '',
+				alt: currentValue.alt ?? '',
+				title: currentValue.title ?? '',
+				description: currentValue.description ?? '',
+				copyright: currentValue.copyright ?? '',
 		  }
 		: IMAGE_META_INITIAL_FORM_STATE;
 

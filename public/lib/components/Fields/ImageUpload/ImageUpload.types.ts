@@ -1,6 +1,8 @@
 import { FieldSchema } from '@redactie/form-renderer-module';
 
-import { VALIDATION_MESSAGES_DEFAULT } from './ImageUpload.const';
+import { AssetResponse } from '../../../services/assets';
+
+import { VALIDATION_MESSAGES_DEFAULT } from './Uploader/Uploader.class.const';
 
 export interface ImageUploadOptions {
 	allowedMimeTypes?: string[];
@@ -23,6 +25,7 @@ export interface ImageUploadConfig extends FieldSchemaConfig {
 export interface ModalViewData {
 	config?: ImageUploadConfig;
 	queuedFiles?: File[];
+	selectedFiles: Pick<AssetResponse, 'uuid' | 'data'>[];
 	imageFieldValue?: Record<string, any>;
 	setImageFieldValue: (value: any) => void;
 }

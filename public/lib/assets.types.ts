@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { ModalViewData } from './components/Fields/ImageUpload/ImageUpload.types';
+
 export interface Tab<Data> {
 	active: boolean;
 	disabled?: boolean;
@@ -11,6 +13,6 @@ export interface Tab<Data> {
 
 export interface ModalViewComponentProps<Data> {
 	onCancel: () => void;
-	onViewChange: (target: string, mode?: string) => void;
+	onViewChange: (target: string, mode?: string, data?: Partial<ModalViewData>) => void;
 	data: Data;
 }
