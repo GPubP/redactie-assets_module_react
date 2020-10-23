@@ -9,6 +9,29 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 const packageJSON = require('./package.json');
 
+const getStyleLoaders = (cssLoaderOptions = { importLoaders: 1 }, preProcessor = '') => {
+	const loaders = [
+		'style-loader',
+		{
+			loader: 'css-loader',
+			options: cssLoaderOptions,
+		},
+		{
+			loader: 'postcss-loader',
+			options: {
+				ident: 'postcss',
+				plugins: () => [postcssPresetEnv(), cssnano({ preset: 'default' })],
+			},
+		},
+	];
+
+	if (preProcessor) {
+		loaders.push(preProcessor);
+	}
+
+	return loaders;
+};
+
 module.exports = env => {
 	const defaultConfig = {
 		mode: 'production',
@@ -24,47 +47,25 @@ module.exports = env => {
 					include: [/public/],
 				},
 				{
+					test: /\.css$/i,
+					use: getStyleLoaders(),
+					include: [/public/, /node_modules\/@a-ui\/core/, /node_modules\/cropperjs/],
+				},
+				{
 					test: /\.module\.s[ac]ss$/i,
-					use: [
-						'style-loader',
+					use: getStyleLoaders(
 						{
-							loader: 'css-loader',
-							options: {
-								modules: true,
-								importLoaders: 1,
-							},
+							modules: true,
+							importLoaders: 2,
 						},
-						{
-							loader: 'postcss-loader',
-							options: {
-								ident: 'postcss',
-								plugins: () => [postcssPresetEnv(), cssnano({ preset: 'default' })],
-							},
-						},
-						'sass-loader',
-					],
+						'sass-loader'
+					),
 					include: [/public/, /node_modules\/@a-ui\/core/],
 				},
 				{
 					test: /\.s[ac]ss$/i,
 					exclude: /\.module\.s[ac]ss$/i,
-					use: [
-						'style-loader',
-						{
-							loader: 'css-loader',
-							options: {
-								importLoaders: 1,
-							},
-						},
-						{
-							loader: 'postcss-loader',
-							options: {
-								ident: 'postcss',
-								plugins: () => [postcssPresetEnv(), cssnano({ preset: 'default' })],
-							},
-						},
-						'sass-loader',
-					],
+					use: getStyleLoaders({ importLoaders: 2 }, 'sass-loader'),
 					include: [/public/, /node_modules\/@a-ui\/core/],
 				},
 			],
