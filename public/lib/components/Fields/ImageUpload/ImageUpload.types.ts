@@ -27,8 +27,11 @@ export interface ModalViewData {
 	queuedFiles?: File[];
 	selectedFiles: Pick<AssetResponse, 'uuid' | 'data'>[];
 	imageFieldValue?: ImageFieldValue;
+	onManualUpload: (files: File[]) => void;
 	setImageFieldValue: (value: any) => void;
 }
+
+export type ReactiveModalViewData = Pick<ModalViewData, 'queuedFiles' | 'selectedFiles'>;
 
 export enum ModalViewMode {
 	CREATE = 'create',
