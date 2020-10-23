@@ -18,11 +18,20 @@
 	}
 
 	.o-image-card__preview {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
 		height: rem(240px);
+		background-color: $grey-light;
 		background-position: center;
 		background-size: cover;
 		transition: opacity $animation-normal;
+	}
+
+	.o-image-card__preview-icon {
+		font-size: $icon-size-lg;
+		color: $grey-dark;
 	}
 
 	.o-image-card__footer {
@@ -53,6 +62,16 @@
 	 * Modifiers
 	 */
 
+	&.o-image-card--disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+		pointer-events: none;
+
+		.o-image-card__check {
+			display: none;
+		}
+	}
+
 	&.o-image-card--selected {
 		border-color: $state-success;
 		background-color: mix($state-success, $white, 10%);
@@ -65,7 +84,17 @@
 	}
 
 	// States
+	&:focus {
+		box-shadow: 0 0 0 3px $grey-light;
+		outline: none;
+
+		&.o-image-card--selected {
+			box-shadow: 0 0 0 3px mix($state-success, $white, 25%);
+		}
+	}
+
 	&:hover {
+		&:not(.o-image-card--disabled),
 		&:not(.o-image-card--selected) {
 			.o-image-card__preview {
 				opacity: 0.8;

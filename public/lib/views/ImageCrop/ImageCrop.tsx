@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 
 import { ModalViewComponentProps } from '../../assets.types';
-import { ModalViewData } from '../../components/Fields/ImageUpload/ImageUpload.types';
-import { ModalViewContainer } from '../../components/ModalView';
+import { ModalViewContainer, ModalViewData } from '../../components';
 
 const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = () => {
 	return (

@@ -1,6 +1,7 @@
-import { UPLOAD_OPTIONS_DEFAULT } from '../ImageUpload.const';
+import { validateFileType } from '../../../../helpers';
 import { ImageUploadOptions } from '../ImageUpload.types';
 
+import { UPLOAD_OPTIONS_DEFAULT } from './Uploader.class.const';
 import { ValidatedFiles } from './Uploader.class.types';
 
 export class Uploader {
@@ -78,18 +79,8 @@ export class Uploader {
 
 	validateFileType(file: File): boolean {
 		const { allowedFileTypes } = this.options;
-		const ext = Uploader.getFileExtension(file);
 
-		// Filter defined?
-		if (!Array.isArray(allowedFileTypes) || allowedFileTypes.length === 0) {
-			return true;
-		}
-
-		// Make allowedFileTypes case insensitive
-		const toUpper = (x: string): string => x.toUpperCase();
-		const allowedFileTypesToUpper = allowedFileTypes.map(toUpper);
-
-		return allowedFileTypesToUpper.lastIndexOf(ext.toUpperCase()) !== -1;
+		return validateFileType(allowedFileTypes, file);
 	}
 
 	validateFileSize(file: File): boolean {
@@ -112,9 +103,5 @@ export class Uploader {
 		}
 
 		return allowedMimeTypes.lastIndexOf(file.type) !== -1;
-	}
-
-	static getFileExtension(file: File): string {
-		return file.name.split('.')[file.name.split('.').length - 1];
 	}
 }

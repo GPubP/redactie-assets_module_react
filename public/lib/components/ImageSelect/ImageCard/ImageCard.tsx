@@ -9,6 +9,7 @@ const cx = classnames.bind(styles);
 
 const ImageCard: FC<ImageCardProps> = ({
 	className,
+	disabled = false,
 	imageSrc,
 	onClick,
 	selected = false,
@@ -20,17 +21,22 @@ const ImageCard: FC<ImageCardProps> = ({
 	return (
 		<div
 			className={cx(className, 'm-card', 'o-image-card', {
+				'o-image-card--disabled': disabled,
 				'o-image-card--no-img': !imageSrc,
 				'o-image-card--selected': selected,
 			})}
-			onClick={onClick}
-			onKeyPress={onClick}
+			onClick={!disabled ? onClick : undefined}
+			onKeyPress={!disabled ? onClick : undefined}
 			role="button"
 			tabIndex={0}
 		>
 			<div className={cx('o-image-card__body')}>
 				<div className={cx('o-image-card__preview')} role="img" style={setImageStyles()}>
-					<span className="u-screen-reader-only">{title}</span>
+					{imageSrc ? (
+						<span className="u-screen-reader-only">{title}</span>
+					) : (
+						<Icon className={cx('o-image-card__preview-icon')} name="picture-o" />
+					)}
 				</div>
 				<div className={cx('o-image-card__footer')}>
 					<p className="u-no-margin">{title}</p>

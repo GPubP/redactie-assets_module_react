@@ -8,13 +8,15 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { InputFieldProps } from '@redactie/form-renderer-module';
 import classnames from 'classnames/bind';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
-import ModalView from '../../ModalView/ModalView';
+import { parseAllowedFileTypes } from '../../../helpers';
+import { ModalView } from '../../ModalView';
 
 import { IMAGE_SETTINGS_DEFAULT_CONFIG, MODAL_VIEW_MODE_MAP } from './ImageUpload.const';
 import styles from './ImageUpload.module.scss';
 import {
+	ImageFieldValue,
 	ImageUploadOptions,
 	ModalViewData,
 	ModalViewMode,
@@ -34,21 +36,22 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	 * Hooks
 	 */
 
+	const [modalViewData, setModalViewData] = useState<ModalViewData>({
+		config,
+		queuedFiles: [],
+		selectedFiles: [],
+		setImageFieldValue: fieldHelperProps.setValue,
+	});
 	const [mode, setMode] = useState(ModalViewMode.EDIT);
 	const [options, setOptions] = useState<ImageUploadOptions | null>(null);
 	const [showModal, setShowModal] = useState(false);
-	const [queuedFiles, setQueuedFiles] = useState<File[]>([]);
 	const [invalidFiles, setInvalidFiles] = useState([]);
 	const [target, setTarget] = useState<ModalViewTarget | null>(null);
 	const [uploader, setUploader] = useState<Uploader | null>(null);
 
 	// Instantiate Uploader class with options from fieldSchema
 	useEffect(() => {
-		const allowedFileTypes =
-			typeof config.allowedFileTypes === 'string'
-				? config.allowedFileTypes.replace('.', '').split(', ')
-				: config.allowedFileTypes;
-
+		const allowedFileTypes = parseAllowedFileTypes(config.allowedFileTypes);
 		const options: ImageUploadOptions = {
 			allowedFileTypes,
 			messages: {
@@ -62,22 +65,16 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		setUploader(new Uploader(options ?? {}));
 	}, [config, config.allowedFileTypes]);
 
-	const modalViewData: ModalViewData = useMemo(
-		() => ({
-			config,
-			queuedFiles,
-			imageFieldValue: (field.value as unknown) as Record<string, any>,
-			setImageFieldValue: fieldHelperProps.setValue,
-		}),
-		[config, field.value, fieldHelperProps.setValue, queuedFiles]
-	);
-
 	/**
 	 * Methods
 	 */
 
-	const onModalViewChange = (newTarget: string, newMode?: string): void => {
-		setQueuedFiles([]);
+	const onModalViewChange = (
+		newTarget: string,
+		newMode?: string,
+		data?: Partial<ModalViewData>
+	): void => {
+		setModalViewData({ ...modalViewData, ...data, queuedFiles: [] });
 		setTarget(newTarget as ModalViewTarget);
 
 		if (newMode) {
@@ -86,9 +83,9 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	};
 
 	const handleCustomUpload = (): void => {
-		setMode(ModalViewMode.EDIT);
+		setMode(ModalViewMode.SELECT);
 		setShowModal(true);
-		setQueuedFiles([]);
+		setModalViewData({ ...modalViewData, queuedFiles: [] });
 	};
 
 	const handleCustomDrop = (files: File[]): void => {
@@ -96,7 +93,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 			// There must be a validation error
 			return;
 		}
-		setQueuedFiles(files);
+		setModalViewData({ ...modalViewData, queuedFiles: files });
 		setMode(ModalViewMode.CREATE);
 		setShowModal(true);
 	};
@@ -112,7 +109,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	const closeModal = (): void => {
 		setTarget(null);
 		setShowModal(false);
-		setQueuedFiles([]);
+		setModalViewData({ ...modalViewData, queuedFiles: [] });
 	};
 
 	/**
@@ -155,11 +152,15 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 				<ControlledModal
 					className={cx('o-image-upload__modal')}
 					onClose={closeModal}
+					overlayClassName={cx('o-image-upload__overlay')}
 					show={showModal}
 				>
 					{showModal ? (
 						<ModalView
-							data={modalViewData}
+							data={{
+								...modalViewData,
+								imageFieldValue: (field.value as unknown) as ImageFieldValue,
+							}}
 							config={MODAL_VIEW_MODE_MAP}
 							mode={mode}
 							onCancel={closeModal}

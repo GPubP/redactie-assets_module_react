@@ -1,6 +1,11 @@
 import { BaseEntityFacade } from '@redactie/utils';
 
-import { AssetResponse, AssetsApiService, assetsApiService } from '../../services/assets';
+import {
+	AssetResponse,
+	AssetsApiService,
+	assetsApiService,
+	AssetsSearchParams,
+} from '../../services/assets';
 
 import { AssetsQuery, assetsQuery } from './assets.query';
 import { AssetsStore, assetsStore } from './assets.store';
@@ -10,11 +15,11 @@ export class AssetsFacade extends BaseEntityFacade<AssetsStore, AssetsApiService
 	public readonly assets$ = this.query.assets$;
 	public readonly asset$ = this.query.asset$;
 
-	public getAssets(): void {
+	public getAssets(searchParams: AssetsSearchParams): void {
 		this.store.setIsFetching(true);
 
 		this.service
-			.getAssets()
+			.getAssets(searchParams)
 			.then(response => {
 				if (response) {
 					this.store.set(response._embedded);
