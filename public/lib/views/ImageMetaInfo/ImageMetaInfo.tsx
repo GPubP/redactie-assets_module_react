@@ -5,6 +5,7 @@ import React, { FC, useMemo, useState } from 'react';
 import { ModalViewComponentProps } from '../../assets.types';
 import {
 	IMAGE_META_INITIAL_FORM_STATE,
+	ImageFieldValue,
 	ImageMetaForm,
 	ImageMetaFormState,
 	ModalViewActions,
@@ -25,11 +26,11 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const currentValue = selectedFiles.length ? selectedFiles[0].data : imageFieldValue?.meta;
 	const initialValues = currentValue
 		? {
-				name: currentValue.name ?? '',
-				alt: currentValue.alt ?? '',
-				title: currentValue.title ?? '',
-				description: currentValue.description ?? '',
-				copyright: currentValue.copyright ?? '',
+				name: currentValue?.name ?? '',
+				alt: (currentValue as ImageFieldValue['meta'])?.alt ?? '',
+				title: (currentValue as ImageFieldValue['meta'])?.title ?? '',
+				description: currentValue?.description ?? '',
+				copyright: currentValue?.copyright ?? '',
 		  }
 		: IMAGE_META_INITIAL_FORM_STATE;
 
