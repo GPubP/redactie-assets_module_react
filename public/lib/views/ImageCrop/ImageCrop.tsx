@@ -1,19 +1,27 @@
 import { Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import { ModalViewComponentProps, NavListItem } from '../../assets.types';
-import { CropOption, ModalViewActions, ModalViewContainer, ModalViewData } from '../../components';
+import {
+	CropOption,
+	ImageCropper,
+	ModalViewActions,
+	ModalViewContainer,
+	ModalViewData,
+} from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
+import { getThumbnailUrl } from '../../helpers';
 
 const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel }) => {
-	const { config } = data;
+	const { config, queuedFiles, selectedFiles } = data;
 	const cropOptions = config?.imageConfig?.cropOptions || [];
 
 	/**
 	 * Hooks
 	 */
 
+	const [imgSrc, setImgSrc] = useState('');
 	const [cropOption, setCropOption] = useState<CropOption | null>(cropOptions[0] || null);
 	const [t] = useCoreTranslation();
 	const navListItems: NavListItem[] = useMemo(() => {
@@ -23,7 +31,18 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			label: crop.name,
 			onClick: () => setCropOption(crop),
 		}));
-	}, [cropOptions, cropOption]);
+	}, [cropOption, cropOptions]);
+
+	// Set image src url
+	useEffect(() => {
+		if (queuedFiles?.length) {
+			// TODO: handle queued files
+			return;
+		}
+		if (selectedFiles.length) {
+			setImgSrc(getThumbnailUrl(selectedFiles[0].uuid));
+		}
+	}, [queuedFiles, selectedFiles]);
 
 	/**
 	 * Methods
@@ -53,10 +72,19 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 					</div>
 
 					<div className="col-xs-12 col-md-9">
-						<p>
+						<p className="u-margin-bottom-xs">
 							Snijd de afbeelding bij volgens deze verhouding: <strong></strong>
 						</p>
-						<div className="o-cropper-container"></div>
+
+						<ImageCropper
+							crop={() => {
+								console.log('cropping...');
+							}}
+							cropend={() => {
+								console.log('cropping done');
+							}}
+							src={imgSrc}
+						/>
 					</div>
 				</div>
 			</ModalViewContainer>
