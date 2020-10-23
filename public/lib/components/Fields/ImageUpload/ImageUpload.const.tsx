@@ -14,6 +14,7 @@ export const IMAGE_SETTINGS_DEFAULT_CONFIG: ImageUploadConfig = {
 	allowedFileTypes: [],
 	guideline: '',
 	imageConfig: {
+		cropOptions: [],
 		minWidth: 0,
 		minHeight: 0,
 	},

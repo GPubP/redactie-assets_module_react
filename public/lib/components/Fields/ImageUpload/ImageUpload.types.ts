@@ -1,6 +1,7 @@
 import { FieldSchema } from '@redactie/form-renderer-module';
 
 import { AssetResponse } from '../../../services/assets';
+import { CropOption } from '../ImageFieldSettings';
 
 import { VALIDATION_MESSAGES_DEFAULT } from './Uploader/Uploader.class.const';
 
@@ -17,6 +18,7 @@ type FieldSchemaConfig = FieldSchema['config'] & {};
 export interface ImageUploadConfig extends FieldSchemaConfig {
 	allowedFileTypes?: string[];
 	imageConfig?: {
+		cropOptions: CropOption[];
 		minWidth: number;
 		minHeight: number;
 	};
