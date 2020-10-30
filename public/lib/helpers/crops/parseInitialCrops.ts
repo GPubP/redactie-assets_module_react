@@ -18,7 +18,7 @@ export const parseInitialCrops = (
 
 		return {
 			...acc,
-			[settings.id]: {
+			[kebabCase(settings.name)]: {
 				...crops[curr],
 				settings,
 			},

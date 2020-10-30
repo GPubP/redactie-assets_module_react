@@ -10,8 +10,8 @@
 }
 
 .o-image-upload__actions {
-	flex-shrink: 1;
-	padding-left: $spacer;
+	flex: 0 1 1%;
+	padding-left: $spacer-sm;
 }
 
 .o-image-upload__overlay {

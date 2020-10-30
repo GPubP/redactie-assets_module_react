@@ -26,19 +26,17 @@ const ImageItem: FC<ImageItemProps> = ({ source, meta, onImageClick }) => {
 
 	return (
 		<div className="row">
-			<div
-				className={cx('o-image-item__thumbnail', 'col-xs-4')}
-				role="img"
-				style={setImageStyles()}
-			>
-				<span className={cx('o-image-item__edit')}>
-					<Button htmlType="button" icon="crop" onClick={onImageClick} />
-				</span>
-				{source ? (
-					<span className="u-screen-reader-only">{meta.title}</span>
-				) : (
-					<Icon className={cx('o-image-item__thumbnail-icon')} name="picture-o" />
-				)}
+			<div className="col-xs-4">
+				<div className={cx('o-image-item__thumbnail')} role="img" style={setImageStyles()}>
+					<span className={cx('o-image-item__edit')}>
+						<Button htmlType="button" icon="crop" onClick={onImageClick} />
+					</span>
+					{source ? (
+						<span className="u-screen-reader-only">{meta.title}</span>
+					) : (
+						<Icon className={cx('o-image-item__thumbnail-icon')} name="picture-o" />
+					)}
+				</div>
 			</div>
 			<div className={cx('o-image-item__meta-list', 'col-xs-8')}>
 				<ImageMetaList data={meta} />

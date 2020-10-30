@@ -5,7 +5,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: rem(240px);
+	max-width: rem(240px);
+	width: 100%;
 	height: rem(180px);
 	background-color: $grey-light;
 	background-position: center;
@@ -30,5 +31,9 @@
 	dt,
 	dd {
 		display: inline-block;
+	}
+
+	dt {
+		margin-right: $spacer-xs;
 	}
 }

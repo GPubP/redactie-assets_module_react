@@ -13,7 +13,7 @@ import {
 	ModalViewData,
 } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
-import { getThumbnailUrl, parseCropsRequest, parseInitialCrops } from '../../helpers';
+import { getAssetUrl, parseCropsRequest, parseInitialCrops } from '../../helpers';
 import { AssetCropsRequest, assetsApiService } from '../../services/assets';
 import { imageCropperService } from '../../services/imageCropper';
 
@@ -21,9 +21,8 @@ import { ALERT_MESSAGES } from './ImageCrop.const';
 import { ImageCrops, TemporaryCrop } from './ImageCrop.types';
 
 const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel }) => {
-	const { config, queuedFiles, selectedFiles, setImageFieldValue, imageFieldValue } = data;
+	const { config, setImageFieldValue, imageFieldValue } = data;
 	const cropOptions = config?.imageConfig?.cropOptions || [];
-	const currentAsset = imageFieldValue?.original?.asset || null;
 
 	/**
 	 * Hooks
@@ -42,6 +41,10 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 	const [imgSrc, setImgSrc] = useState<string>();
 	const [t] = useCoreTranslation();
 
+	const currentAsset = useMemo(() => {
+		return data.imageFieldValue?.original?.asset || null;
+	}, [data.imageFieldValue]);
+
 	const navListItems: NavListItem[] = useMemo(() => {
 		return cropOptions.map(crop => ({
 			className: crop.id === activeCrop?.id ? 'is-active' : '',
@@ -53,15 +56,10 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 	// Set image src url
 	useEffect(() => {
-		if (queuedFiles?.length) {
-			// TODO: handle queued files
-			// Depends on whether an image can be saved without meta info or not
-			return;
+		if (currentAsset) {
+			setImgSrc(getAssetUrl(currentAsset.uuid));
 		}
-		if (selectedFiles.length) {
-			setImgSrc(getThumbnailUrl(selectedFiles[0].uuid));
-		}
-	}, [queuedFiles, selectedFiles]);
+	}, [currentAsset]);
 
 	// Clear or set crop data when activeCrop changes
 	useEffect(() => {
@@ -70,7 +68,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		}
 
 		const aspectRatio = imageCropperService.calculateAspectRatio(activeCrop);
-		const cropData = crops[activeCrop.id] || {};
+		const cropData = crops[kebabCase(activeCrop.name)] || {};
 
 		cropperRef.current.setAspectRatio(aspectRatio);
 		cropperRef.current.crop();
@@ -152,12 +150,14 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		if (!crops || !currentAsset) {
 			return;
 		}
-		setIsGeneratingCrops(true);
 
+		// Validate if all crops are set
 		if (cropOptions.length !== Object.keys(crops).length) {
 			setError('Alle crops moeten gezet worden');
 			return;
 		}
+
+		setIsGeneratingCrops(true);
 
 		const cropsRequest: AssetCropsRequest = {
 			// TODO: remove uuid from request body once removed from backend (old remnant from v3)
@@ -218,6 +218,8 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 					{alert && (
 						<div className="col-xs-12">
 							<Alert
+								className="u-margin-bottom"
+								closable
 								onClose={() => setAlert(null)}
 								title={alert.title}
 								type={alert.type}
