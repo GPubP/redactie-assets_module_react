@@ -51,36 +51,39 @@ export interface AssetFile {
 }
 
 export interface AssetCropsResponse {
-	uuid: string;
-	data: {
-		name: string;
-		description: string;
-		copyright: string;
-		category: string;
-		file: {
-			type: {
+	crops: {
+		[key: string]: {
+			asset: {
 				mime: string;
-				extension: string;
+				source: string;
+				url: string;
+				uuid: string;
 			};
-			size: number;
-			ref: string;
 			name: string;
+			width: number;
+			height: number;
+			settings: {
+				x: number;
+				y: number;
+				width: number;
+				height: number;
+				blur: number;
+				grayscale: boolean;
+				rotate: 0;
+			};
 		};
-		parent: string;
-		thumbnail: string;
-		metaData: {
-			width: string;
-			height: string;
-			language: string;
-		};
-		attributes: Record<string, any>;
-		type: string;
 	};
-	meta: {
-		created: string;
-		lastUpdated: string;
-		lastEditor: string;
-		tenant: string;
+	original: {
+		asset: {
+			uuid: string;
+			mime: string;
+			source: string;
+			url: string;
+		};
+		name: string;
+		width: number;
+		height: number;
+		settings: {};
 	};
 }
 
@@ -110,23 +113,23 @@ export interface AssetCropsRequest {
 			rotate: number;
 		};
 	};
-	settings: [
-		{
-			type: 'free' | 'exact' | 'boundary' | 'ratio';
-			label: string;
-			safeLabel: string;
-			ratio?: {
-				width: number;
-				height: number;
-			};
-			_lockID?: boolean;
-			width?: number;
-			height?: number;
-			lockRatio?: boolean;
-			minWidth?: number;
-			minHeight?: number;
-			maxWidth?: number;
-			maxHeight?: number;
-		}
-	];
+	settings: AssetCropsSettings[];
+}
+
+export interface AssetCropsSettings {
+	type: 'free' | 'exact' | 'boundary' | 'ratio';
+	label: string;
+	safeLabel: string;
+	ratio?: {
+		width: number;
+		height: number;
+	};
+	_lockID?: boolean;
+	width?: number;
+	height?: number;
+	lockRatio?: boolean;
+	minWidth?: number;
+	minHeight?: number;
+	maxWidth?: number;
+	maxHeight?: number;
 }

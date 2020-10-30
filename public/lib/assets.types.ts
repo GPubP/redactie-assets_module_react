@@ -22,3 +22,9 @@ export interface ModalViewComponentProps<Data> {
 	onViewChange: (target: string, mode?: string, data?: Partial<Data>) => void;
 	data: Data;
 }
+
+export interface AlertMessage {
+	title: string;
+	message: string;
+	type: 'success' | 'danger';
+}
