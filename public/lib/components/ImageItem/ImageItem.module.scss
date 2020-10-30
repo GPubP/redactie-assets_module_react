@@ -1,0 +1,34 @@
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.o-image-item__thumbnail {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: rem(240px);
+	height: rem(180px);
+	background-color: $grey-light;
+	background-position: center;
+	background-size: cover;
+	transition: opacity $animation-normal;
+}
+
+.o-image-card__thumbnail-icon {
+	font-size: $icon-size-lg;
+	color: $grey-dark;
+}
+
+.o-image-item__edit {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: $white;
+}
+
+.o-image-item__meta-list {
+	dt,
+	dd {
+		display: inline-block;
+	}
+}

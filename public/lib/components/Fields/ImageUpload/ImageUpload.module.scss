@@ -1,5 +1,19 @@
 @import '~@a-ui/core/dist/assets/styles/_quarks';
 
+.o-image-upload {
+	display: flex;
+	align-items: center;
+}
+
+.o-image-upload__card {
+	flex-grow: 1;
+}
+
+.o-image-upload__actions {
+	flex-shrink: 1;
+	padding-left: $spacer;
+}
+
 .o-image-upload__overlay {
 	padding: $spacer 0;
 	overflow-y: auto;

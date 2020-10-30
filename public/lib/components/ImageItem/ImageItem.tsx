@@ -1,14 +1,46 @@
-import React, { FC } from 'react';
+import { Button, Icon } from '@acpaas-ui/react-components';
+import classnames from 'classnames/bind';
+import React, { CSSProperties, FC } from 'react';
 
-import { ImageMetaList } from '../ImageMetaList';
+import { useImageLoaded } from '../../hooks';
 
+import styles from './ImageItem.module.scss';
 import { ImageItemProps } from './ImageItem.types';
+import { ImageMetaList } from './ImageMetaList';
 
-const ImageItem: FC<ImageItemProps> = ({ source, meta }) => {
+const cx = classnames.bind(styles);
+
+const ImageItem: FC<ImageItemProps> = ({ source, meta, onImageClick }) => {
+	/**
+	 * Hooks
+	 */
+
+	const loaded = useImageLoaded(source);
+
+	/**
+	 * Methods
+	 */
+
+	const setImageStyles = (): CSSProperties =>
+		source && loaded ? { backgroundImage: `url(${source})` } : {};
+
 	return (
 		<div className="row">
-			<img src={source} alt={meta.alt} />
-			<div>
+			<div
+				className={cx('o-image-item__thumbnail', 'col-xs-4')}
+				role="img"
+				style={setImageStyles()}
+			>
+				<span className={cx('o-image-item__edit')}>
+					<Button htmlType="button" icon="crop" onClick={onImageClick} />
+				</span>
+				{source ? (
+					<span className="u-screen-reader-only">{meta.title}</span>
+				) : (
+					<Icon className={cx('o-image-item__thumbnail-icon')} name="picture-o" />
+				)}
+			</div>
+			<div className={cx('o-image-item__meta-list', 'col-xs-8')}>
 				<ImageMetaList data={meta} />
 			</div>
 		</div>
