@@ -64,7 +64,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 		!!selectedAssets.find(selected => selected.uuid === item.uuid);
 
 	const onContinue = (): void => {
-		onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT, {
+		onViewChange(ModalViewTarget.CREATE_META, ModalViewMode.CREATE, {
 			// Don't pass image select component props
 			selectedFiles: selectedAssets.map(({ uuid, data }) => ({ uuid, data })),
 		});
