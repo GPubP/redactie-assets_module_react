@@ -1,4 +1,4 @@
-import { CropMethods } from '../../components';
+import { CropMethods } from '../../assets.types';
 
 export const CROP_TYPE_MAP = {
 	[CropMethods.BOUNDS]: 'boundary',

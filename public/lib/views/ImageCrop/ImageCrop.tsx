@@ -3,9 +3,13 @@ import { NavList } from '@acpaas-ui/react-editorial-components';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
-import { AlertMessage, ModalViewComponentProps, NavListItem } from '../../assets.types';
 import {
+	AlertMessage,
 	CropMethods,
+	ModalViewComponentProps,
+	NavListItem,
+} from '../../assets.types';
+import {
 	CropOption,
 	ImageCropper,
 	ModalViewActions,

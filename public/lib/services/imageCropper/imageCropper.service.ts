@@ -1,4 +1,5 @@
-import { BoundsDimensions, CropMethods, CropOption, ExactDimensions } from '../../components';
+import { CropMethods } from '../../assets.types';
+import { BoundsDimensions, CropOption, ExactDimensions } from '../../components';
 
 export class ImageCropperService {
 	public calculateAspectRatio(cropData: CropOption): number {

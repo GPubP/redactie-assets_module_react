@@ -28,3 +28,10 @@ export interface AlertMessage {
 	message: string;
 	type: 'success' | 'danger';
 }
+
+export enum CropMethods {
+	FREE = 'free',
+	EXACT = 'exact',
+	BOUNDS = 'bounds',
+	RATIO = 'ratio',
+}

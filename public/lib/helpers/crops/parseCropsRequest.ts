@@ -1,6 +1,6 @@
 import kebabCase from 'lodash.kebabcase';
 
-import { CropMethods } from '../../components';
+import { CropMethods } from '../../assets.types';
 import { AssetCropsRequest } from '../../services/assets';
 import { CROP_DIMENSIONS_MAP, CROP_TYPE_MAP } from '../../views/ImageCrop/ImageCrop.const';
 import { ImageCrops } from '../../views/ImageCrop/ImageCrop.types';

@@ -3,14 +3,11 @@ import { ErrorMessage } from '@redactie/utils';
 import { Field, Formik, FormikProps } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
+import { CropMethods } from '../../../assets.types';
 import { CropOption } from '../../Fields/ImageFieldSettings';
 
 import { CROP_METHODS, IMAGE_CROP_SETTINGS_VALIDATION_SCHEMA } from './ImageCropSettingsForm.const';
-import {
-	CropMethodFieldOption,
-	CropMethods,
-	ImageCropSettingsFormProps,
-} from './ImageCropSettingsForm.types';
+import { CropMethodFieldOption, ImageCropSettingsFormProps } from './ImageCropSettingsForm.types';
 
 const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 	initialValues,

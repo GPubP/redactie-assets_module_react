@@ -2,8 +2,9 @@ import { Button } from '@acpaas-ui/react-components';
 import { TranslateFunc } from '@redactie/translations-module';
 import React from 'react';
 
+import { CropMethods } from '../../../assets.types';
 import { CORE_TRANSLATIONS } from '../../../connectors/translations';
-import { CROP_METHODS, CropMethods } from '../../Forms/ImageCropSettingsForm';
+import { CROP_METHODS } from '../../Forms/ImageCropSettingsForm';
 
 import { CropOption } from './ImageFieldSettings.types';
 
