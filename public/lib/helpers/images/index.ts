@@ -1,2 +1,2 @@
-export * from './getThumbnailUrl';
+export * from './getAssetUrl';
 export * from './onImageLoaded';

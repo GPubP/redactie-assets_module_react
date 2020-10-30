@@ -1,4 +1,4 @@
-import { ImageMetaListProps } from '../ImageMetaList';
+import { ImageMetaListProps } from './ImageMetaList';
 
 export interface ImageItemProps {
 	meta: ImageMetaListProps['data'];
