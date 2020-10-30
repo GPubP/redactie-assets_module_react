@@ -1,6 +1,8 @@
 import { Icon } from '@acpaas-ui/react-components';
 import classnames from 'classnames/bind';
-import React, { CSSProperties, FC } from 'react';
+import React, { CSSProperties, FC, useEffect, useState } from 'react';
+
+import { onImageLoaded } from '../../../helpers';
 
 import styles from './ImageCard.module.scss';
 import { ImageCardProps } from './ImageCard.types';
@@ -15,8 +17,34 @@ const ImageCard: FC<ImageCardProps> = ({
 	selected = false,
 	title = '',
 }) => {
+	/**
+	 * Hooks
+	 */
+
+	const [loaded, setLoaded] = useState(false);
+
+	useEffect(() => {
+		let img = onImageLoaded(imageSrc, () => setLoaded(true));
+
+		return () => {
+			if (img) {
+				// Prevent state updates to happen after component has already been destroyed
+				img.onload = () => null;
+				img = null;
+			}
+		};
+	}, [imageSrc]);
+
+	/**
+	 * Methods
+	 */
+
 	const setImageStyles = (): CSSProperties =>
-		imageSrc ? { backgroundImage: `url(${imageSrc})` } : {};
+		imageSrc && loaded ? { backgroundImage: `url(${imageSrc})` } : {};
+
+	/**
+	 * Render
+	 */
 
 	return (
 		<div

@@ -1,0 +1,28 @@
+/**
+ * Image cropper
+ * ----
+ */
+
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.o-image-cropper-container {
+	position: relative;
+}
+
+.o-image-cropper {
+	width: 100%;
+	height: rem(420px);
+	background-color: $grey;
+}
+
+/**
+ * Elements
+ */
+
+.o-image-cropper__loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: $white;
+}

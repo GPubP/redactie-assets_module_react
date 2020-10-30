@@ -1,5 +1,12 @@
 import { FC } from 'react';
 
+export interface NavListItem {
+	description?: string;
+	hasError?: boolean;
+	label: string;
+	onClick?: () => void;
+}
+
 export interface Tab<Data> {
 	active: boolean;
 	disabled?: boolean;
