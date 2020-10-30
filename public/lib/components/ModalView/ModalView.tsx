@@ -1,13 +1,20 @@
 import { ContextHeader } from '@acpaas-ui/react-editorial-components';
 import classnames from 'classnames/bind';
-import React, { FC, useMemo } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 
 import styles from './ModalView.module.scss';
 import { ModalViewProps } from './ModalView.types';
 
 const cx = classnames.bind(styles);
 
-const ModalView: FC<ModalViewProps> = ({ config, mode, onCancel, onViewChange, target }) => {
+const ModalView = <Data extends Record<string, any>>({
+	config,
+	mode,
+	onCancel,
+	onViewChange,
+	target,
+	data,
+}: ModalViewProps<Data>): ReactElement => {
 	/**
 	 * Hooks
 	 */
@@ -35,6 +42,10 @@ const ModalView: FC<ModalViewProps> = ({ config, mode, onCancel, onViewChange, t
 		if (!clickedTab || clickedTab?.disabled) {
 			return;
 		}
+		if (clickedTab.onClick) {
+			clickedTab.onClick(data);
+			return;
+		}
 
 		onViewChange(newTarget);
 	};
@@ -54,7 +65,7 @@ const ModalView: FC<ModalViewProps> = ({ config, mode, onCancel, onViewChange, t
 				tabs={activeTabs}
 				title={config[mode].title}
 			/>
-			<ViewComponent onCancel={onCancel} onViewChange={onViewChange} />
+			<ViewComponent data={data} onCancel={onCancel} onViewChange={onViewChange} />
 		</>
 	);
 };

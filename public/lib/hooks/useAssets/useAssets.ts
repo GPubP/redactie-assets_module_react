@@ -4,15 +4,22 @@ import { LoadingState } from '@redactie/utils';
 import { AssetsMetaResponse } from '../../services/assets';
 import { AssetModel, assetsFacade } from '../../store/assets';
 
-const useAssets = (): [LoadingState, AssetModel[], AssetsMetaResponse | null | undefined] => {
-	const [loading] = useObservable(assetsFacade.isFetching$, LoadingState.Loading);
+const useAssets = (): [
+	LoadingState,
+	LoadingState,
+	AssetModel[],
+	AssetsMetaResponse | null | undefined
+] => {
+	const [isFetching] = useObservable(assetsFacade.isFetching$, LoadingState.Loading);
+	const [isCreating] = useObservable(assetsFacade.isCreating$, LoadingState.Loading);
 	const [assets] = useObservable(assetsFacade.assets$, []);
 	const [meta] = useObservable(assetsFacade.meta$, null);
 	const [error] = useObservable(assetsFacade.error$, null);
 
-	const loadingState = error ? LoadingState.Error : loading;
+	const loadingState = error ? LoadingState.Error : isFetching;
+	const creatingState = error ? LoadingState.Error : isCreating;
 
-	return [loadingState, assets, meta];
+	return [loadingState, creatingState, assets, meta];
 };
 
 export default useAssets;

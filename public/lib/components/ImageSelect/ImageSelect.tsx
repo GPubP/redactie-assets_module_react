@@ -10,6 +10,7 @@ const cx = classnames.bind(styles);
 
 const ImageSelect: FC<ImageSelectProps> = ({
 	className,
+	compareSelected,
 	dataKey,
 	items = [],
 	selection = [],
@@ -18,6 +19,9 @@ const ImageSelect: FC<ImageSelectProps> = ({
 	const isSelected = (item: ImageSelectItem): boolean => {
 		if (dataKey) {
 			return selection.includes(item[dataKey]);
+		}
+		if (compareSelected) {
+			return compareSelected(item);
 		}
 
 		return !!selection.find(selected => equals(selected, item));
@@ -30,12 +34,13 @@ const ImageSelect: FC<ImageSelectProps> = ({
 				const selected = isSelected(item);
 
 				return (
-					<div key={key} className="col-xs-12 col-md-3">
+					<div key={key} className="col-xs-12 col-md-6 col-lg-3 u-margin-bottom">
 						<ImageCard
 							className={cx('o-image-select__card')}
+							disabled={item.disabled}
+							imageSrc={item.src}
 							onClick={() => onSelect(item)}
 							selected={selected}
-							imageSrc={item.src}
 							title={item.title}
 						/>
 					</div>

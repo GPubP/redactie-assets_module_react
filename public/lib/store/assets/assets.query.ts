@@ -10,7 +10,7 @@ export class AssetsQuery extends BaseEntityQuery<AssetsState> {
 		filter(meta => !isNil(meta), distinctUntilChanged())
 	);
 	public assets$ = this.selectAll();
-	public asset$ = this.select(state => state.contentType).pipe(
+	public asset$ = this.select(state => state.asset).pipe(
 		filter(asset => !isNil(asset), distinctUntilChanged())
 	);
 }

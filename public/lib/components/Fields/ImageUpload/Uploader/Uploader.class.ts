@@ -1,8 +1,7 @@
-import { Observable } from 'rxjs';
-
-import { UPLOAD_OPTIONS_DEFAULT } from '../ImageUpload.const';
+import { validateFileType } from '../../../../helpers';
 import { ImageUploadOptions } from '../ImageUpload.types';
 
+import { UPLOAD_OPTIONS_DEFAULT } from './Uploader.class.const';
 import { ValidatedFiles } from './Uploader.class.types';
 
 export class Uploader {
@@ -19,47 +18,8 @@ export class Uploader {
 		};
 	}
 
-	// TODO: update this with upload for assets
-	uploadFiles(files = []): Observable<unknown> {
-		const formData = this.filesToFormData(files);
-
-		return new Observable(observer => {
-			const xhr = new XMLHttpRequest();
-
-			// Progress callback
-			xhr.upload.addEventListener('progress', e => {
-				if (e.lengthComputable) {
-					const percentComplete = e.loaded / e.total;
-
-					observer.next({
-						progress: percentComplete,
-						data: null,
-					});
-				}
-			});
-
-			// Complete callback
-			xhr.onload = () => {
-				observer.next({
-					progress: 1,
-					data: xhr.response,
-				});
-				observer.complete();
-			};
-
-			// Do request
-			xhr.responseType = 'json';
-			xhr.open('post', this.options.url);
-
-			if (this.options.requestHeader && this.options.requestHeader.key) {
-				xhr.setRequestHeader(
-					this.options.requestHeader.key,
-					this.options.requestHeader.value
-				);
-			}
-
-			xhr.send(formData);
-		});
+	uploadFiles(): void {
+		// Placeholder function
 	}
 
 	validateFiles(files: File[] = []): ValidatedFiles {
@@ -119,18 +79,8 @@ export class Uploader {
 
 	validateFileType(file: File): boolean {
 		const { allowedFileTypes } = this.options;
-		const ext = Uploader.getFileExtension(file);
 
-		// Filter defined?
-		if (!Array.isArray(allowedFileTypes) || allowedFileTypes.length === 0) {
-			return true;
-		}
-
-		// Make allowedFileTypes case insensitive
-		const toUpper = (x: string): string => x.toUpperCase();
-		const allowedFileTypesToUpper = allowedFileTypes.map(toUpper);
-
-		return allowedFileTypesToUpper.lastIndexOf(ext.toUpperCase()) !== -1;
+		return validateFileType(allowedFileTypes, file);
 	}
 
 	validateFileSize(file: File): boolean {
@@ -153,9 +103,5 @@ export class Uploader {
 		}
 
 		return allowedMimeTypes.lastIndexOf(file.type) !== -1;
-	}
-
-	static getFileExtension(file: File): string {
-		return file.name.split('.')[file.name.split('.').length - 1];
 	}
 }
