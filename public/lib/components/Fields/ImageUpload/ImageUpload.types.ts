@@ -95,4 +95,5 @@ export interface CropValues {
 	x: number;
 	height: number;
 	width: number;
+	rotate: number;
 }

@@ -1,3 +1,7 @@
+/**
+ * Response types
+ */
+
 export interface AssetsResponse {
 	_embedded: AssetResponse[];
 	_page: AssetsMetaResponse;
@@ -36,6 +40,54 @@ export interface AssetResponse {
 	uuid: string;
 }
 
+export interface AssetFile {
+	type: {
+		mime: string;
+		extension: string;
+	};
+	size: number;
+	reference: string;
+	name: string;
+}
+
+export interface AssetCropsResponse {
+	uuid: string;
+	data: {
+		name: string;
+		description: string;
+		copyright: string;
+		category: string;
+		file: {
+			type: {
+				mime: string;
+				extension: string;
+			};
+			size: number;
+			ref: string;
+			name: string;
+		};
+		parent: string;
+		thumbnail: string;
+		metaData: {
+			width: string;
+			height: string;
+			language: string;
+		};
+		attributes: Record<string, any>;
+		type: string;
+	};
+	meta: {
+		created: string;
+		lastUpdated: string;
+		lastEditor: string;
+		tenant: string;
+	};
+}
+
+/**
+ * Request types
+ */
+
 export interface AssetsSearchParams {
 	sort: string;
 	page: number;
@@ -45,12 +97,36 @@ export interface AssetsSearchParams {
 	category: string;
 }
 
-export interface AssetFile {
-	type: {
-		mime: string;
-		extension: string;
+export interface AssetCropsRequest {
+	uuid: string;
+	cropData: {
+		[key: string]: {
+			grayscale: boolean;
+			blur: number;
+			x: number;
+			y: number;
+			width: number;
+			height: number;
+			rotate: number;
+		};
 	};
-	size: number;
-	reference: string;
-	name: string;
+	settings: [
+		{
+			type: 'free' | 'exact' | 'boundary' | 'ratio';
+			label: string;
+			safeLabel: string;
+			ratio?: {
+				width: number;
+				height: number;
+			};
+			_lockID?: boolean;
+			width?: number;
+			height?: number;
+			lockRatio?: boolean;
+			minWidth?: number;
+			minHeight?: number;
+			maxWidth?: number;
+			maxHeight?: number;
+		}
+	];
 }
