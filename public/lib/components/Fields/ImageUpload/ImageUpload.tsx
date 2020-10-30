@@ -171,6 +171,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 						<ModalView
 							data={{
 								...modalViewData,
+								mode,
 								config,
 								imageFieldValue: (field.value as unknown) as ImageFieldValue,
 								onManualUpload: handleManualUpload,

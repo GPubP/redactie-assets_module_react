@@ -26,9 +26,10 @@ export interface ImageUploadConfig extends FieldSchemaConfig {
 
 export interface ModalViewData {
 	config?: ImageUploadConfig;
+	imageFieldValue?: ImageFieldValue;
+	mode: ModalViewMode;
 	queuedFiles?: File[];
 	selectedFiles: Pick<AssetResponse, 'uuid' | 'data'>[];
-	imageFieldValue?: ImageFieldValue;
 	onManualUpload: (files: File[]) => void;
 	setImageFieldValue: (value: any) => void;
 }

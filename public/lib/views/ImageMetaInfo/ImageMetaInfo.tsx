@@ -22,8 +22,15 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	onCancel,
 	onViewChange,
 }) => {
-	const { imageFieldValue, selectedFiles } = data;
-	const currentValue = selectedFiles.length ? selectedFiles[0].data : imageFieldValue?.meta;
+	const { imageFieldValue, mode, selectedFiles } = data;
+	const isCreating = mode === ModalViewMode.CREATE;
+	// When creating check if user has uploaded or selected from assets
+	// otherwise when editing the meta should be available from imageFieldValue
+	const currentValue = isCreating
+		? selectedFiles.length
+			? selectedFiles[0].data
+			: imageFieldValue?.meta
+		: imageFieldValue?.meta;
 	const initialValues = currentValue
 		? {
 				name: currentValue?.name ?? '',
@@ -108,8 +115,26 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 				description: formValues.description,
 				copyright: formValues.copyright,
 			},
+			...(isCreating && selectedFiles.length
+				? {
+						original: {
+							asset: {
+								mime: selectedFiles[0]?.data?.file?.type?.mime,
+								uuid: selectedFiles[0]?.uuid,
+								size: {
+									height: selectedFiles[0]?.data?.metaData?.height ?? 0,
+									width: selectedFiles[0]?.data?.metaData?.width ?? 0,
+								},
+								fileName: selectedFiles[0]?.data?.file?.name,
+							},
+						},
+				  }
+				: {}),
 		});
 		resetDetectValueChanges();
+		if (isCreating) {
+			onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
+		}
 	};
 
 	/**
