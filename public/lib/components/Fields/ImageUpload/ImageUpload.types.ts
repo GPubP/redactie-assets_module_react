@@ -62,12 +62,7 @@ export interface ImageFieldValue {
 				};
 				fileName: string;
 			};
-			cropValues: {
-				y: number;
-				x: number;
-				height: number;
-				width: number;
-			};
+			cropValues: CropValues;
 			transformValues: {
 				rotate: number;
 				blur: number;
@@ -93,4 +88,11 @@ export interface ImageFieldValue {
 			fileName: string;
 		};
 	};
+}
+
+export interface CropValues {
+	y: number;
+	x: number;
+	height: number;
+	width: number;
 }

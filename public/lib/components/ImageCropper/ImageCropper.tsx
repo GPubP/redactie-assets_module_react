@@ -1,6 +1,6 @@
 import { Spinner } from '@acpaas-ui/react-components';
 import classnames from 'classnames/bind';
-import React, { FC, useState } from 'react';
+import React, { forwardRef, RefForwardingComponent, useState } from 'react';
 import Cropper, { ReactCropperProps } from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 
@@ -8,20 +8,23 @@ import styles from './ImageCropper.module.scss';
 
 const cx = classnames.bind(styles);
 
-const ImageCropper: FC<ReactCropperProps> = ({
-	className,
-	autoCrop = false,
-	autoCropArea = 1,
-	background = false,
-	movable = false,
-	ready = () => null,
-	scalable = false,
-	viewMode = 1,
-	zoomable = false,
-	zoomOnTouch = false,
-	zoomOnWheel = false,
-	...rest
-}) => {
+const ImageCropper: RefForwardingComponent<HTMLImageElement, ReactCropperProps> = (
+	{
+		className,
+		autoCrop = false,
+		autoCropArea = 1,
+		background = false,
+		movable = false,
+		ready = () => null,
+		scalable = false,
+		viewMode = 1,
+		zoomable = false,
+		zoomOnTouch = false,
+		zoomOnWheel = false,
+		...rest
+	},
+	ref
+) => {
 	/**
 	 * Hooks
 	 */
@@ -54,6 +57,7 @@ const ImageCropper: FC<ReactCropperProps> = ({
 				background={background}
 				movable={movable}
 				ready={onReady}
+				ref={ref}
 				scalable={scalable}
 				viewMode={viewMode}
 				zoomable={zoomable}
@@ -64,4 +68,4 @@ const ImageCropper: FC<ReactCropperProps> = ({
 	);
 };
 
-export default ImageCropper;
+export default forwardRef(ImageCropper);

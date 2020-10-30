@@ -1,10 +1,12 @@
 import { Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ModalViewComponentProps, NavListItem } from '../../assets.types';
 import {
+	CropMethods,
 	CropOption,
+	CropValues,
 	ImageCropper,
 	ModalViewActions,
 	ModalViewContainer,
@@ -12,31 +14,38 @@ import {
 } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
 import { getThumbnailUrl } from '../../helpers';
+import { imageCropperService } from '../../services/imageCropper';
 
 const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel }) => {
-	const { config, queuedFiles, selectedFiles } = data;
+	const { config, queuedFiles, selectedFiles, setImageFieldValue, imageFieldValue = {} } = data;
 	const cropOptions = config?.imageConfig?.cropOptions || [];
 
 	/**
 	 * Hooks
 	 */
 
-	const [imgSrc, setImgSrc] = useState('');
-	const [cropOption, setCropOption] = useState<CropOption | null>(cropOptions[0] || null);
+	const activeCropRef = useRef<CropOption | null>(cropOptions[0] || null);
+	const cropperRef = useRef<Cropper | null>(null);
+	const [crops, setCrops] = useState<{ [key: string]: CropValues }>({});
+	const [activeCrop, setActiveCrop] = useState<CropOption | null>(cropOptions[0] || null);
+	const [cropValues, setCropValues] = useState<CropValues | null>(null);
+	const [imgSrc, setImgSrc] = useState<string>();
 	const [t] = useCoreTranslation();
+
 	const navListItems: NavListItem[] = useMemo(() => {
 		return cropOptions.map(crop => ({
-			className: crop.id === cropOption?.id ? 'is-active' : '',
+			className: crop.id === activeCrop?.id ? 'is-active' : '',
 			hasError: false,
 			label: crop.name,
-			onClick: () => setCropOption(crop),
+			onClick: () => setActiveCrop(crop),
 		}));
-	}, [cropOption, cropOptions]);
+	}, [activeCrop, cropOptions]);
 
 	// Set image src url
 	useEffect(() => {
 		if (queuedFiles?.length) {
 			// TODO: handle queued files
+			// Depends on whether an image can be saved without meta info or not
 			return;
 		}
 		if (selectedFiles.length) {
@@ -44,19 +53,111 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		}
 	}, [queuedFiles, selectedFiles]);
 
+	// Clear or set crop data when activeCrop changes
+	useEffect(() => {
+		if (!cropperRef.current || !activeCrop) {
+			return;
+		}
+
+		const aspectRatio = imageCropperService.calculateAspectRatio(activeCrop);
+		const cropperData = crops[activeCrop.id] || {};
+
+		cropperRef.current.setAspectRatio(aspectRatio);
+		cropperRef.current.crop();
+
+		if (!cropperData.width && !cropperData.height && !cropperData.x && !cropperData.y) {
+			cropperRef.current.clear();
+			return;
+		}
+		cropperRef.current.setData(cropperData);
+	}, [activeCrop, cropperRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Update crops when cropValues change
+	useEffect(() => {
+		if (!activeCrop || !cropValues) {
+			return;
+		}
+
+		setCrops({
+			...crops,
+			[activeCrop.id]: cropValues,
+		});
+		setCropValues(null);
+	}, [activeCrop, cropValues, crops]);
+
+	// Keep ref of active crop for use in event methods
+	// because state values don't get updated
+	useEffect(() => {
+		activeCropRef.current = activeCrop;
+	}, [activeCrop]);
+
 	/**
 	 * Methods
 	 */
 
 	const getCropOptionIndex = (): number =>
-		cropOptions.findIndex(crop => crop.id === cropOption?.id);
+		cropOptions.findIndex(crop => crop.id === activeCrop?.id);
 
 	const cycleCropOption = (indexUpdate: number): void =>
-		setCropOption(cropOptions[getCropOptionIndex() + indexUpdate]);
+		setActiveCrop(cropOptions[getCropOptionIndex() + indexUpdate]);
 
-	const onSave = (): void => {
-		// TODO: handle save functionality
-		// setImageFieldValue();
+	const onCrop = (e: Cropper.CropEvent): void => {
+		const cropper = cropperRef.current;
+		const cropOption = activeCropRef.current;
+		const data = { ...e.detail };
+
+		if (
+			cropper &&
+			cropOption &&
+			[CropMethods.BOUNDS, CropMethods.EXACT].includes(cropOption.method)
+		) {
+			const imageData = cropper.getImageData();
+			const { minWidth, minHeight } = imageCropperService.calculateMinCropSize(
+				cropOption,
+				imageData
+			);
+			const { width, height } = data;
+			if (width && width < minWidth) {
+				data.width = minWidth;
+			}
+			if (height && height < minHeight) {
+				data.height = minHeight;
+			}
+		}
+
+		setCropValues(data);
+	};
+
+	const onSubmit = (): void => {
+		if (!crops) {
+			return;
+		}
+
+		const asset = selectedFiles[0];
+
+		setImageFieldValue({
+			...imageFieldValue,
+			// Add asset and transform data
+			crops: Object.keys(crops).reduce((acc, key) => {
+				return {
+					...acc,
+					[key]: {
+						asset: {
+							fileName: asset.data.file.name,
+							mime: asset.data.file.type.mime,
+							size: asset.data.metaData,
+							uuid: asset.uuid,
+						},
+						cropValues: crops[key],
+						transformValues: {
+							blur: 0,
+							grayscale: 0,
+							rotate: 0,
+						},
+					},
+				};
+			}, {}),
+		});
 	};
 
 	/**
@@ -77,12 +178,18 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 						</p>
 
 						<ImageCropper
-							crop={() => {
-								console.log('cropping...');
+							crop={onCrop}
+							cropmove={e => {
+								const height = cropperRef.current?.getData().height || 0;
+								if (height > 400) {
+									e.preventDefault();
+								}
 							}}
-							cropend={() => {
-								console.log('cropping done');
-							}}
+							ref={imgRef =>
+								(cropperRef.current =
+									(imgRef as HTMLImageElement & { cropper: Cropper })?.cropper ||
+									null)
+							}
 							src={imgSrc}
 						/>
 					</div>
@@ -118,7 +225,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 								</Button>
 							</>
 						) : null}
-						<Button onClick={onSave} type="success">
+						<Button onClick={onSubmit} type="success">
 							{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
 						</Button>
 					</div>
