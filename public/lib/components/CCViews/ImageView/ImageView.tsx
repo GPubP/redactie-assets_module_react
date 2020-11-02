@@ -15,9 +15,9 @@ const ImageView: FC<ViewFieldProps> = ({ value }) => {
 		<div className="u-margin-bottom">
 			<figure className="m-image">
 				{src && loaded ? (
-					<img src={src} alt={meta.alt || ''} title={meta.title || ''} />
+					<img src={src} alt={meta?.alt || ''} title={meta?.title || ''} />
 				) : null}
-				{meta.copyright ? (
+				{meta?.copyright ? (
 					<div className="m-image__copyright a-copyright" aria-haspopup="true">
 						<div className="a-copyright__sign">
 							<Icon name="copyright" />
