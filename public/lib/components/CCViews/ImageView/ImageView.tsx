@@ -4,10 +4,11 @@ import React, { FC, useMemo } from 'react';
 
 import { getAssetUrl } from '../../../helpers';
 import { useImageLoaded } from '../../../hooks';
+import { ImageFieldValue } from '../../Fields';
 
 const ImageView: FC<ViewFieldProps> = ({ value }) => {
-	const { meta = {} } = value;
-	const src = useMemo(() => getAssetUrl(value.original?.asset?.uuid), [value.original]);
+	const { meta, original } = value as ImageFieldValue;
+	const src = useMemo(() => getAssetUrl(original?.asset?.uuid), [original]);
 	const loaded = useImageLoaded(src);
 
 	return (
