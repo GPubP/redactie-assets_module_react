@@ -145,8 +145,8 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		<div className={cx({ 'o-image-upload': hasCrops })}>
 			<Card className={cx({ 'o-image-upload__card': hasCrops })}>
 				<CardBody>
-					<h6>{field?.name}</h6>
-					{guideline && <p className="u-margin-top u-margin-bottom">{guideline}</p>}
+					<h6 className="u-margin-bottom">{fieldSchema?.label}</h6>
+					{guideline && <p className="u-margin-bottom">{guideline}</p>}
 					{!hasCrops ? (
 						<>
 							<FileUploadZone
