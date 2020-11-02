@@ -8,13 +8,6 @@ export interface ImageCropSettingsFormProps {
 	children?: ((props: FormikProps<CropOption>) => React.ReactNode) | React.ReactNode;
 }
 
-export enum CropMethods {
-	FREE = 'free',
-	EXACT = 'exact',
-	BOUNDS = 'bounds',
-	RATIO = 'ratio',
-}
-
 export interface CropMethodFieldOption {
 	key: string;
 	value: string;

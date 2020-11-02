@@ -14,5 +14,6 @@ module.exports = {
 	// Module names that allow to stub out resources, like images or styles with a single module.
 	moduleNameMapper: {
 		'^.+\\.(css|less|scss)$': 'identity-obj-proxy',
+		'^ky$': '<rootDir>/node_modules/ky/umd.js',
 	},
 };

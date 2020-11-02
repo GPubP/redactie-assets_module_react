@@ -14,7 +14,7 @@ import {
 	ModalViewTarget,
 } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
-import { getThumbnailUrl, parseAllowedFileTypes, validateFileType } from '../../helpers';
+import { getAssetUrl, parseAllowedFileTypes, validateFileType } from '../../helpers';
 import { useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
 
@@ -46,7 +46,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 				parseAllowedFileTypes(viewData.config?.allowedFileTypes),
 				data.file
 			),
-			src: getThumbnailUrl(data.thumbnail),
+			src: getAssetUrl(data.thumbnail),
 			title: data.name,
 		}));
 	}, [assets, viewData.config]);
@@ -64,7 +64,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 		!!selectedAssets.find(selected => selected.uuid === item.uuid);
 
 	const onContinue = (): void => {
-		onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT, {
+		onViewChange(ModalViewTarget.CREATE_META, ModalViewMode.CREATE, {
 			// Don't pass image select component props
 			selectedFiles: selectedAssets.map(({ uuid, data }) => ({ uuid, data })),
 		});

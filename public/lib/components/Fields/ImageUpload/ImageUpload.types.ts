@@ -26,9 +26,10 @@ export interface ImageUploadConfig extends FieldSchemaConfig {
 
 export interface ModalViewData {
 	config?: ImageUploadConfig;
+	imageFieldValue?: ImageFieldValue;
+	mode: ModalViewMode;
 	queuedFiles?: File[];
 	selectedFiles: Pick<AssetResponse, 'uuid' | 'data'>[];
-	imageFieldValue?: ImageFieldValue;
 	onManualUpload: (files: File[]) => void;
 	setImageFieldValue: (value: any) => void;
 }
@@ -53,21 +54,9 @@ export enum ModalViewTarget {
 export interface ImageFieldValue {
 	crops?: {
 		[key: string]: {
-			asset: {
-				mime: string;
-				uuid: string;
-				size: {
-					width: number;
-					height: number;
-				};
-				fileName: string;
-			};
+			asset: ImageFieldAsset;
 			cropValues: CropValues;
-			transformValues: {
-				rotate: number;
-				blur: number;
-				grayscale: boolean;
-			};
+			transformValues: TransformValues;
 		};
 	};
 	meta: {
@@ -78,16 +67,18 @@ export interface ImageFieldValue {
 		alt: string;
 	};
 	original: {
-		asset: {
-			mime: string;
-			uuid: string;
-			size: {
-				height: number;
-				width: number;
-			};
-			fileName: string;
-		};
+		asset: ImageFieldAsset;
 	};
+}
+
+export interface ImageFieldAsset {
+	mime: string;
+	uuid: string;
+	size: {
+		width: number;
+		height: number;
+	};
+	fileName: string;
 }
 
 export interface CropValues {
@@ -95,4 +86,10 @@ export interface CropValues {
 	x: number;
 	height: number;
 	width: number;
+}
+
+export interface TransformValues {
+	rotate: number;
+	blur: number;
+	grayscale: boolean;
 }

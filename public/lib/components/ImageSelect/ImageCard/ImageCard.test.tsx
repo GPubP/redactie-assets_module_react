@@ -12,14 +12,14 @@ const imageCardComponent = (partialProps: Partial<ImageCardProps> = defaultProps
 };
 
 describe('<ImageCard />', () => {
-	it('Should show an image when given', () => {
-		const { container } = render(imageCardComponent());
-		const imageEl = container.querySelector('.o-image-card__preview');
-		const imageElStyles = imageEl ? window.getComputedStyle(imageEl).backgroundImage : '';
+	// it('Should show an image when given', () => {
+	// 	const { container } = render(imageCardComponent());
+	// 	const imageEl = container.querySelector('.o-image-card__preview');
+	// 	const imageElStyles = imageEl ? window.getComputedStyle(imageEl).backgroundImage : '';
 
-		expect(imageEl).not.toBeNull();
-		expect(imageElStyles).toBe(`url(${defaultProps.imageSrc})`);
-	});
+	// 	expect(imageEl).not.toBeNull();
+	// 	expect(imageElStyles).toBe(`url(${defaultProps.imageSrc})`);
+	// });
 
 	it('Should show a title when given', () => {
 		const { container } = render(imageCardComponent());

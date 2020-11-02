@@ -1,6 +1,8 @@
 import { object, string } from 'yup';
 
-import { CropMethodFieldOption, CropMethods } from './ImageCropSettingsForm.types';
+import { CropMethods } from '../../../assets.types';
+
+import { CropMethodFieldOption } from './ImageCropSettingsForm.types';
 
 export const IMAGE_CROP_SETTINGS_VALIDATION_SCHEMA = object().shape({
 	name: string().required('Naam is een verplicht veld'),

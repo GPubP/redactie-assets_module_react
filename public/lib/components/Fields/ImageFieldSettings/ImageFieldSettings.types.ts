@@ -1,4 +1,4 @@
-import { CropMethods } from '../../Forms';
+import { CropMethods } from '../../../assets.types';
 
 export interface ImageFieldSettingsFormState {
 	minHeight: number;
