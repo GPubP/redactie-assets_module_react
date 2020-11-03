@@ -1,6 +1,7 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
 import kebabCase from 'lodash.kebabcase';
+import { isEmpty, mergeRight } from 'ramda';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -83,13 +84,14 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		cropperRef.current.crop();
 
 		if (!validateCropValues(cropData.cropValues)) {
-			cropperRef.current.clear();
 			return;
 		}
+
 		cropperRef.current.setData({
 			...cropData.cropValues,
 			rotate: cropData.transformValues.rotate,
 		});
+		cropperRef.current.crop();
 	}, [activeCrop, cropperRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Update crops when cropValues change
@@ -109,8 +111,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		setTempCrop(null);
 	}, [activeCrop, crops, tempCrop]);
 
-	// Keep ref of active crop for use in event methods
-	// because state values don't get updated
+	// Keep ref of active crop because state values don't get updated in cropperjs event methods
 	useEffect(() => {
 		activeCropRef.current = activeCrop;
 	}, [activeCrop]);
@@ -126,32 +127,39 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		setActiveCrop(cropOptions[getCropOptionIndex() + indexUpdate]);
 
 	const onCrop = (e: Cropper.CropEvent): void => {
-		const cropper = cropperRef.current;
-		const cropOption = activeCropRef.current;
 		const { rotate, ...cropValues } = e.detail;
 		const transformValues = { grayscale: false, blur: 0, rotate };
 
-		if (
-			cropper &&
-			cropOption &&
-			[CropMethods.BOUNDS, CropMethods.EXACT].includes(cropOption.method)
-		) {
-			const imageData = cropper.getImageData();
-			const { minWidth, minHeight } = imageCropperService.calculateMinCropSize(
-				cropOption,
-				imageData
-			);
-			const { width, height } = cropValues;
+		setTempCrop({ cropValues, transformValues });
+	};
 
-			if (width && width < minWidth) {
-				cropValues.width = minWidth;
-			}
-			if (height && height < minHeight) {
-				cropValues.height = minHeight;
-			}
+	const onCropMove = (e: Cropper.CropMoveEvent): void => {
+		if (
+			!cropperRef.current ||
+			!activeCropRef.current ||
+			![CropMethods.BOUNDS, CropMethods.EXACT].includes(activeCropRef.current.method)
+		) {
+			return;
 		}
 
-		setTempCrop({ cropValues, transformValues });
+		// Prevent crop being smaller than min sizes for current option
+		const cropData = cropperRef.current.getData();
+		const imageData = cropperRef.current.getImageData();
+		const { minWidth, minHeight } = imageCropperService.calculateMinCropSize(
+			activeCropRef.current,
+			imageData
+		);
+
+		if (cropData.width < minWidth) {
+			e.preventDefault();
+			cropData.width = minWidth;
+			cropperRef.current.setData(cropData);
+		}
+		if (cropData.height < minHeight) {
+			e.preventDefault();
+			cropData.height = minHeight;
+			cropperRef.current.setData(cropData);
+		}
 	};
 
 	const onSubmit = async (): Promise<void> => {
@@ -248,6 +256,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 						<ImageCropper
 							crop={onCrop}
+							cropmove={onCropMove}
 							ref={imgRef =>
 								(cropperRef.current =
 									(imgRef as HTMLImageElement & { cropper: Cropper })?.cropper ||
