@@ -90,7 +90,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	const onSearchAssets = debounce(
 		(e: ChangeEvent<HTMLInputElement>): void => {
-			setSearchParams({ ...searchParams, search: e.target.value });
+			setSearchParams({ ...searchParams, page: 1, search: e.target.value });
 		},
 		500,
 		{ leading: true }
