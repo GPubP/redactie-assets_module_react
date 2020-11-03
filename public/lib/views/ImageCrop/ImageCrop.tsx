@@ -1,7 +1,6 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
 import kebabCase from 'lodash.kebabcase';
-import { isEmpty, mergeRight } from 'ramda';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
