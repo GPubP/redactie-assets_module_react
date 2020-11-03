@@ -11,6 +11,7 @@ export interface CropOption {
 	name: string;
 	guideline: string;
 	method: CropMethods;
+	lockRatio?: boolean;
 	ratioDimensions?: RatioDimensions;
 	boundsDimensions?: BoundsDimensions;
 	exactDimensions?: ExactDimensions;

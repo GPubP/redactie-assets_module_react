@@ -5,8 +5,7 @@ export class ImageCropperService {
 	public calculateAspectRatio(cropData: CropOption): number {
 		switch (cropData.method) {
 			case CropMethods.BOUNDS:
-				if (!cropData.boundsDimensions) {
-					// TODO: If no lock ratio is available for bounds alse return NaN
+				if (!cropData.boundsDimensions || !cropData.lockRatio) {
 					return NaN;
 				}
 				if (cropData.boundsDimensions.minWidth && cropData.boundsDimensions.minHeight) {
