@@ -17,6 +17,10 @@ export interface AssetsMetaResponse {
 export interface AssetResponse {
 	_id: string;
 	data: {
+		attributes: {
+			alt: string;
+			title: string;
+		};
 		name: string;
 		category: string;
 		description: string;
