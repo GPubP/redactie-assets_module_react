@@ -1,4 +1,4 @@
-import { Button, Pagination, TextField } from '@acpaas-ui/react-components';
+import { Button, Icon, Pagination, TextField } from '@acpaas-ui/react-components';
 import { DataLoader } from '@redactie/utils';
 import debounce from 'lodash.debounce';
 import React, { ChangeEvent, FC, ReactElement, useEffect, useMemo, useState } from 'react';
@@ -14,7 +14,7 @@ import {
 	ModalViewTarget,
 } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
-import { getAssetUrl, parseAllowedFileTypes, validateFileType } from '../../helpers';
+import { parseImageCards } from '../../helpers';
 import { useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
 
@@ -35,25 +35,17 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const [assetsLoading, , assets, assetsMeta] = useAssets();
 	const [t] = useCoreTranslation();
 	const parsedAssets: AssetSelectItem[] = useMemo(() => {
-		if (!assets || assets.length === 0) {
-			return [];
-		}
-
-		return assets.map(({ data, uuid }) => ({
-			uuid,
-			data,
-			disabled: !validateFileType(
-				parseAllowedFileTypes(viewData.config?.allowedFileTypes),
-				data.file
-			),
-			src: getAssetUrl(data.thumbnail),
-			title: data.name,
-		}));
+		return viewData.config ? parseImageCards(viewData.config, assets) : [];
 	}, [assets, viewData.config]);
 
 	// Fetch assets
 	useEffect(() => {
-		assetsFacade.getAssets(searchParams);
+		const leading = !searchParams.search && searchParams.page === 1;
+		const debouncedGetAssets = debounce(() => assetsFacade.getAssets(searchParams), 500, {
+			leading,
+		});
+		debouncedGetAssets();
+		return () => debouncedGetAssets.cancel();
 	}, [searchParams]);
 
 	/**
@@ -78,6 +70,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 		} else {
 			if (selectedAssets.length === 1) {
 				// For now, only allow to select 1 item
+				setSelectedAssets([item as AssetSelectItem]);
 				return;
 			}
 			setSelectedAssets(selectedAssets.concat(item as AssetSelectItem));
@@ -88,13 +81,9 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 		setSearchParams({ ...searchParams, page: newPage });
 	};
 
-	const onSearchAssets = debounce(
-		(e: ChangeEvent<HTMLInputElement>): void => {
-			setSearchParams({ ...searchParams, page: 1, search: e.target.value });
-		},
-		500,
-		{ leading: true }
-	);
+	const onSearchAssets = (e: ChangeEvent<HTMLInputElement>): void => {
+		setSearchParams({ ...searchParams, page: 1, search: e.target.value });
+	};
 
 	/**
 	 * Render
@@ -151,6 +140,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 				<div className="row middle-xs end-xs">
 					{selectedAssets.length > 0 && (
 						<span className="u-text-success u-text-italic u-margin-right">
+							<Icon className="u-margin-right-xs" name="check-circle" />
 							{selectedAssets.length} afbeelding(en) geselecteerd
 						</span>
 					)}
