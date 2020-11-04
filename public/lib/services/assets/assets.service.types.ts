@@ -28,10 +28,7 @@ export interface AssetResponse {
 		file: AssetFile;
 		parent: any;
 		thumbnail: string | null;
-		metaData: {
-			width?: number;
-			height?: number;
-		};
+		metaData: AssetMetaData;
 		type: string;
 	};
 	meta: {
@@ -52,6 +49,11 @@ export interface AssetFile {
 	size: number;
 	reference: string;
 	name: string;
+}
+
+export interface AssetMetaData {
+	width?: number;
+	height?: number;
 }
 
 export interface AssetCropsResponse {

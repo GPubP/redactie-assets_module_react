@@ -21,6 +21,7 @@ export class AssetsApiService {
 		return await apiService
 			.post('files', {
 				body: formData,
+				timeout: 30000, // Up the timeout for uploading large files
 			})
 			.json<AssetResponse>();
 	}

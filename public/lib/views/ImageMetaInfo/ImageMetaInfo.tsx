@@ -43,6 +43,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	/**
 	 * Hooks
 	 */
+
 	const [t] = useCoreTranslation();
 	const [, creatingState] = useAssets();
 	const [formValues, setFormValues] = useState<ImageMetaFormState>(initialValues);
@@ -142,7 +143,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	return (
 		<ImageMetaForm initialValues={initialValues} onSubmit={onSubmit}>
-			{({ submitForm }) => (
+			{({ isValid, submitForm }) => (
 				<>
 					<FormikOnChangeHandler
 						onChange={values => setFormValues(values as ImageMetaFormState)}
@@ -154,7 +155,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 							</Button>
 							<Button
 								iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
-								disabled={isSaving || !hasChanges}
+								disabled={isSaving || (!hasChanges && !isValid)}
 								className="u-margin-left-xs"
 								onClick={submitForm}
 								type="success"
