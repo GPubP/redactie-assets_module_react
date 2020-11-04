@@ -10,14 +10,16 @@ import {
 	ModalViewTarget,
 } from './ImageUpload.types';
 
+export const DEFAULT_IMAGE_CONFIG: ImageUploadConfig['imageConfig'] = {
+	cropOptions: [],
+	minWidth: 0,
+	minHeight: 0,
+};
+
 export const IMAGE_SETTINGS_DEFAULT_CONFIG: ImageUploadConfig = {
 	allowedFileTypes: [],
 	guideline: '',
-	imageConfig: {
-		cropOptions: [],
-		minWidth: 0,
-		minHeight: 0,
-	},
+	imageConfig: DEFAULT_IMAGE_CONFIG,
 };
 
 const MODAL_VIEW_SELECT_TABS: Tab<ModalViewData>[] = [
