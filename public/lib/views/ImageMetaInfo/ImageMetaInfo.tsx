@@ -5,7 +5,6 @@ import React, { FC, useMemo, useState } from 'react';
 import { ModalViewComponentProps } from '../../assets.types';
 import {
 	IMAGE_META_INITIAL_FORM_STATE,
-	ImageFieldValue,
 	ImageMetaForm,
 	ImageMetaFormState,
 	ModalViewActions,
@@ -25,17 +24,17 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const { imageFieldValue, mode, selectedFiles } = data;
 	const isCreating = mode === ModalViewMode.CREATE;
 	// When creating check if user has uploaded or selected from assets
-	// otherwise when editing the meta should be available from imageFieldValue
+	// otherwise, when editing, the meta should be available from imageFieldValue
 	const currentValue = isCreating
-		? selectedFiles.length
-			? selectedFiles[0].data
-			: imageFieldValue?.meta
+		? selectedFiles?.[0]?.data || imageFieldValue?.meta
 		: imageFieldValue?.meta;
+	// Always use alt and title from imageFieldValue.meta for the default values
+	// if they are not avalaible use the current value's name
 	const initialValues = currentValue
 		? {
 				name: currentValue?.name ?? '',
-				alt: (currentValue as ImageFieldValue['meta'])?.alt ?? '',
-				title: (currentValue as ImageFieldValue['meta'])?.title ?? '',
+				alt: imageFieldValue?.meta.alt ?? currentValue?.name ?? '',
+				title: imageFieldValue?.meta.title ?? currentValue?.name ?? '',
 				description: currentValue?.description ?? '',
 				copyright: currentValue?.copyright ?? '',
 		  }
@@ -59,12 +58,11 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			formData.append('name', formValues.name);
 			formData.append('description', formValues.description);
 			formData.append('copyright', formValues.copyright);
-			// TODO: Add extra attributes when the API is ready
-			// const attributes = {
-			// 	alt: formValues.alt,
-			// 	titel: formValues.title,
-			// };
-			// formData.append('attributes', JSON.stringify(attributes, null, 2));
+			const attributes = {
+				alt: formValues.alt,
+				title: formValues.title,
+			};
+			formData.append('attributes', JSON.stringify(attributes, null, 2));
 			formData.append('category', 'image');
 
 			return formData;
@@ -79,12 +77,13 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 			assetsFacade.createAsset(formData).then(response => {
 				const { data: responseData } = response;
+
 				data.setImageFieldValue({
 					...data.imageFieldValue,
 					meta: {
 						name: responseData?.name,
-						alt: formValues.alt,
-						title: formValues.title,
+						alt: responseData?.attributes?.alt,
+						title: responseData?.attributes?.title,
 						description: responseData?.description,
 						copyright: responseData?.copyright,
 					},

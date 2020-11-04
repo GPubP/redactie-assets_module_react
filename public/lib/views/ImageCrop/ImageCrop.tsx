@@ -17,7 +17,12 @@ import {
 	ModalViewData,
 } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
-import { getAssetUrl, parseCropsRequest, parseInitialCrops } from '../../helpers';
+import {
+	getAssetUrl,
+	parseCropsRequest,
+	parseInitialCrops,
+	validateCropValues,
+} from '../../helpers';
 import { AssetCropsRequest, assetsApiService } from '../../services/assets';
 import { imageCropperService } from '../../services/imageCropper';
 
@@ -77,12 +82,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		cropperRef.current.setAspectRatio(aspectRatio);
 		cropperRef.current.crop();
 
-		if (
-			!cropData.cropValues?.width &&
-			!cropData.cropValues?.height &&
-			!cropData.cropValues?.x &&
-			!cropData.cropValues?.y
-		) {
+		if (!validateCropValues(cropData.cropValues)) {
 			cropperRef.current.clear();
 			return;
 		}
@@ -98,10 +98,14 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			return;
 		}
 
-		setCrops({
-			...crops,
-			[kebabCase(activeCrop.name)]: { ...tempCrop, settings: activeCrop },
-		});
+		// Only set crop if all values are valid
+		if (validateCropValues(tempCrop.cropValues)) {
+			setCrops({
+				...crops,
+				[kebabCase(activeCrop.name)]: { ...tempCrop, settings: activeCrop },
+			});
+		}
+
 		setTempCrop(null);
 	}, [activeCrop, crops, tempCrop]);
 
