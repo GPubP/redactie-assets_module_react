@@ -20,8 +20,8 @@ export const parseImageCards = (
 		return [];
 	}
 
-	const { allowedFileTypes, imageConfig } = config;
-	const { minWidth, minHeight } = imageConfig || { minWidth: 1, minHeight: 1 };
+	const { allowedFileTypes, imageConfig = { minWidth: 1, minHeight: 1 } } = config;
+	const { minWidth, minHeight } = imageConfig;
 
 	return assets.map(({ data, uuid }) => {
 		const disabled =

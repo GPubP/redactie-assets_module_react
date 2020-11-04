@@ -90,7 +90,6 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			...cropData.cropValues,
 			rotate: cropData.transformValues.rotate,
 		});
-		cropperRef.current.crop();
 	}, [activeCrop, cropperRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Update crops when cropValues change
