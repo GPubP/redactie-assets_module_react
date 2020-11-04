@@ -24,6 +24,7 @@ import {
 import styles from './ImageUpload.module.scss';
 import {
 	ImageFieldValue,
+	ImageUploadConfig,
 	ImageUploadOptions,
 	ModalViewMode,
 	ModalViewTarget,
@@ -36,7 +37,7 @@ const cx = classnames.bind(styles);
 const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelperProps }) => {
 	const { field } = fieldProps;
 	const { config = IMAGE_SETTINGS_DEFAULT_CONFIG } = fieldSchema;
-	const { guideline, imageConfig = DEFAULT_IMAGE_CONFIG } = config;
+	const { guideline, imageConfig = DEFAULT_IMAGE_CONFIG } = config as ImageUploadConfig;
 	const { minWidth, minHeight } = imageConfig;
 	const imageFieldValue = (field.value as unknown) as ImageFieldValue;
 	const hasCrops = !!imageFieldValue?.crops && !isEmpty(imageFieldValue.crops);

@@ -10,13 +10,13 @@ import {
 	ModalViewTarget,
 } from './ImageUpload.types';
 
-export const DEFAULT_IMAGE_CONFIG: ImageUploadConfig['imageConfig'] = {
+export const DEFAULT_IMAGE_CONFIG = {
 	cropOptions: [],
 	minWidth: 0,
 	minHeight: 0,
 };
 
-export const IMAGE_SETTINGS_DEFAULT_CONFIG: ImageUploadConfig = {
+export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
 	allowedFileTypes: [],
 	guideline: '',
 	imageConfig: DEFAULT_IMAGE_CONFIG,
