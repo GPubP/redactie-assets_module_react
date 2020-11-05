@@ -3,21 +3,18 @@ import React from 'react';
 import { Tab } from '../../../assets.types';
 import { ImageCrop, ImageMetaInfo, ImageSelection } from '../../../views';
 
-import {
-	ImageUploadConfig,
-	ModalViewData,
-	ModalViewMode,
-	ModalViewTarget,
-} from './ImageUpload.types';
+import { ModalViewData, ModalViewMode, ModalViewTarget } from './ImageUpload.types';
 
-export const IMAGE_SETTINGS_DEFAULT_CONFIG: ImageUploadConfig = {
+export const DEFAULT_IMAGE_CONFIG = {
+	cropOptions: [],
+	minWidth: 0,
+	minHeight: 0,
+};
+
+export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
 	allowedFileTypes: [],
 	guideline: '',
-	imageConfig: {
-		cropOptions: [],
-		minWidth: 0,
-		minHeight: 0,
-	},
+	imageConfig: DEFAULT_IMAGE_CONFIG,
 };
 
 const MODAL_VIEW_SELECT_TABS: Tab<ModalViewData>[] = [
