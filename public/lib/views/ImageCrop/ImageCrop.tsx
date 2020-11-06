@@ -1,6 +1,7 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
 import kebabCase from 'lodash.kebabcase';
+import { isEmpty } from 'ramda';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -98,11 +99,23 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			return;
 		}
 
+		let newCropData = tempCrop;
+
+		// Set initial crop if no data is present
+		const cropData = crops[kebabCase(activeCrop.name)] || {};
+
+		if (cropperRef.current && isEmpty(cropData)) {
+			const { rotate, ...cropValues } = cropperRef.current.getData();
+			const transformValues = { grayscale: false, blur: 0, rotate };
+
+			newCropData = { cropValues, transformValues };
+		}
+
 		// Only set crop if all values are valid
-		if (validateCropValues(tempCrop.cropValues)) {
+		if (validateCropValues(newCropData.cropValues)) {
 			setCrops({
 				...crops,
-				[kebabCase(activeCrop.name)]: { ...tempCrop, settings: activeCrop },
+				[kebabCase(activeCrop.name)]: { ...newCropData, settings: activeCrop },
 			});
 		}
 
