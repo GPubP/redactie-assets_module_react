@@ -5,7 +5,7 @@ import { AssetCropsRequest } from '../../services/assets';
 import { CROP_DIMENSIONS_MAP, CROP_TYPE_MAP } from '../../views/ImageCrop/ImageCrop.const';
 import { ImageCrops } from '../../views/ImageCrop/ImageCrop.types';
 
-export const parseCropsRequest = (crops: ImageCrops): Omit<AssetCropsRequest, 'uuid'> => {
+export const parseCropsRequest = (crops: ImageCrops): AssetCropsRequest => {
 	return Object.keys(crops).reduce(
 		(acc, curr) => {
 			const { settings, cropValues, transformValues } = crops[curr];

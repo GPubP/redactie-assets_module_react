@@ -107,7 +107,6 @@ export interface AssetsSearchParams {
 }
 
 export interface AssetCropsRequest {
-	uuid: string;
 	cropData: {
 		[key: string]: {
 			grayscale: boolean;
@@ -130,7 +129,6 @@ export interface AssetCropsSettings {
 		width: number;
 		height: number;
 	};
-	_lockID?: boolean;
 	width?: number;
 	height?: number;
 	lockRatio?: boolean;

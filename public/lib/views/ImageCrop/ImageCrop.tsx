@@ -1,6 +1,7 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
 import kebabCase from 'lodash.kebabcase';
+import { isEmpty } from 'ramda';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -23,7 +24,7 @@ import {
 	parseInitialCrops,
 	validateCropValues,
 } from '../../helpers';
-import { AssetCropsRequest, assetsApiService } from '../../services/assets';
+import { assetsApiService } from '../../services/assets';
 import { imageCropperService } from '../../services/imageCropper';
 
 import { ALERT_MESSAGES } from './ImageCrop.const';
@@ -98,11 +99,23 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			return;
 		}
 
+		let newCropData = tempCrop;
+
+		// Set initial crop if no data is present
+		const cropData = crops[kebabCase(activeCrop.name)] || {};
+
+		if (cropperRef.current && isEmpty(cropData)) {
+			const { rotate, ...cropValues } = cropperRef.current.getData();
+			const transformValues = { grayscale: false, blur: 0, rotate };
+
+			newCropData = { cropValues, transformValues };
+		}
+
 		// Only set crop if all values are valid
-		if (validateCropValues(tempCrop.cropValues)) {
+		if (validateCropValues(newCropData.cropValues)) {
 			setCrops({
 				...crops,
-				[kebabCase(activeCrop.name)]: { ...tempCrop, settings: activeCrop },
+				[kebabCase(activeCrop.name)]: { ...newCropData, settings: activeCrop },
 			});
 		}
 
@@ -142,11 +155,9 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 		// Prevent crop being smaller than min sizes for current option
 		const cropData = cropperRef.current.getData();
-		const imageData = cropperRef.current.getImageData();
-		const { minWidth, minHeight } = imageCropperService.calculateMinCropSize(
-			activeCropRef.current,
-			imageData
-		);
+		// !Important note: the updated values on the crop(move) event are not scaled but based
+		// on the actual image size, so we don't have to do calculations for the crop's min size
+		const { minWidth, minHeight } = imageCropperService.getMinCropSize(activeCropRef.current);
 
 		if (cropData.width < minWidth) {
 			e.preventDefault();
@@ -173,11 +184,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 		setIsGeneratingCrops(true);
 
-		const cropsRequest: AssetCropsRequest = {
-			// TODO: remove uuid from request body once removed from backend (old remnant from v3)
-			uuid: currentAsset.uuid,
-			...parseCropsRequest(crops),
-		};
+		const cropsRequest = parseCropsRequest(crops);
 
 		assetsApiService
 			.generateCrops(currentAsset.uuid, cropsRequest)
@@ -249,7 +256,8 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 					<div className="col-xs-12 col-md-9">
 						<p className="u-margin-bottom-xs">
-							Snijd de afbeelding bij volgens deze verhouding: <strong></strong>
+							Snijd de afbeelding bij volgens deze verhouding:{' '}
+							<strong>{imageCropperService.getRatioLabel(activeCrop)}</strong>
 						</p>
 
 						<ImageCropper

@@ -25,7 +25,7 @@ export const parseImageCards = (
 
 	return assets.map(({ data, uuid }) => {
 		const disabled =
-			!validateFileType(parseAllowedFileTypes(allowedFileTypes), data.file) &&
+			!validateFileType(parseAllowedFileTypes(allowedFileTypes), data.file) ||
 			!validateImageSize(data.metaData, { minWidth, minHeight });
 
 		return {
