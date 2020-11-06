@@ -156,6 +156,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 						<>
 							<FileUploadZone
 								autoUpload={false}
+								id={fieldSchema.name}
 								uploader={uploader}
 								invalidFiles={handleInvalidFiles}
 								onCustomClick={handleCustomUpload}
