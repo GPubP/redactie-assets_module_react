@@ -142,11 +142,9 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 		// Prevent crop being smaller than min sizes for current option
 		const cropData = cropperRef.current.getData();
-		const imageData = cropperRef.current.getImageData();
-		const { minWidth, minHeight } = imageCropperService.calculateMinCropSize(
-			activeCropRef.current,
-			imageData
-		);
+		// !Important note: the updated values on the crop(move) event are not scaled but based
+		// on the actual image size, so we don't have to do calculations for the crop's min size
+		const { minWidth, minHeight } = imageCropperService.getMinCropSize(activeCropRef.current);
 
 		if (cropData.width < minWidth) {
 			e.preventDefault();

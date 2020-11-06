@@ -44,42 +44,24 @@ export class ImageCropperService {
 		);
 	}
 
-	public calculateMinCropSize(
-		cropData: CropOption,
-		imageData: Cropper.ImageData
-	): { minWidth: number; minHeight: number } {
-		const multipliers = this.getCropSizeMultiplier(imageData);
-
+	public getMinCropSize(cropData: CropOption): { minWidth: number; minHeight: number } {
 		switch (cropData.method) {
 			case CropMethods.EXACT: {
-				const exactDimensions = this.getExactDimensions(cropData.exactDimensions);
+				const { width, height } = this.getExactDimensions(cropData.exactDimensions);
 
 				return {
-					minWidth: Math.floor(exactDimensions.width * multipliers.width),
-					minHeight: Math.floor(exactDimensions.height * multipliers.height),
+					minWidth: width,
+					minHeight: height,
 				};
 			}
 			case CropMethods.BOUNDS: {
-				const boundsDimensions = this.getBoundsDimensions(cropData.boundsDimensions);
+				const { minWidth, minHeight } = this.getBoundsDimensions(cropData.boundsDimensions);
 
-				return {
-					minWidth: Math.floor(boundsDimensions.minWidth * multipliers.width),
-					minHeight: Math.floor(boundsDimensions.minHeight * multipliers.height),
-				};
+				return { minWidth, minHeight };
 			}
 			default:
-				return {
-					minWidth: 0,
-					minHeight: 0,
-				};
+				return { minWidth: 0, minHeight: 0 };
 		}
-	}
-
-	private getCropSizeMultiplier(imageData: Cropper.ImageData): any {
-		return {
-			width: imageData.width / imageData.naturalWidth,
-			height: imageData.height / imageData.naturalHeight,
-		};
 	}
 
 	private getBoundsDimensions(dimensions?: BoundsDimensions): BoundsDimensions {
