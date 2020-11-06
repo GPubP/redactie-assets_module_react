@@ -23,7 +23,7 @@ import {
 	parseInitialCrops,
 	validateCropValues,
 } from '../../helpers';
-import { AssetCropsRequest, assetsApiService } from '../../services/assets';
+import { assetsApiService } from '../../services/assets';
 import { imageCropperService } from '../../services/imageCropper';
 
 import { ALERT_MESSAGES } from './ImageCrop.const';
@@ -173,11 +173,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 		setIsGeneratingCrops(true);
 
-		const cropsRequest: AssetCropsRequest = {
-			// TODO: remove uuid from request body once removed from backend (old remnant from v3)
-			uuid: currentAsset.uuid,
-			...parseCropsRequest(crops),
-		};
+		const cropsRequest = parseCropsRequest(crops);
 
 		assetsApiService
 			.generateCrops(currentAsset.uuid, cropsRequest)
