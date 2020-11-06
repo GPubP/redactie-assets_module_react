@@ -64,6 +64,37 @@ export class ImageCropperService {
 		}
 	}
 
+	public getRatioLabel(cropData: CropOption | null): string {
+		const defaultLabel = 'Vrije verhouding';
+
+		if (!cropData) {
+			return defaultLabel;
+		}
+
+		switch (cropData.method) {
+			case CropMethods.BOUNDS: {
+				const { minWidth, minHeight } = this.getBoundsDimensions(cropData.boundsDimensions);
+				if (!minWidth || !minHeight) {
+					return defaultLabel;
+				}
+				return `Min. ${minWidth} * ${minHeight}`;
+			}
+			case CropMethods.EXACT: {
+				const { width, height } = this.getExactDimensions(cropData.exactDimensions);
+				return `${width} * ${height}`;
+			}
+			case CropMethods.FREE:
+				return defaultLabel;
+			case CropMethods.RATIO:
+				if (!cropData.ratioDimensions) {
+					return 'Vrije ratio';
+				}
+				return `${cropData.ratioDimensions.x}:${cropData.ratioDimensions.y}`;
+			default:
+				return defaultLabel;
+		}
+	}
+
 	private getBoundsDimensions(dimensions?: BoundsDimensions): BoundsDimensions {
 		return {
 			maxHeight: dimensions?.maxHeight || 0,

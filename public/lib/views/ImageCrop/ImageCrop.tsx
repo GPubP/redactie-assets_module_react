@@ -243,7 +243,8 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 					<div className="col-xs-12 col-md-9">
 						<p className="u-margin-bottom-xs">
-							Snijd de afbeelding bij volgens deze verhouding: <strong></strong>
+							Snijd de afbeelding bij volgens deze verhouding:{' '}
+							<strong>{imageCropperService.getRatioLabel(activeCrop)}</strong>
 						</p>
 
 						<ImageCropper
