@@ -147,9 +147,9 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 		<>
 			<div className={cx('u-border-bottom', 'u-margin-bottom')}>
 				<div className="row">
-					<div className="col-xs-12 col-md-8 col-lg-6 row">
-						<div className={cx('col-xs-5', 'row', 'middle-xs', 'flex-no-wrap')}>
-							<div className="col-xs-10">
+					<div className="col-xs-12 col-lg-8 col-xl-7 row">
+						<div className="col-xs-12 col-sm-6 col-md-5 row middle-xs flex-no-wrap">
+							<div className="col-xs-11">
 								<Field
 									as={TextField}
 									label="Minimumbreedte"
@@ -159,15 +159,20 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 									type="number"
 								/>
 							</div>
-							<div className="col-xs-2 u-margin-top">
-								<small className={cx('suffix-neg-margin-left')}>px</small>
+							<div className="col-xs-1 u-margin-top">
+								<small className="suffix-neg-margin-left">px</small>
 							</div>
 						</div>
-						<div className={cx('col-xs-2', 'flex-align-self-center', 'u-margin-top')}>
+						<div
+							className={cx(
+								'o-image-field-settings__min-max-divider',
+								'col-md-2 flex-align-self-center'
+							)}
+						>
 							op
 						</div>
-						<div className={cx('col-xs-5', 'row', 'middle-xs', 'flex-no-wrap')}>
-							<div className="col-xs-10">
+						<div className="col-xs-12 col-sm-6 col-md-5 row middle-xs flex-no-wrap">
+							<div className="col-xs-11">
 								<Field
 									as={TextField}
 									label="Minimumhoogte"
@@ -177,8 +182,8 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 									type="number"
 								/>
 							</div>
-							<div className="col-xs-2 u-margin-top">
-								<small className={cx('suffix-neg-margin-left')}>px</small>
+							<div className="col-xs-1 u-margin-top">
+								<small className="suffix-neg-margin-left">px</small>
 							</div>
 						</div>
 					</div>

@@ -5,6 +5,15 @@
 	padding: $spacer-xs 0 $spacer;
 }
 
+.o-image-field-settings__min-max-divider {
+	margin: $spacer-sm 0;
+
+	@include at($screen-sm) {
+		margin: $spacer 0 0;
+		text-align: center;
+	}
+}
+
 .u-border-bottom {
 	border-bottom: 1px solid $border-color;
 }
