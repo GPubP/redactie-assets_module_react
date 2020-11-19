@@ -1,13 +1,21 @@
 import { Button } from '@acpaas-ui/react-components';
-import { FormikOnChangeHandler, LoadingState, useDetectValueChanges } from '@redactie/utils';
+import {
+	AlertContainer,
+	alertService,
+	FormikOnChangeHandler,
+	LoadingState,
+	useDetectValueChanges,
+} from '@redactie/utils';
 import React, { FC, useMemo, useState } from 'react';
 
+import { ALERT_CONTAINER_IDS } from '../../assets.const';
 import { ModalViewComponentProps } from '../../assets.types';
 import {
 	IMAGE_META_INITIAL_FORM_STATE,
 	ImageMetaForm,
 	ImageMetaFormState,
 	ModalViewActions,
+	ModalViewContainer,
 	ModalViewData,
 	ModalViewMode,
 	ModalViewTarget,
@@ -15,6 +23,8 @@ import {
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
+
+import { ALERT_MESSAGES } from './ImageMetaInfo.const';
 
 const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	data,
@@ -53,6 +63,14 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	/**
 	 * Function
 	 */
+
+	const showUploadError = (): void => {
+		alertService.danger(
+			{ ...ALERT_MESSAGES.create.error, className: 'u-margin-bottom' },
+			{ containerId: ALERT_CONTAINER_IDS.imageMetaCreate }
+		);
+	};
+
 	const filesToFormData = (files: File[] = [], formValues: ImageMetaFormState): FormData => {
 		return files.reduce((formData, file) => {
 			formData.append('file', file);
@@ -76,33 +94,44 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		if (uploadNewImage) {
 			const formData = filesToFormData(data.queuedFiles, formValues);
 
-			assetsFacade.createAsset(formData).then(response => {
-				const { data: responseData } = response;
+			assetsFacade
+				.createAsset(formData)
+				.then(response => {
+					if (!response.data) {
+						showUploadError();
+						return;
+					}
 
-				data.setImageFieldValue({
-					...data.imageFieldValue,
-					meta: {
-						name: responseData?.name,
-						alt: responseData?.attributes?.alt,
-						title: responseData?.attributes?.title,
-						description: responseData?.description,
-						copyright: responseData?.copyright,
-					},
-					original: {
-						asset: {
-							mime: responseData?.file?.type?.mime,
-							uuid: response.uuid,
-							size: {
-								height: responseData?.metaData?.height ?? 0,
-								width: responseData?.metaData?.width ?? 0,
-							},
-							fileName: responseData?.file?.name,
+					const { data: responseData } = response;
+
+					data.setImageFieldValue({
+						...data.imageFieldValue,
+						meta: {
+							name: responseData?.name,
+							alt: responseData?.attributes?.alt,
+							title: responseData?.attributes?.title,
+							description: responseData?.description,
+							copyright: responseData?.copyright,
 						},
-					},
+						original: {
+							asset: {
+								mime: responseData?.file?.type?.mime,
+								uuid: response.uuid,
+								size: {
+									height: responseData?.metaData?.height ?? 0,
+									width: responseData?.metaData?.width ?? 0,
+								},
+								fileName: responseData?.file?.name,
+							},
+						},
+					});
+					resetDetectValueChanges();
+					onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
+				})
+				.catch(error => {
+					console.error(error);
+					showUploadError();
 				});
-				resetDetectValueChanges();
-				onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
-			});
 			return;
 		}
 
@@ -142,31 +171,37 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	 */
 
 	return (
-		<ImageMetaForm initialValues={initialValues} onSubmit={onSubmit}>
-			{({ isValid, submitForm }) => (
-				<>
-					<FormikOnChangeHandler
-						onChange={values => setFormValues(values as ImageMetaFormState)}
-					/>
-					<ModalViewActions>
-						<div className="u-wrapper row end-xs">
-							<Button onClick={onCancel} negative>
-								{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
-							</Button>
-							<Button
-								iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
-								disabled={isSaving || (!hasChanges && !isValid)}
-								className="u-margin-left-xs"
-								onClick={submitForm}
-								type="success"
-							>
-								{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
-							</Button>
-						</div>
-					</ModalViewActions>
-				</>
-			)}
-		</ImageMetaForm>
+		<>
+			<ModalViewContainer className="u-no-padding-y">
+				<AlertContainer containerId={ALERT_CONTAINER_IDS.imageMetaCreate} />
+			</ModalViewContainer>
+
+			<ImageMetaForm initialValues={initialValues} onSubmit={onSubmit}>
+				{({ isValid, submitForm }) => (
+					<>
+						<FormikOnChangeHandler
+							onChange={values => setFormValues(values as ImageMetaFormState)}
+						/>
+						<ModalViewActions>
+							<div className="u-wrapper row end-xs">
+								<Button onClick={onCancel} negative>
+									{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
+								</Button>
+								<Button
+									iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
+									disabled={isSaving || (!hasChanges && !isValid)}
+									className="u-margin-left-xs"
+									onClick={submitForm}
+									type="success"
+								>
+									{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
+								</Button>
+							</div>
+						</ModalViewActions>
+					</>
+				)}
+			</ImageMetaForm>
+		</>
 	);
 };
 

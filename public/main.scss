@@ -1,3 +1,8 @@
+.suffix-neg-margin-left {
+	margin-left: -12px;
+}
+
+// TODO: move to redactie_app styles
 .flex-no-wrap {
 	flex-wrap: nowrap;
 }
@@ -6,6 +11,7 @@
 	align-self: center;
 }
 
-.suffix-neg-margin-left {
-	margin-left: -12px;
+.u-no-padding-y {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
 }
