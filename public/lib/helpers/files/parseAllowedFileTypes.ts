@@ -6,6 +6,6 @@ export const parseAllowedFileTypes = (
 	}
 
 	return typeof allowedFileTypes === 'string'
-		? allowedFileTypes.replace(/\s*\./gm, '').split(/(,|;)/)
+		? allowedFileTypes.replace(/\s*\./gm, '').split(/,|;/)
 		: allowedFileTypes;
 };

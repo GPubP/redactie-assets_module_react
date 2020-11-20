@@ -66,8 +66,11 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	const showUploadError = (): void => {
 		alertService.danger(
-			{ ...ALERT_MESSAGES.create.error, className: 'u-margin-bottom' },
-			{ containerId: ALERT_CONTAINER_IDS.imageMetaCreate }
+			{ ...ALERT_MESSAGES.create.error },
+			{
+				containerId: ALERT_CONTAINER_IDS.imageMetaCreate,
+				className: 'u-padding-top',
+			}
 		);
 	};
 
@@ -172,7 +175,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	return (
 		<>
-			<ModalViewContainer className="u-no-padding-y">
+			<ModalViewContainer className="u-no-padding-top u-no-padding-bottom">
 				<AlertContainer containerId={ALERT_CONTAINER_IDS.imageMetaCreate} />
 			</ModalViewContainer>
 

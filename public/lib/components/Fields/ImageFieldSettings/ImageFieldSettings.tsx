@@ -145,10 +145,10 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 
 	const renderDimensions = (): ReactElement => (
 		<>
-			<div className={cx('u-border-bottom', 'u-margin-bottom')}>
+			<div className="u-border-bottom u-margin-bottom">
 				<div className="row">
 					<div className="col-xs-12 col-md-8 col-lg-6 row">
-						<div className={cx('col-xs-5', 'row', 'middle-xs', 'flex-no-wrap')}>
+						<div className={cx('col-xs-5', 'row', 'middle-xs', 'u-flex-no-wrap')}>
 							<div className="col-xs-10">
 								<Field
 									as={TextField}
@@ -163,10 +163,8 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 								<small className={cx('suffix-neg-margin-left')}>px</small>
 							</div>
 						</div>
-						<div className={cx('col-xs-2', 'flex-align-self-center', 'u-margin-top')}>
-							op
-						</div>
-						<div className={cx('col-xs-5', 'row', 'middle-xs', 'flex-no-wrap')}>
+						<div className="col-xs-2 u-flex-align-self-center u-margin-top">op</div>
+						<div className={cx('col-xs-5', 'row', 'middle-xs', 'u-flex-no-wrap')}>
 							<div className="col-xs-10">
 								<Field
 									as={TextField}
