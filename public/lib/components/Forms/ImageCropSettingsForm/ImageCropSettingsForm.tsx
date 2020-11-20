@@ -29,7 +29,7 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 			return (
 				<div className="row u-margin-bottom">
 					<div className="col-xs-12 col-md-8 row">
-						<div className="col-xs-5 row middle-xs flex-no-wrap">
+						<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 							<div className="col-xs-10">
 								<Field
 									as={TextField}
@@ -44,8 +44,8 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 								<small className="suffix-neg-margin-left">px</small>
 							</div>
 						</div>
-						<div className="col-xs-2 flex-align-self-center u-margin-top">op</div>
-						<div className="col-xs-5 row middle-xs flex-no-wrap">
+						<div className="col-xs-2 u-flex-align-self-center u-margin-top">op</div>
+						<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 							<div className="col-xs-10">
 								<Field
 									as={TextField}
@@ -71,7 +71,7 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 					<div className="row u-margin-bottom">
 						<div className="col-xs-12 row u-margin-bottom">
 							<div className="col-xs-12 col-md-8 row">
-								<div className="col-xs-5 row middle-xs flex-no-wrap">
+								<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 									<div className="col-xs-10">
 										<Field
 											as={TextField}
@@ -86,10 +86,10 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 										<small className="suffix-neg-margin-left">px</small>
 									</div>
 								</div>
-								<div className="col-xs-2 flex-align-self-center u-margin-top">
+								<div className="col-xs-2 u-flex-align-self-center u-margin-top">
 									op
 								</div>
-								<div className="col-xs-5 row middle-xs flex-no-wrap">
+								<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 									<div className="col-xs-10">
 										<Field
 											as={TextField}
@@ -108,7 +108,7 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 						</div>
 						<div className="col-xs-12 row u-margin-bottom">
 							<div className="col-xs-12 col-md-8 row">
-								<div className="col-xs-5 row middle-xs flex-no-wrap">
+								<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 									<div className="col-xs-10">
 										<Field
 											as={TextField}
@@ -123,10 +123,10 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 										<small className="suffix-neg-margin-left">px</small>
 									</div>
 								</div>
-								<div className="col-xs-2 flex-align-self-center u-margin-top">
+								<div className="col-xs-2 u-flex-align-self-center u-margin-top">
 									op
 								</div>
-								<div className="col-xs-5 row middle-xs flex-no-wrap">
+								<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 									<div className="col-xs-10">
 										<Field
 											as={TextField}
@@ -157,7 +157,7 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 			return (
 				<div className="row u-margin-bottom">
 					<div className="col-xs-12 col-md-8 row">
-						<div className="col-xs-5 row middle-xs flex-no-wrap">
+						<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 							<div className="col-xs-10">
 								<Field
 									as={TextField}
@@ -172,8 +172,8 @@ const ImageCropSettingsForm: FC<ImageCropSettingsFormProps> = ({
 								<small className="suffix-neg-margin-left">px</small>
 							</div>
 						</div>
-						<div className="col-xs-2 flex-align-self-center u-margin-top">op</div>
-						<div className="col-xs-5 row middle-xs flex-no-wrap">
+						<div className="col-xs-2 u-flex-align-self-center u-margin-top">op</div>
+						<div className="col-xs-5 row middle-xs u-flex-no-wrap">
 							<div className="col-xs-10">
 								<Field
 									as={TextField}
