@@ -69,7 +69,6 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			{ ...ALERT_MESSAGES.create.error },
 			{
 				containerId: ALERT_CONTAINER_IDS.imageMetaCreate,
-				className: 'u-padding-top',
 			}
 		);
 	};
@@ -176,7 +175,10 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	return (
 		<>
 			<ModalViewContainer className="u-no-padding-top u-no-padding-bottom">
-				<AlertContainer containerId={ALERT_CONTAINER_IDS.imageMetaCreate} />
+				<AlertContainer
+					className="u-padding-top"
+					containerId={ALERT_CONTAINER_IDS.imageMetaCreate}
+				/>
 			</ModalViewContainer>
 
 			<ImageMetaForm initialValues={initialValues} onSubmit={onSubmit}>
