@@ -6,6 +6,7 @@ import classNames from 'classnames/bind';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement, useMemo, useState } from 'react';
 
+import { formRendererConnector } from '../../../connectors';
 import { useCoreTranslation } from '../../../connectors/translations';
 import { ImageCropSettingsForm } from '../../Forms';
 
@@ -153,10 +154,14 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 								<Field
 									as={TextField}
 									label="Minimumbreedte"
-									id="minWidth"
-									name="minWidth"
+									id={`${field.name}.minWidth`}
+									name={`${field.name}.minWidth`}
+									required={true}
 									min={0}
 									type="number"
+								/>
+								<formRendererConnector.api.ErrorMessage
+									name={`${field.name}.minWidth`}
 								/>
 							</div>
 							<div className="col-xs-1 u-margin-top">
@@ -176,10 +181,15 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 								<Field
 									as={TextField}
 									label="Minimumhoogte"
-									id="minHeight"
-									name="minHeight"
+									id={`${field.name}.minHeight`}
+									name={`${field.name}.minHeight`}
+									required={true}
 									min={0}
 									type="number"
+								/>
+
+								<formRendererConnector.api.ErrorMessage
+									name={`${field.name}.minHeight`}
 								/>
 							</div>
 							<div className="col-xs-1 u-margin-top">
@@ -215,6 +225,7 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 
 	return (
 		<>
+			{renderDimensions()}
 			<Formik enableReinitialize onSubmit={onSubmit} initialValues={initialValues}>
 				{({ values }) => {
 					return (
@@ -222,13 +233,13 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 							<FormikOnChangeHandler
 								onChange={values => onSubmit(values as ImageFieldSettingsFormState)}
 							/>
-							{renderDimensions()}
 							<h3 className="h6">{label}</h3>
 							{renderCropTable(values)}
 						</>
 					);
 				}}
 			</Formik>
+			<formRendererConnector.api.ErrorMessage name={`${field.name}.cropOptions`} />
 			{showCropSettingsForm && (
 				<div className="u-margin-top">
 					<ImageCropSettingsForm
