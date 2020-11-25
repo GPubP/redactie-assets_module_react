@@ -12,6 +12,7 @@ import classnames from 'classnames/bind';
 import { omit } from 'ramda';
 import React, { FC, useEffect, useState } from 'react';
 
+import { formRendererConnector } from '../../../connectors';
 import { getAssetUrl, parseAllowedFileTypes } from '../../../helpers';
 import { ImageItem } from '../../ImageItem';
 import { ModalView } from '../../ModalView';
@@ -147,100 +148,106 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	}
 
 	return (
-		<div className={cx({ 'o-image-upload': hasCrops })}>
-			<Card className={cx({ 'o-image-upload__card': hasCrops })}>
-				<CardBody>
-					<h6 className="u-margin-bottom">{fieldSchema?.label}</h6>
-					{guideline && <p className="u-margin-bottom">{guideline}</p>}
-					{!hasCrops ? (
-						<>
-							<FileUploadZone
-								autoUpload={false}
-								id={fieldSchema.name}
-								uploader={uploader}
-								invalidFiles={handleInvalidFiles}
-								onCustomClick={handleCustomUpload}
-								onCustomDrop={handleCustomDrop}
-							>
-								<FileUploadMessage>
-									<span className="u-text-primary">
-										<Icon name="picture-o" />
-										<span className="u-block">
-											Selecteer of sleep een afbeelding
+		<>
+			<div className={cx({ 'o-image-upload': hasCrops })}>
+				<Card className={cx({ 'o-image-upload__card': hasCrops })}>
+					<CardBody>
+						<h6 className="u-margin-bottom">{fieldSchema?.label}</h6>
+						{guideline && <p className="u-margin-bottom">{guideline}</p>}
+						{!hasCrops ? (
+							<>
+								<FileUploadZone
+									autoUpload={false}
+									id={fieldSchema.name}
+									uploader={uploader}
+									invalidFiles={handleInvalidFiles}
+									onCustomClick={handleCustomUpload}
+									onCustomDrop={handleCustomDrop}
+								>
+									<FileUploadMessage>
+										<span className="u-text-primary">
+											<Icon name="picture-o" />
+											<span className="u-block">
+												Selecteer of sleep een afbeelding
+											</span>
 										</span>
-									</span>
-								</FileUploadMessage>
-								<FileUploadDescription>
-									Laad een afbeelding op van minimum {minWidth}px breed en{' '}
-									{minHeight}
-									px hoog
-								</FileUploadDescription>
-							</FileUploadZone>
-							<ValidationList
-								messages={options?.messages}
-								ariaLabelRemove="Verwijder"
-								invalidFiles={invalidFiles}
-								removeInvalidFile={handleRemoveInvalidFile}
+									</FileUploadMessage>
+									<FileUploadDescription>
+										Laad een afbeelding op van minimum {minWidth}px breed en{' '}
+										{minHeight}
+										px hoog
+									</FileUploadDescription>
+								</FileUploadZone>
+								<ValidationList
+									messages={options?.messages}
+									ariaLabelRemove="Verwijder"
+									invalidFiles={invalidFiles}
+									removeInvalidFile={handleRemoveInvalidFile}
+								/>
+							</>
+						) : (
+							<ImageItem
+								source={getAssetUrl(imageFieldValue.original.asset.uuid)}
+								meta={imageFieldValue.meta}
+								onImageClick={() => {
+									onModalViewChange(
+										ModalViewTarget.EDIT_CROP,
+										ModalViewMode.EDIT
+									);
+									setShowModal(true);
+								}}
 							/>
-						</>
-					) : (
-						<ImageItem
-							source={getAssetUrl(imageFieldValue.original.asset.uuid)}
-							meta={imageFieldValue.meta}
-							onImageClick={() => {
-								onModalViewChange(ModalViewTarget.EDIT_CROP, ModalViewMode.EDIT);
+						)}
+
+						<ControlledModal
+							className={cx('o-image-upload__modal')}
+							onClose={closeModal}
+							overlayClassName={cx('o-image-upload__overlay')}
+							show={showModal}
+						>
+							{showModal ? (
+								<ModalView
+									data={{
+										...modalViewData,
+										mode,
+										config,
+										imageFieldValue,
+										onManualUpload: handleManualUpload,
+										setImageFieldValue: fieldHelperProps.setValue,
+									}}
+									config={MODAL_VIEW_MODE_MAP}
+									mode={mode}
+									onCancel={closeModal}
+									onViewChange={onModalViewChange}
+									target={target || ''}
+								/>
+							) : null}
+						</ControlledModal>
+					</CardBody>
+				</Card>
+				{hasCrops ? (
+					<div className={cx('o-image-upload__actions')}>
+						<Button
+							htmlType="button"
+							icon="edit"
+							onClick={() => {
+								onModalViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
 								setShowModal(true);
 							}}
+							transparent
 						/>
-					)}
-
-					<ControlledModal
-						className={cx('o-image-upload__modal')}
-						onClose={closeModal}
-						overlayClassName={cx('o-image-upload__overlay')}
-						show={showModal}
-					>
-						{showModal ? (
-							<ModalView
-								data={{
-									...modalViewData,
-									mode,
-									config,
-									imageFieldValue,
-									onManualUpload: handleManualUpload,
-									setImageFieldValue: fieldHelperProps.setValue,
-								}}
-								config={MODAL_VIEW_MODE_MAP}
-								mode={mode}
-								onCancel={closeModal}
-								onViewChange={onModalViewChange}
-								target={target || ''}
-							/>
-						) : null}
-					</ControlledModal>
-				</CardBody>
-			</Card>
-			{hasCrops ? (
-				<div className={cx('o-image-upload__actions')}>
-					<Button
-						htmlType="button"
-						icon="edit"
-						onClick={() => {
-							onModalViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
-							setShowModal(true);
-						}}
-						transparent
-					/>
-					<Button
-						htmlType="button"
-						icon="trash"
-						onClick={deleteCrops}
-						transparent
-						type="danger"
-					/>
-				</div>
-			) : null}
-		</div>
+						<Button
+							htmlType="button"
+							icon="trash"
+							onClick={deleteCrops}
+							transparent
+							type="danger"
+						/>
+					</div>
+				) : null}
+			</div>
+			<formRendererConnector.api.ErrorMessage name={field.name} />
+		</>
 	);
 };
 
