@@ -5,7 +5,7 @@ export class ImageCropperService {
 	public calculateAspectRatio(cropData: CropOption): number {
 		switch (cropData.method) {
 			case CropMethods.BOUNDS:
-				if (!cropData.boundsDimensions || !cropData.lockRatio) {
+				if (!cropData.lockRatio || !cropData.boundsDimensions) {
 					return NaN;
 				}
 				if (cropData.boundsDimensions.minWidth && cropData.boundsDimensions.minHeight) {
@@ -64,6 +64,22 @@ export class ImageCropperService {
 		}
 	}
 
+	public getMaxCropSize(
+		cropData: CropOption,
+		{ naturalHeight, naturalWidth }: Cropper.ImageData
+	): { maxWidth: number; maxHeight: number } {
+		if (cropData.method === CropMethods.BOUNDS) {
+			const { maxHeight, maxWidth } = this.getBoundsDimensions(cropData.boundsDimensions);
+
+			return {
+				maxHeight: Math.min(maxHeight, naturalHeight),
+				maxWidth: Math.min(maxWidth, naturalWidth),
+			};
+		}
+
+		return { maxHeight: naturalHeight, maxWidth: naturalWidth };
+	}
+
 	public getRatioLabel(cropData: CropOption | null): string {
 		const defaultLabel = 'Vrije verhouding';
 
@@ -95,7 +111,7 @@ export class ImageCropperService {
 		}
 	}
 
-	private getBoundsDimensions(dimensions?: BoundsDimensions): BoundsDimensions {
+	public getBoundsDimensions(dimensions?: BoundsDimensions): BoundsDimensions {
 		return {
 			maxHeight: dimensions?.maxHeight || 0,
 			maxWidth: dimensions?.maxWidth || 0,

@@ -1,5 +1,6 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
+import Big from 'big.js';
 import kebabCase from 'lodash.kebabcase';
 import { isEmpty } from 'ramda';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
@@ -48,12 +49,14 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 	const [error, setError] = useState<string | null>(null);
 	const [isGeneratingCrops, setIsGeneratingCrops] = useState(false);
 	const [tempCrop, setTempCrop] = useState<TemporaryCrop | null>(null);
-	const [imgSrc, setImgSrc] = useState<string>();
 	const [t] = useCoreTranslation();
 
 	const currentAsset = useMemo(() => {
 		return data.imageFieldValue?.original?.asset || null;
 	}, [data.imageFieldValue]);
+	const imgSrc = useMemo(() => {
+		return currentAsset ? getAssetUrl(currentAsset.uuid) : '';
+	}, [currentAsset]);
 
 	const navListItems: NavListItem[] = useMemo(() => {
 		return cropOptions.map(crop => ({
@@ -63,13 +66,6 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			onClick: () => setActiveCrop(crop),
 		}));
 	}, [activeCrop, cropOptions]);
-
-	// Set image src url
-	useEffect(() => {
-		if (currentAsset) {
-			setImgSrc(getAssetUrl(currentAsset.uuid));
-		}
-	}, [currentAsset]);
 
 	// Clear or set crop data when activeCrop changes
 	useEffect(() => {
@@ -108,7 +104,28 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			const { rotate, ...cropValues } = cropperRef.current.getData();
 			const transformValues = { grayscale: false, blur: 0, rotate };
 
-			newCropData = { cropValues, transformValues };
+			if (activeCrop.method === CropMethods.BOUNDS) {
+				const { maxHeight, maxWidth } = imageCropperService.getBoundsDimensions(
+					activeCrop.boundsDimensions
+				);
+				const { naturalHeight, naturalWidth } = cropperRef.current.getImageData();
+				// Set max size and center bounds crop
+				const height = Math.min(naturalHeight, maxHeight);
+				const width = Math.min(naturalWidth, maxWidth);
+				console.log(width, height);
+
+				const x = naturalWidth / 2 - width / 2;
+				const y = naturalHeight / 2 - height / 2;
+				const boundCropValues = { height, width, x, y };
+
+				newCropData = {
+					cropValues: boundCropValues,
+					transformValues,
+				};
+				cropperRef.current.setData(boundCropValues);
+			} else {
+				newCropData = { cropValues, transformValues };
+			}
 		}
 
 		// Only set crop if all values are valid
@@ -153,21 +170,99 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 			return;
 		}
 
-		// Prevent crop being smaller than min sizes for current option
 		const cropData = cropperRef.current.getData();
 		// !Important note: the updated values on the crop(move) event are not scaled but based
 		// on the actual image size, so we don't have to do calculations for the crop's min size
-		const { minWidth, minHeight } = imageCropperService.getMinCropSize(activeCropRef.current);
+		const { minHeight, minWidth } = imageCropperService.getMinCropSize(activeCropRef.current);
 
-		if (cropData.width < minWidth) {
+		// Prevent crop being smaller than min sizes for current option
+		if (activeCropRef.current.method !== CropMethods.BOUNDS && cropData.width < minWidth) {
 			e.preventDefault();
-			cropData.width = minWidth;
-			cropperRef.current.setData(cropData);
+			cropperRef.current.setData({ width: minWidth });
 		}
-		if (cropData.height < minHeight) {
+		if (activeCropRef.current.method !== CropMethods.BOUNDS && cropData.height < minHeight) {
 			e.preventDefault();
-			cropData.height = minHeight;
-			cropperRef.current.setData(cropData);
+			cropperRef.current.setData({ height: minHeight });
+		}
+
+		// Prevent crop being smaller than calculated max sizes for bounds crop
+		if (activeCropRef.current.method === CropMethods.BOUNDS) {
+			const { maxHeight, maxWidth } = imageCropperService.getBoundsDimensions(
+				activeCropRef.current.boundsDimensions
+			);
+
+			const { naturalWidth, naturalHeight } = cropperRef.current.getImageData();
+
+			console.log('crop w', cropData.width);
+			console.log('crop h', cropData.height);
+
+			let newWidth;
+			let newHeight;
+
+			if (cropData.height > maxHeight || cropData.height === naturalHeight) {
+				const minWidthBig = new Big(minWidth);
+				const ratio = new Big(Math.floor(maxHeight / cropData.height));
+				const newMinWidth = minWidthBig.div(ratio);
+
+				console.log('min w', minWidth);
+				console.log('min h', minHeight);
+				console.log('resized w', newMinWidth);
+				console.log('max w', maxWidth);
+				console.log('max h', maxHeight);
+
+				if (newMinWidth.gt(cropData.width)) {
+					console.log('EXCEEDED W');
+					newWidth = newMinWidth.add(1).toNumber();
+
+					// if (newWidth > naturalWidth) {
+					// 	newWidth = naturalWidth;
+
+					// 	if (newWidth > maxWidth || newWidth === naturalWidth) {
+					// 		const ratio = Math.floor((maxWidth / newWidth) * 1000) / 1000;
+					// 		const newMinHeight = Math.ceil(minHeight / ratio);
+
+					// 		if (newMinHeight > cropData.height) {
+					// 			newHeight = newMinHeight + 1;
+					// 		}
+					// 	}
+					// }
+				}
+			}
+
+			if ((newWidth || cropData.width) < minWidth) {
+				console.log('corrected w');
+				newWidth = minWidth;
+			}
+
+			if (cropData.width > maxWidth || cropData.width === naturalWidth) {
+				const ratio = Math.floor((maxWidth / cropData.width) * 1000) / 1000;
+				const newMinHeight = Math.ceil(minHeight / ratio);
+
+				console.log('min w', minWidth);
+				console.log('min h', minHeight);
+				console.log('resized h', newMinHeight);
+				console.log('max w', maxWidth);
+				console.log('max h', maxHeight);
+
+				if (newMinHeight > cropData.height) {
+					newHeight = newMinHeight + 1;
+				}
+			}
+
+			if ((newHeight || cropData.height) < minHeight) {
+				console.log('corrected h');
+				newHeight = minHeight;
+			}
+
+			if (newHeight || newWidth) {
+				e.preventDefault();
+				console.log('has new', newHeight, newWidth);
+
+				cropperRef.current.setData({
+					...(newWidth ? { width: newWidth. } : {}),
+					...(newHeight ? { height: newHeight } : {}),
+				});
+			}
 		}
 	};
 
