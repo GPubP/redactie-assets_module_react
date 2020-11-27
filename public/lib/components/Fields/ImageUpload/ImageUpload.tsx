@@ -8,11 +8,11 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { isEmpty } from '@datorama/akita';
 import { InputFieldProps } from '@redactie/form-renderer-module';
+import { ErrorMessage } from '@redactie/utils';
 import classnames from 'classnames/bind';
 import { omit } from 'ramda';
 import React, { FC, useEffect, useState } from 'react';
 
-import { formRendererConnector } from '../../../connectors';
 import { getAssetUrl, parseAllowedFileTypes } from '../../../helpers';
 import { ImageItem } from '../../ImageItem';
 import { ModalView } from '../../ModalView';
@@ -246,7 +246,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 					</div>
 				) : null}
 			</div>
-			<formRendererConnector.api.ErrorMessage name={field.name} />
+			<ErrorMessage name={field.name} />
 		</>
 	);
 };
