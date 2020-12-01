@@ -1,7 +1,7 @@
 import { Button, TextField } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
 import { InputFieldProps } from '@redactie/form-renderer-module';
-import { FormikOnChangeHandler } from '@redactie/utils';
+import { ErrorMessage, FormikOnChangeHandler } from '@redactie/utils';
 import classNames from 'classnames/bind';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement, useMemo, useState } from 'react';
@@ -153,11 +153,13 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 								<Field
 									as={TextField}
 									label="Minimumbreedte"
-									id="minWidth"
-									name="minWidth"
+									id={`${field.name}.minWidth`}
+									name={`${field.name}.minWidth`}
+									required={true}
 									min={0}
 									type="number"
 								/>
+								<ErrorMessage name={`${field.name}.minWidth`} />
 							</div>
 							<div className="col-xs-1 u-margin-top">
 								<small className="suffix-neg-margin-left">px</small>
@@ -176,11 +178,14 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 								<Field
 									as={TextField}
 									label="Minimumhoogte"
-									id="minHeight"
-									name="minHeight"
+									id={`${field.name}.minHeight`}
+									name={`${field.name}.minHeight`}
+									required={true}
 									min={0}
 									type="number"
 								/>
+
+								<ErrorMessage name={`${field.name}.minHeight`} />
 							</div>
 							<div className="col-xs-1 u-margin-top">
 								<small className="suffix-neg-margin-left">px</small>
@@ -215,6 +220,7 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 
 	return (
 		<>
+			{renderDimensions()}
 			<Formik enableReinitialize onSubmit={onSubmit} initialValues={initialValues}>
 				{({ values }) => {
 					return (
@@ -222,13 +228,13 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 							<FormikOnChangeHandler
 								onChange={values => onSubmit(values as ImageFieldSettingsFormState)}
 							/>
-							{renderDimensions()}
 							<h3 className="h6">{label}</h3>
 							{renderCropTable(values)}
 						</>
 					);
 				}}
 			</Formik>
+			<ErrorMessage name={`${field.name}.cropOptions`} />
 			{showCropSettingsForm && (
 				<div className="u-margin-top">
 					<ImageCropSettingsForm
