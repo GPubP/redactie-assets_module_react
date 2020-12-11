@@ -43,7 +43,7 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 		return {
 			...value,
 			cropOptions:
-				value.cropOptions.map((crop, index) => ({
+				(value?.cropOptions || []).map((crop, index) => ({
 					...crop,
 					id: `crop-item-${index}`,
 				})) || [],
