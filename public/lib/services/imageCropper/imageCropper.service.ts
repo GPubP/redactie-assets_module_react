@@ -64,22 +64,6 @@ export class ImageCropperService {
 		}
 	}
 
-	public getMaxCropSize(
-		cropData: CropOption,
-		{ naturalHeight, naturalWidth }: Cropper.ImageData
-	): { maxWidth: number; maxHeight: number } {
-		if (cropData.method === CropMethods.BOUNDS) {
-			const { maxHeight, maxWidth } = this.getBoundsDimensions(cropData.boundsDimensions);
-
-			return {
-				maxHeight: Math.min(maxHeight, naturalHeight),
-				maxWidth: Math.min(maxWidth, naturalWidth),
-			};
-		}
-
-		return { maxHeight: naturalHeight, maxWidth: naturalWidth };
-	}
-
 	public getRatioLabel(cropData: CropOption | null): string {
 		const defaultLabel = 'Vrije verhouding';
 

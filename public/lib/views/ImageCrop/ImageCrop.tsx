@@ -1,6 +1,5 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
-import Big from 'big.js';
 import classnames from 'classnames';
 import kebabCase from 'lodash.kebabcase';
 import { isEmpty } from 'ramda';
@@ -117,8 +116,6 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 				// Set max size and center bounds crop
 				const height = Math.min(naturalHeight, maxHeight);
 				const width = Math.min(naturalWidth, maxWidth);
-				console.log(width, height);
-
 				const x = naturalWidth / 2 - width / 2;
 				const y = naturalHeight / 2 - height / 2;
 				const boundCropValues = { height, width, x, y };

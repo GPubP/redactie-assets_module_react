@@ -51,7 +51,6 @@
     "@redactie/utils": "^1.0.0",
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "9.4.0",
-    "@types/big.js": "^6.0.0",
     "@types/classnames": "^2.2.10",
     "@types/jest": "24.9.1",
     "@types/lodash.debounce": "^4.0.6",
@@ -95,7 +94,6 @@
   "dependencies": {
     "@a-ui/core": "^4.2.2",
     "@mindspace-io/react": "^1.1.6",
-    "big.js": "^6.0.2",
     "lodash.debounce": "^4.0.8",
     "query-string": "6.12.1",
     "react-cropper": "^2.1.4"
