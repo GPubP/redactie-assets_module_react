@@ -1,6 +1,7 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
 import Big from 'big.js';
+import classnames from 'classnames';
 import kebabCase from 'lodash.kebabcase';
 import { isEmpty } from 'ramda';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
@@ -47,6 +48,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 	);
 	const [alert, setAlert] = useState<AlertMessage | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [isLoadingImage, setIsLoadingImage] = useState(true);
 	const [isGeneratingCrops, setIsGeneratingCrops] = useState(false);
 	const [tempCrop, setTempCrop] = useState<TemporaryCrop | null>(null);
 	const [t] = useCoreTranslation();
@@ -60,12 +62,15 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 	const navListItems: NavListItem[] = useMemo(() => {
 		return cropOptions.map(crop => ({
-			className: crop.id === activeCrop?.id ? 'is-active' : '',
+			className: classnames({
+				'is-active': crop.id === activeCrop?.id,
+				'is-disabled': isLoadingImage,
+			}),
 			hasError: false,
 			label: crop.name,
-			onClick: () => setActiveCrop(crop),
+			onClick: () => !isLoadingImage && setActiveCrop(crop),
 		}));
-	}, [activeCrop, cropOptions]);
+	}, [activeCrop, cropOptions, isLoadingImage]);
 
 	// Clear or set crop data when activeCrop changes
 	useEffect(() => {
@@ -358,6 +363,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 						<ImageCropper
 							crop={onCrop}
 							cropmove={onCropMove}
+							ready={() => setIsLoadingImage(false)}
 							ref={imgRef =>
 								(cropperRef.current =
 									(imgRef as HTMLImageElement & { cropper: Cropper })?.cropper ||
