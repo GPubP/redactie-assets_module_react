@@ -182,90 +182,82 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 
 		// Prevent crop being smaller than min sizes for current option
 		if (activeCropRef.current.method !== CropMethods.BOUNDS && cropData.width < minWidth) {
-			e.preventDefault();
 			cropperRef.current.setData({ width: minWidth });
 		}
 		if (activeCropRef.current.method !== CropMethods.BOUNDS && cropData.height < minHeight) {
-			e.preventDefault();
 			cropperRef.current.setData({ height: minHeight });
 		}
 
 		// Prevent crop being smaller than calculated max sizes for bounds crop
 		if (activeCropRef.current.method === CropMethods.BOUNDS) {
+			const { naturalWidth, naturalHeight } = cropperRef.current.getImageData();
 			const { maxHeight, maxWidth } = imageCropperService.getBoundsDimensions(
 				activeCropRef.current.boundsDimensions
 			);
 
-			const { naturalWidth, naturalHeight } = cropperRef.current.getImageData();
-
-			console.log('crop w', cropData.width);
-			console.log('crop h', cropData.height);
-
 			let newWidth;
 			let newHeight;
 
+			// Recalculate width if height max bounds are exceeded
 			if (cropData.height > maxHeight || cropData.height === naturalHeight) {
-				const minWidthBig = new Big(minWidth);
-				const ratio = new Big(Math.floor(maxHeight / cropData.height));
-				const newMinWidth = minWidthBig.div(ratio);
+				const ratio = Math.floor((maxHeight / cropData.height) * 1000) / 1000;
+				const newMinWidth = Math.ceil(minWidth / ratio);
 
-				console.log('min w', minWidth);
-				console.log('min h', minHeight);
-				console.log('resized w', newMinWidth);
-				console.log('max w', maxWidth);
-				console.log('max h', maxHeight);
+				if (newMinWidth > cropData.width) {
+					newWidth = newMinWidth;
 
-				if (newMinWidth.gt(cropData.width)) {
-					console.log('EXCEEDED W');
-					newWidth = newMinWidth.add(1).toNumber();
+					if (newWidth > naturalWidth) {
+						newWidth = naturalWidth;
 
-					// if (newWidth > naturalWidth) {
-					// 	newWidth = naturalWidth;
+						if (newWidth > maxWidth || newWidth === naturalWidth) {
+							const ratio = Math.floor((maxWidth / newWidth) * 1000) / 1000;
+							const newMinHeight = Math.ceil(minHeight / ratio);
 
-					// 	if (newWidth > maxWidth || newWidth === naturalWidth) {
-					// 		const ratio = Math.floor((maxWidth / newWidth) * 1000) / 1000;
-					// 		const newMinHeight = Math.ceil(minHeight / ratio);
-
-					// 		if (newMinHeight > cropData.height) {
-					// 			newHeight = newMinHeight + 1;
-					// 		}
-					// 	}
-					// }
+							if (newMinHeight > cropData.height) {
+								newHeight = newMinHeight;
+							}
+						}
+					}
 				}
 			}
 
+			// Prevent crop being smaller than min width
 			if ((newWidth || cropData.width) < minWidth) {
-				console.log('corrected w');
 				newWidth = minWidth;
 			}
 
+			// Recalculate height if width max bounds are exceeded
 			if (cropData.width > maxWidth || cropData.width === naturalWidth) {
 				const ratio = Math.floor((maxWidth / cropData.width) * 1000) / 1000;
 				const newMinHeight = Math.ceil(minHeight / ratio);
 
-				console.log('min w', minWidth);
-				console.log('min h', minHeight);
-				console.log('resized h', newMinHeight);
-				console.log('max w', maxWidth);
-				console.log('max h', maxHeight);
-
 				if (newMinHeight > cropData.height) {
-					newHeight = newMinHeight + 1;
+					newHeight = newMinHeight;
+
+					if (newHeight > naturalHeight) {
+						newHeight = naturalHeight;
+
+						if (newHeight > maxHeight || newHeight === naturalHeight) {
+							const ratio = Math.floor((maxHeight / newHeight) * 1000) / 1000;
+							const newMinWidth = Math.ceil(minWidth / ratio);
+
+							if (newMinWidth > cropData.width) {
+								newWidth = newMinWidth;
+							}
+						}
+					}
 				}
 			}
 
+			// Prevent crop being smaller than min height
 			if ((newHeight || cropData.height) < minHeight) {
-				console.log('corrected h');
 				newHeight = minHeight;
 			}
 
 			if (newHeight || newWidth) {
-				e.preventDefault();
-				console.log('has new', newHeight, newWidth);
-
 				cropperRef.current.setData({
-					...(newWidth ? { width: newWidth. } : {}),
-					...(newHeight ? { height: newHeight } : {}),
+					width: newWidth || cropData.width,
+					height: newHeight || cropData.height,
 				});
 			}
 		}
