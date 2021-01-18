@@ -163,7 +163,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		setTempCrop({ cropValues, transformValues });
 	};
 
-	const onCropMove = (e: Cropper.CropMoveEvent): void => {
+	const onCropMove = (): void => {
 		if (
 			!cropperRef.current ||
 			!activeCropRef.current ||
