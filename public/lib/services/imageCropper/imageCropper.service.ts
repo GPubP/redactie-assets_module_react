@@ -5,7 +5,7 @@ export class ImageCropperService {
 	public calculateAspectRatio(cropData: CropOption): number {
 		switch (cropData.method) {
 			case CropMethods.BOUNDS:
-				if (!cropData.boundsDimensions || !cropData.lockRatio) {
+				if (!cropData.lockRatio || !cropData.boundsDimensions) {
 					return NaN;
 				}
 				if (cropData.boundsDimensions.minWidth && cropData.boundsDimensions.minHeight) {
@@ -95,7 +95,7 @@ export class ImageCropperService {
 		}
 	}
 
-	private getBoundsDimensions(dimensions?: BoundsDimensions): BoundsDimensions {
+	public getBoundsDimensions(dimensions?: BoundsDimensions): BoundsDimensions {
 		return {
 			maxHeight: dimensions?.maxHeight || 0,
 			maxWidth: dimensions?.maxWidth || 0,
