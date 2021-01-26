@@ -7,9 +7,15 @@ import { useImageLoaded } from '../../../hooks';
 import { ImageFieldValue } from '../../Fields';
 
 const ImageView: FC<ViewFieldProps> = ({ value }) => {
-	const { meta, original } = value as ImageFieldValue;
-	const src = useMemo(() => getAssetUrl(original?.asset?.uuid), [original]);
+	const { meta, original } = (value as ImageFieldValue) || {};
+	const src = useMemo(() => (original ? getAssetUrl(original?.asset?.uuid) : undefined), [
+		original,
+	]);
 	const loaded = useImageLoaded(src);
+
+	if (!value) {
+		return null;
+	}
 
 	return (
 		<div className="u-margin-bottom">
