@@ -43,8 +43,8 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const initialValues = currentValue
 		? {
 				name: currentValue?.name ?? '',
-				alt: imageFieldValue?.meta.alt ?? currentValue?.name ?? '',
-				title: imageFieldValue?.meta.title ?? currentValue?.name ?? '',
+				alt: imageFieldValue?.meta?.alt ?? currentValue?.name ?? '',
+				title: imageFieldValue?.meta?.title ?? currentValue?.name ?? '',
 				description: currentValue?.description ?? '',
 				copyright: currentValue?.copyright ?? '',
 		  }
