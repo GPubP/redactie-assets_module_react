@@ -8,11 +8,10 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { isEmpty } from '@datorama/akita';
 import { InputFieldProps } from '@redactie/form-renderer-module';
-import { ErrorMessage } from '@redactie/utils';
 import classnames from 'classnames/bind';
-import { omit } from 'ramda';
 import React, { FC, useEffect, useState } from 'react';
 
+import { formRendererConnector } from '../../../connectors';
 import { getAssetUrl, parseAllowedFileTypes } from '../../../helpers';
 import { ImageItem } from '../../ImageItem';
 import { ModalView } from '../../ModalView';
@@ -79,7 +78,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	 */
 
 	const deleteCrops = (): void => {
-		fieldHelperProps.setValue(omit(['crops'], imageFieldValue));
+		fieldHelperProps.setValue(null);
 	};
 
 	const onModalViewChange = (
@@ -152,7 +151,14 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 			<div className={cx({ 'o-image-upload': hasCrops })}>
 				<Card className={cx({ 'o-image-upload__card': hasCrops })}>
 					<CardBody>
-						<h6 className="u-margin-bottom">{fieldSchema?.label}</h6>
+						{fieldSchema.label && (
+							<formRendererConnector.api.FormRendererFieldTitle
+								isRequired={config.required}
+								className="u-margin-bottom"
+							>
+								{fieldSchema.label}
+							</formRendererConnector.api.FormRendererFieldTitle>
+						)}
 						{guideline && <p className="u-margin-bottom">{guideline}</p>}
 						{!hasCrops ? (
 							<>
@@ -246,7 +252,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 					</div>
 				) : null}
 			</div>
-			<ErrorMessage name={field.name} />
+			<formRendererConnector.api.ErrorMessage name={field.name} />
 		</>
 	);
 };
