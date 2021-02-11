@@ -148,16 +148,18 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 
 	return (
 		<>
-			<div className={cx({ 'o-image-upload': hasCrops })}>
+			<div
+				className={cx('a-input', {
+					'o-image-upload': hasCrops,
+					'is-required': config.required,
+				})}
+			>
 				<Card className={cx({ 'o-image-upload__card': hasCrops })}>
 					<CardBody>
 						{fieldSchema.label && (
-							<formRendererConnector.api.FormRendererFieldTitle
-								isRequired={config.required}
-								className="u-margin-bottom"
-							>
-								{fieldSchema.label}
-							</formRendererConnector.api.FormRendererFieldTitle>
+							<label className="a-input__label u-margin-bottom">
+								{fieldSchema.label}{' '}
+							</label>
 						)}
 						{guideline && <p className="u-margin-bottom">{guideline}</p>}
 						{!hasCrops ? (
