@@ -158,7 +158,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 					<CardBody>
 						{fieldSchema.label && (
 							<label className="a-input__label u-margin-bottom">
-								{fieldSchema.label}{' '}
+								{fieldSchema.label}
 							</label>
 						)}
 						{guideline && <p className="u-margin-bottom">{guideline}</p>}
