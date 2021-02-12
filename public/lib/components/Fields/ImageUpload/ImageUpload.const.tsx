@@ -15,6 +15,7 @@ export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
 	allowedFileTypes: [],
 	guideline: '',
 	imageConfig: DEFAULT_IMAGE_CONFIG,
+	required: false,
 };
 
 const MODAL_VIEW_SELECT_TABS: Tab<ModalViewData>[] = [
