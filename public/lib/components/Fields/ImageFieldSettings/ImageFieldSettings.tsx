@@ -1,11 +1,12 @@
 import { Button, TextField } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
 import { InputFieldProps } from '@redactie/form-renderer-module';
-import { ErrorMessage, FormikOnChangeHandler } from '@redactie/utils';
+import { FormikOnChangeHandler } from '@redactie/utils';
 import classNames from 'classnames/bind';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement, useMemo, useState } from 'react';
 
+import { formRendererConnector } from '../../../connectors/formRenderer';
 import { useCoreTranslation } from '../../../connectors/translations';
 import { ImageCropSettingsForm } from '../../Forms';
 
@@ -159,7 +160,9 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 									min={0}
 									type="number"
 								/>
-								<ErrorMessage name={`${field.name}.minWidth`} />
+								<formRendererConnector.api.ErrorMessage
+									name={`${field.name}.minWidth`}
+								/>
 							</div>
 							<div className="col-xs-1 u-margin-top">
 								<small className="suffix-neg-margin-left">px</small>
@@ -185,7 +188,9 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 									type="number"
 								/>
 
-								<ErrorMessage name={`${field.name}.minHeight`} />
+								<formRendererConnector.api.ErrorMessage
+									name={`${field.name}.minHeight`}
+								/>
 							</div>
 							<div className="col-xs-1 u-margin-top">
 								<small className="suffix-neg-margin-left">px</small>
@@ -234,7 +239,7 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 					);
 				}}
 			</Formik>
-			<ErrorMessage name={`${field.name}.cropOptions`} />
+			<formRendererConnector.api.ErrorMessage name={`${field.name}.cropOptions`} />
 			{showCropSettingsForm && (
 				<div className="u-margin-top">
 					<ImageCropSettingsForm
