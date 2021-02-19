@@ -30,7 +30,7 @@ export interface AssetResponse {
 		thumbnail: string | null;
 		metaData: AssetMetaData;
 		type: string;
-		figuratively: boolean;
+		figuratively?: boolean;
 	};
 	meta: {
 		deleted: boolean;
