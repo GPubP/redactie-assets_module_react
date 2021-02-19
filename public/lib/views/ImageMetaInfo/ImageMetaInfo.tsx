@@ -43,6 +43,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const initialValues = currentValue
 		? {
 				name: currentValue?.name ?? '',
+				figuratively: currentValue?.figuratively,
 				alt: imageFieldValue?.meta?.alt ?? currentValue?.name ?? '',
 				title: imageFieldValue?.meta?.title ?? currentValue?.name ?? '',
 				description: currentValue?.description ?? '',
@@ -79,6 +80,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			formData.append('name', formValues.name);
 			formData.append('description', formValues.description);
 			formData.append('copyright', formValues.copyright);
+			formData.append('figuratively', formValues.figuratively.toString());
 			const attributes = {
 				alt: formValues.alt,
 				title: formValues.title,
@@ -114,6 +116,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 							title: responseData?.attributes?.title,
 							description: responseData?.description,
 							copyright: responseData?.copyright,
+							figuratively: responseData?.figuratively,
 						},
 						original: {
 							asset: {
@@ -145,6 +148,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 				title: formValues.title,
 				description: formValues.description,
 				copyright: formValues.copyright,
+				figuratively: formValues.figuratively,
 			},
 			...(isCreating && selectedFiles.length
 				? {

@@ -1,4 +1,4 @@
-import { Textarea, TextField } from '@acpaas-ui/react-components';
+import { Textarea, TextField, Checkbox } from '@acpaas-ui/react-components';
 import { ErrorMessage } from '@redactie/utils';
 import { Field, Formik } from 'formik';
 import React, { FC } from 'react';
@@ -36,6 +36,17 @@ const ImageMetaForm: FC<ImageMetaFormProps> = ({
 								component="p"
 								name="name"
 							/>
+						</div>
+						<div className="row">
+							<div className="col-xs-12 u-margin-bottom">
+								<Field
+									as={Checkbox}
+									checked={props?.values?.figuratively}
+									id="figuratively"
+									name="figuratively"
+									label="Gebruik als decoratieve afbeelding"
+								/>
+							</div>
 						</div>
 						<div className="row">
 							<div className="col-xs-12 col-md-6 u-margin-bottom">

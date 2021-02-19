@@ -65,6 +65,7 @@ export interface ImageFieldValue {
 		title: string;
 		name: string;
 		alt: string;
+		figuratively: boolean;
 	};
 	original: {
 		asset: ImageFieldAsset;

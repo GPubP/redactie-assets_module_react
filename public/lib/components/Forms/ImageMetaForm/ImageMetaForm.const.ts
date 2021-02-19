@@ -10,6 +10,7 @@ export const IMAGE_META_VALIDATION_SCHEMA = object().shape({
 
 export const IMAGE_META_INITIAL_FORM_STATE: ImageMetaFormState = {
 	name: '',
+	figuratively: false,
 	title: '',
 	alt: '',
 	description: '',
