@@ -57,13 +57,6 @@ const MODAL_VIEW_EDIT_TABS: Tab<ModalViewData>[] = [
 		target: ModalViewTarget.EDIT_CROP,
 		viewComponent: ImageCrop,
 	},
-	{
-		active: false,
-		disabled: true,
-		name: 'Afbeelding vervangen',
-		target: ModalViewTarget.EDIT_REPLACE,
-		viewComponent: () => null,
-	},
 ];
 
 const MODAL_VIEW_CREATE_TABS: Tab<ModalViewData>[] = [
