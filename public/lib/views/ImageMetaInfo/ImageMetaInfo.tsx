@@ -168,6 +168,10 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		}
 	};
 
+	const onReplaceImg = (): void => {
+		onViewChange(ModalViewTarget.ADD_SELECTION, ModalViewMode.REPLACE);
+	};
+
 	/**
 	 * Render
 	 */
@@ -188,19 +192,31 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 							onChange={values => setFormValues(values as ImageMetaFormState)}
 						/>
 						<ModalViewActions>
-							<div className="u-wrapper row end-xs">
-								<Button onClick={onCancel} negative>
-									{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
-								</Button>
-								<Button
-									iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
-									disabled={isSaving || (!hasChanges && !isValid)}
-									className="u-margin-left-xs"
-									onClick={submitForm}
-									type="success"
-								>
-									{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
-								</Button>
+							<div className="u-wrapper row between-xs">
+								<div>
+									<Button
+										className="u-margin-right-xs"
+										iconLeft="trash"
+										type="secondary"
+									>
+										{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
+									</Button>
+									<Button onClick={onReplaceImg}>Vervangen</Button>
+								</div>
+								<div>
+									<Button onClick={onCancel} negative>
+										{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
+									</Button>
+									<Button
+										iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
+										disabled={isSaving || (!hasChanges && !isValid)}
+										className="u-margin-left-xs"
+										onClick={submitForm}
+										type="success"
+									>
+										{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
+									</Button>
+								</div>
 							</div>
 						</ModalViewActions>
 					</>

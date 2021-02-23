@@ -85,4 +85,8 @@ export const MODAL_VIEW_MODE_MAP: {
 		title: 'Bewerk afbeelding',
 		tabs: MODAL_VIEW_EDIT_TABS,
 	},
+	[ModalViewMode.REPLACE]: {
+		title: 'Bewerk afbeelding',
+		tabs: MODAL_VIEW_SELECT_TABS,
+	},
 };
