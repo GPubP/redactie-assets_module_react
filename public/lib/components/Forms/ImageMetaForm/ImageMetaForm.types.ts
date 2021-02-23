@@ -8,6 +8,7 @@ export interface ImageMetaFormProps {
 
 export interface ImageMetaFormState {
 	name: string;
+	figuratively: boolean;
 	alt: string;
 	title: string;
 	description: string;
