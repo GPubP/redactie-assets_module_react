@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { AssetResponse } from './services/assets';
+
 export interface NavListItem {
 	description?: string;
 	hasError?: boolean;
@@ -35,3 +37,5 @@ export enum CropMethods {
 	BOUNDS = 'bounds',
 	RATIO = 'ratio',
 }
+
+export type SelectedAsset = Pick<AssetResponse, 'uuid' | 'data'>;
