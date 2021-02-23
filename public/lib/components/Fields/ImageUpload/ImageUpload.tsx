@@ -138,6 +138,11 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		setModalViewData({ ...modalViewData, queuedFiles: [] });
 	};
 
+	const onDelete = (): void => {
+		deleteFieldValue();
+		closeModal();
+	};
+
 	/**
 	 * Render
 	 */
@@ -226,6 +231,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 									config={MODAL_VIEW_MODE_MAP}
 									mode={mode}
 									onCancel={closeModal}
+									onDelete={onDelete}
 									onViewChange={onModalViewChange}
 									target={target || ''}
 								/>

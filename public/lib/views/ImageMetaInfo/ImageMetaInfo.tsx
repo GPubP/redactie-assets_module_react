@@ -29,6 +29,7 @@ import { ALERT_MESSAGES } from './ImageMetaInfo.const';
 const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	data,
 	onCancel,
+	onDelete,
 	onViewChange,
 }) => {
 	const { imageFieldValue, mode, selectedFiles } = data;
@@ -197,6 +198,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 									<Button
 										className="u-margin-right-xs"
 										iconLeft="trash"
+										onClick={onDelete}
 										type="secondary"
 									>
 										{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
