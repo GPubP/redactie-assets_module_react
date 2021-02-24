@@ -193,7 +193,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 							onChange={values => setFormValues(values as ImageMetaFormState)}
 						/>
 						<ModalViewActions>
-							<div className="u-wrapper row between-xs">
+							<div className="row between-xs">
 								<div>
 									<Button
 										className="u-margin-right-xs"
