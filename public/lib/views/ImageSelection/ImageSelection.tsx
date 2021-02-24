@@ -26,6 +26,9 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 	onCancel,
 	onViewChange,
 }) => {
+	const { mode, setImageFieldValue } = viewData;
+	const isReplacing = mode === ModalViewMode.REPLACE;
+
 	/**
 	 * Hooks
 	 */
@@ -56,6 +59,10 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 		!!selectedAssets.find(selected => selected.uuid === item.uuid);
 
 	const onContinue = (): void => {
+		if (isReplacing) {
+			setImageFieldValue(null);
+		}
+
 		onViewChange(ModalViewTarget.CREATE_META, ModalViewMode.CREATE, {
 			// Don't pass image select component props
 			selectedFiles: selectedAssets.map(({ uuid, data }) => ({ uuid, data })),
@@ -151,8 +158,9 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 						className="u-margin-left-xs"
 						disabled={selectedAssets.length === 0}
 						onClick={onContinue}
+						type={isReplacing ? 'success' : 'primary'}
 					>
-						{t(CORE_TRANSLATIONS['BUTTON_NEXT'])}
+						{isReplacing ? 'Vervang' : t(CORE_TRANSLATIONS['BUTTON_NEXT'])}
 					</Button>
 				</div>
 			</ModalViewActions>

@@ -77,7 +77,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	 * Methods
 	 */
 
-	const deleteCrops = (): void => {
+	const deleteFieldValue = (): void => {
 		fieldHelperProps.setValue(null);
 	};
 
@@ -247,7 +247,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 						<Button
 							htmlType="button"
 							icon="trash"
-							onClick={deleteCrops}
+							onClick={deleteFieldValue}
 							transparent
 							type="danger"
 						/>

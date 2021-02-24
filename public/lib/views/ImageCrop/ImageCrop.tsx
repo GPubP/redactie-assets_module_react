@@ -17,6 +17,8 @@ import {
 	ModalViewActions,
 	ModalViewContainer,
 	ModalViewData,
+	ModalViewMode,
+	ModalViewTarget,
 } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
 import {
@@ -31,7 +33,11 @@ import { imageCropperService } from '../../services/imageCropper';
 import { ALERT_MESSAGES } from './ImageCrop.const';
 import { ImageCrops, TemporaryCrop } from './ImageCrop.types';
 
-const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel }) => {
+const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
+	data,
+	onCancel,
+	onViewChange,
+}) => {
 	const { config, setImageFieldValue, imageFieldValue } = data;
 	const cropOptions = config?.imageConfig?.cropOptions || [];
 
@@ -260,6 +266,10 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 		}
 	};
 
+	const onReplaceImg = (): void => {
+		onViewChange(ModalViewTarget.ADD_SELECTION, ModalViewMode.REPLACE);
+	};
+
 	const onSubmit = async (): Promise<void> => {
 		if (!crops || !currentAsset) {
 			return;
@@ -376,6 +386,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({ data, onCancel 
 						<Button iconLeft="trash" type="secondary">
 							{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
 						</Button>
+						<Button onClick={onReplaceImg}>Vervangen</Button>
 					</div>
 					<div>
 						<Button className="u-margin-right-xs" negative onClick={onCancel}>

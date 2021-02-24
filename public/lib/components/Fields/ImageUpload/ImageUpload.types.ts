@@ -1,6 +1,6 @@
 import { FieldSchema } from '@redactie/form-renderer-module';
 
-import { AssetResponse } from '../../../services/assets';
+import { SelectedAsset } from '../../../assets.types';
 import { CropOption } from '../ImageFieldSettings';
 
 import { VALIDATION_MESSAGES_DEFAULT } from './Uploader/Uploader.class.const';
@@ -29,7 +29,7 @@ export interface ModalViewData {
 	imageFieldValue?: ImageFieldValue;
 	mode: ModalViewMode;
 	queuedFiles?: File[];
-	selectedFiles: Pick<AssetResponse, 'uuid' | 'data'>[];
+	selectedFiles: SelectedAsset[];
 	onManualUpload: (files: File[]) => void;
 	setImageFieldValue: (value: any) => void;
 }
@@ -40,6 +40,7 @@ export enum ModalViewMode {
 	CREATE = 'create',
 	SELECT = 'select',
 	EDIT = 'edit',
+	REPLACE = 'replace',
 }
 
 export enum ModalViewTarget {
@@ -48,7 +49,6 @@ export enum ModalViewTarget {
 	ADD_UPLOAD = 'add-upload',
 	EDIT_META = 'edit-meta',
 	EDIT_CROP = 'edit-crop',
-	EDIT_REPLACE = 'edit-replace',
 }
 
 export interface ImageFieldValue {
