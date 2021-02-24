@@ -11,6 +11,7 @@ const ModalView = <Data extends Record<string, any>>({
 	config,
 	mode,
 	onCancel,
+	onDelete,
 	onViewChange,
 	target,
 	data,
@@ -65,7 +66,12 @@ const ModalView = <Data extends Record<string, any>>({
 				tabs={activeTabs}
 				title={config[mode].title}
 			/>
-			<ViewComponent data={data} onCancel={onCancel} onViewChange={onViewChange} />
+			<ViewComponent
+				data={data}
+				onCancel={onCancel}
+				onDelete={onDelete}
+				onViewChange={onViewChange}
+			/>
 		</>
 	);
 };

@@ -36,6 +36,7 @@ import { ImageCrops, TemporaryCrop } from './ImageCrop.types';
 const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 	data,
 	onCancel,
+	onDelete,
 	onViewChange,
 }) => {
 	const { config, setImageFieldValue, imageFieldValue } = data;
@@ -293,7 +294,6 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 				}
 
 				setError(null);
-				setAlert(ALERT_MESSAGES.success);
 
 				setImageFieldValue({
 					...imageFieldValue,
@@ -316,6 +316,8 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 						};
 					}, {}),
 				});
+				// Close modal
+				onCancel();
 			})
 			.catch(error => {
 				console.error('crop error', error);
@@ -383,7 +385,12 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 			<ModalViewActions>
 				<div className="row between-xs">
 					<div>
-						<Button iconLeft="trash" type="secondary">
+						<Button
+							className="u-margin-right-xs"
+							iconLeft="trash"
+							onClick={onDelete}
+							type="secondary"
+						>
 							{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
 						</Button>
 						<Button onClick={onReplaceImg}>Vervangen</Button>
