@@ -201,9 +201,9 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 								<div>
 									<Button
 										className="u-margin-right-xs"
-										iconLeft="trash"
+										iconLeft="trash-o"
 										onClick={onDelete}
-										type="secondary"
+										type="danger"
 									>
 										{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
 									</Button>
