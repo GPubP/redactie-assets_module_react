@@ -22,6 +22,7 @@ export interface ImageUploadConfig extends FieldSchemaConfig {
 		minWidth: number;
 		minHeight: number;
 	};
+	figuratively?: boolean;
 }
 
 export interface ModalViewData {

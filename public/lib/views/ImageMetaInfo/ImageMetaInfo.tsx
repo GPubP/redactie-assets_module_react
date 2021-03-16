@@ -32,7 +32,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	onDelete,
 	onViewChange,
 }) => {
-	const { imageFieldValue, mode, selectedFiles } = data;
+	const { imageFieldValue, mode, selectedFiles, config } = data;
 	const isCreating = mode === ModalViewMode.CREATE;
 	// When creating check if user has uploaded or selected from assets
 	// otherwise, when editing, the meta should be available from imageFieldValue
@@ -41,16 +41,20 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		: imageFieldValue?.meta;
 	// Always use alt and title from imageFieldValue.meta for the default values
 	// if they are not avalaible use the current value's name
+
 	const initialValues = currentValue
 		? {
 				name: currentValue?.name ?? '',
-				figuratively: !!currentValue?.figuratively,
+				figuratively: !!currentValue?.figuratively ?? config?.figuratively,
 				alt: imageFieldValue?.meta?.alt ?? currentValue?.name ?? '',
 				title: imageFieldValue?.meta?.title ?? currentValue?.name ?? '',
 				description: currentValue?.description ?? '',
 				copyright: currentValue?.copyright ?? '',
 		  }
-		: IMAGE_META_INITIAL_FORM_STATE;
+		: {
+			...IMAGE_META_INITIAL_FORM_STATE,
+			figuratively: config?.figuratively as boolean,
+		};
 
 	/**
 	 * Hooks
