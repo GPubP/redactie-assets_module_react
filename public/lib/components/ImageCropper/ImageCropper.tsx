@@ -35,7 +35,7 @@ const ImageCropper: RefForwardingComponent<HTMLImageElement, ReactCropperProps> 
 	 * Methods
 	 */
 
-	const onReady = (e: Cropper.ReadyEvent): void => {
+	const onReady = (e: Cropper.ReadyEvent<HTMLImageElement>): void => {
 		if (imgLoading) {
 			setImgLoading(false);
 		}
