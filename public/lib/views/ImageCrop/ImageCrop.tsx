@@ -1,8 +1,9 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
+import { useDetectValueChanges } from '@redactie/utils';
 import classnames from 'classnames';
 import kebabCase from 'lodash.kebabcase';
-import { isEmpty } from 'ramda';
+import { equals, isEmpty } from 'ramda';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -57,6 +58,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const [isLoadingImage, setIsLoadingImage] = useState(true);
 	const [isGeneratingCrops, setIsGeneratingCrops] = useState(false);
 	const [tempCrop, setTempCrop] = useState<TemporaryCrop | null>(null);
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(true, crops);
 	const [t] = useCoreTranslation();
 
 	const currentAsset = useMemo(() => {
@@ -65,6 +67,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const imgSrc = useMemo(() => {
 		return currentAsset ? getAssetUrl(currentAsset.uuid) : '';
 	}, [currentAsset]);
+	const allCropsSet = Object.keys(crops).length === cropOptions.length;
 
 	const navListItems: NavListItem[] = useMemo(() => {
 		return cropOptions.map(crop => ({
@@ -138,7 +141,11 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 		}
 
 		// Only set crop if all values are valid
-		if (validateCropValues(newCropData.cropValues)) {
+		// And the crop values has changed
+		if (
+			validateCropValues(newCropData.cropValues) &&
+			!equals(crops[kebabCase(activeCrop.name)]?.cropValues, newCropData.cropValues)
+		) {
 			setCrops({
 				...crops,
 				[kebabCase(activeCrop.name)]: { ...newCropData, settings: activeCrop },
@@ -167,7 +174,15 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 		const { rotate, ...cropValues } = e.detail;
 		const transformValues = { grayscale: false, blur: 0, rotate };
 
-		setTempCrop({ cropValues, transformValues });
+		setTempCrop({
+			cropValues: {
+				width: Math.round(cropValues.width * 10) / 10,
+				height: Math.round(cropValues.height * 10) / 10,
+				x: Math.round(cropValues.x * 10) / 10,
+				y: Math.round(cropValues.y * 10) / 10,
+			},
+			transformValues,
+		});
 	};
 
 	const onCropMove = (): void => {
@@ -326,6 +341,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 			})
 			.finally(() => {
 				setIsGeneratingCrops(false);
+				resetDetectValueChanges();
 			});
 	};
 
@@ -418,7 +434,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 							</>
 						) : null}
 						<Button
-							disabled={isGeneratingCrops}
+							disabled={isGeneratingCrops || !allCropsSet || !hasChanges}
 							iconLeft={isGeneratingCrops ? 'circle-o-notch fa-spin' : null}
 							onClick={onSubmit}
 							type="success"
