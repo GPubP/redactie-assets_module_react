@@ -195,42 +195,47 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			</ModalViewContainer>
 
 			<ImageMetaForm initialValues={initialValues} onSubmit={onSubmit}>
-				{({ isValid, submitForm }) => (
-					<>
-						<FormikOnChangeHandler
-							onChange={values => setFormValues(values as ImageMetaFormState)}
-						/>
-						<ModalViewActions>
-							<div className="row between-xs">
-								<div>
-									<Button
-										className="u-margin-right-xs"
-										iconLeft="trash-o"
-										onClick={onDelete}
-										type="danger"
-									>
-										{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
-									</Button>
-									<Button onClick={onReplaceImg}>Vervangen</Button>
+				{({ isValid, submitForm }) => {
+					const saveButtonDisabled = isCreating
+						? isSaving || (!hasChanges && !isValid)
+						: isSaving || !hasChanges || !isValid;
+					return (
+						<>
+							<FormikOnChangeHandler
+								onChange={values => setFormValues(values as ImageMetaFormState)}
+							/>
+							<ModalViewActions>
+								<div className="row between-xs">
+									<div>
+										<Button
+											className="u-margin-right-xs"
+											iconLeft="trash-o"
+											onClick={onDelete}
+											type="danger"
+										>
+											{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
+										</Button>
+										<Button onClick={onReplaceImg}>Vervangen</Button>
+									</div>
+									<div>
+										<Button onClick={onCancel} negative>
+											{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
+										</Button>
+										<Button
+											iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
+											disabled={saveButtonDisabled}
+											className="u-margin-left-xs"
+											onClick={submitForm}
+											type="success"
+										>
+											{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
+										</Button>
+									</div>
 								</div>
-								<div>
-									<Button onClick={onCancel} negative>
-										{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
-									</Button>
-									<Button
-										iconLeft={isSaving ? 'circle-o-notch fa-spin' : null}
-										disabled={isSaving || (!hasChanges && !isValid)}
-										className="u-margin-left-xs"
-										onClick={submitForm}
-										type="success"
-									>
-										{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
-									</Button>
-								</div>
-							</div>
-						</ModalViewActions>
-					</>
-				)}
+							</ModalViewActions>
+						</>
+					);
+				}}
 			</ImageMetaForm>
 		</>
 	);
