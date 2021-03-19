@@ -9,7 +9,7 @@ export const VALIDATION_MESSAGES_DEFAULT = {
 export const UPLOAD_OPTIONS_DEFAULT: ImageUploadOptions = {
 	allowedMimeTypes: [],
 	allowedFileTypes: [],
-	maxFileSize: 0, // 0 is infinite
+	maxFileSize: 10485760, // 10MB, 0 is infinite
 	url: '',
 	messages: VALIDATION_MESSAGES_DEFAULT,
 };
