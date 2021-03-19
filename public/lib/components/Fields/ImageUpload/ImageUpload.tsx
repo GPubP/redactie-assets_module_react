@@ -63,7 +63,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		const options: ImageUploadOptions = {
 			allowedFileTypes,
 			messages: {
-				INVALID_FILE_SIZE: 'Ongeldige bestandsgrootte',
+				INVALID_FILE_SIZE: 'Ongeldige bestandsgrootte, max. 10MB',
 				INVALID_FILE_TYPE: `Ongeldig bestandstype, volgende types zijn toegestaan: ${config.allowedFileTypes}`,
 				INVALID_MIME_TYPE: 'Ongeldig mime type',
 			},
