@@ -135,7 +135,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	const closeModal = (): void => {
 		setTarget(null);
 		setShowModal(false);
-		setModalViewData({ ...modalViewData, queuedFiles: [] });
+		setModalViewData({ ...modalViewData, queuedFiles: [], selectedFiles: [] });
 	};
 
 	const onDelete = (): void => {
