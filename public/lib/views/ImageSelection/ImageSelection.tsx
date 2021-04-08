@@ -1,5 +1,5 @@
 import { Button, Icon, Pagination, TextField } from '@acpaas-ui/react-components';
-import { DataLoader } from '@redactie/utils';
+import { DataLoader, useSiteContext } from '@redactie/utils';
 import debounce from 'lodash.debounce';
 import React, { ChangeEvent, FC, ReactElement, useEffect, useMemo, useState } from 'react';
 
@@ -28,6 +28,7 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 }) => {
 	const { mode, setImageFieldValue } = viewData;
 	const isReplacing = mode === ModalViewMode.REPLACE;
+	const { siteId } = useSiteContext();
 
 	/**
 	 * Hooks
@@ -44,12 +45,16 @@ const ImageSelection: FC<ModalViewComponentProps<ModalViewData>> = ({
 	// Fetch assets
 	useEffect(() => {
 		const leading = !searchParams.search && searchParams.page === 1;
-		const debouncedGetAssets = debounce(() => assetsFacade.getAssets(searchParams), 500, {
-			leading,
-		});
+		const debouncedGetAssets = debounce(
+			() => assetsFacade.getAssets(searchParams, siteId),
+			500,
+			{
+				leading,
+			}
+		);
 		debouncedGetAssets();
 		return () => debouncedGetAssets.cancel();
-	}, [searchParams]);
+	}, [searchParams, siteId]);
 
 	/**
 	 * Methods

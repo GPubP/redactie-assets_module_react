@@ -15,11 +15,11 @@ export class AssetsFacade extends BaseEntityFacade<AssetsStore, AssetsApiService
 	public readonly assets$ = this.query.assets$;
 	public readonly asset$ = this.query.asset$;
 
-	public getAssets(searchParams: AssetsSearchParams): void {
+	public getAssets(searchParams: AssetsSearchParams, siteId?: string): void {
 		this.store.setIsFetching(true);
 
 		this.service
-			.getAssets(searchParams)
+			.getAssets(searchParams, siteId)
 			.then(response => {
 				if (response) {
 					this.store.set(response._embedded);
