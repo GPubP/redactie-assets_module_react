@@ -9,9 +9,13 @@ import {
 } from './assets.service.types';
 
 export class AssetsApiService {
-	public async getAssets(searchParams: AssetsSearchParams): Promise<AssetsResponse> {
+	public async getAssets(
+		searchParams: AssetsSearchParams,
+		siteId?: string
+	): Promise<AssetsResponse> {
+		const path = siteId ? `sites/${siteId}/assets` : 'assets';
 		return await apiService
-			.get('assets', {
+			.get(path, {
 				searchParams: parseSearchParams(searchParams),
 			})
 			.json<AssetsResponse>();
