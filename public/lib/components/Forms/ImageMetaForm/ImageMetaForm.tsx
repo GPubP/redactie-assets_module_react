@@ -1,6 +1,6 @@
-import { Textarea, TextField, Checkbox } from '@acpaas-ui/react-components';
+import { Checkbox, Textarea, TextField } from '@acpaas-ui/react-components';
 import { ErrorMessage } from '@redactie/utils';
-import { Field, Formik } from 'formik';
+import { Field, FieldProps, Formik } from 'formik';
 import React, { FC } from 'react';
 
 import { ModalViewContainer } from '../../ModalView';
@@ -40,12 +40,25 @@ const ImageMetaForm: FC<ImageMetaFormProps> = ({
 						<div className="row">
 							<div className="col-xs-12 u-margin-bottom">
 								<Field
-									as={Checkbox}
-									checked={props?.values?.figuratively}
-									id="figuratively"
 									name="figuratively"
 									label="Gebruik als decoratieve afbeelding"
-								/>
+								>
+									{({ field, form }: FieldProps) => (
+										<div className="a-input">
+											<Checkbox
+												id={field.name}
+												name={field.name}
+												label="Gebruik als decoratieve afbeelding"
+												checked={field.value}
+												onChange={() =>
+													form
+														.getFieldHelpers('figuratively')
+														.setValue(!field.value)
+												}
+											/>
+										</div>
+									)}
+								</Field>
 							</div>
 						</div>
 						<div className="row">

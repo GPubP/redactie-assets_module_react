@@ -52,9 +52,9 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 				copyright: currentValue?.copyright ?? '',
 		  }
 		: {
-			...IMAGE_META_INITIAL_FORM_STATE,
-			figuratively: config?.figuratively as boolean,
-		};
+				...IMAGE_META_INITIAL_FORM_STATE,
+				figuratively: !!config?.figuratively,
+		  };
 
 	/**
 	 * Hooks
@@ -85,7 +85,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			formData.append('name', formValues.name);
 			formData.append('description', formValues.description);
 			formData.append('copyright', formValues.copyright);
-			formData.append('figuratively', formValues.figuratively.toString());
+			formData.append('figuratively', (formValues.figuratively || false).toString());
 			const attributes = {
 				alt: formValues.alt,
 				title: formValues.title,
@@ -171,7 +171,9 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 				  }
 				: {}),
 		});
+
 		resetDetectValueChanges();
+
 		if (isCreating) {
 			onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
 		}
