@@ -83,7 +83,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	// Clear or set crop data when activeCrop changes
 	useEffect(() => {
-		if (!cropperRef.current || !activeCrop) {
+		if (!cropperRef.current || !activeCrop || isLoadingImage) {
 			return;
 		}
 
@@ -101,7 +101,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 			...cropData.cropValues,
 			rotate: cropData.transformValues.rotate,
 		});
-	}, [activeCrop, cropperRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [activeCrop, cropperRef.current, isLoadingImage]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Update crops when cropValues change
 	useEffect(() => {
@@ -376,6 +376,9 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 							Snijd de afbeelding bij volgens deze verhouding:{' '}
 							<strong>{imageCropperService.getRatioLabel(activeCrop)}</strong>
 						</p>
+						{activeCrop?.guideline && (
+							<p className="u-margin-bottom-xs">{activeCrop?.guideline}</p>
+						)}
 
 						<ImageCropper
 							crop={onCrop}
