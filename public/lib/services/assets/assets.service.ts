@@ -21,9 +21,10 @@ export class AssetsApiService {
 			.json<AssetsResponse>();
 	}
 
-	public async createAsset(formData: FormData): Promise<AssetResponse> {
+	public async createAsset(formData: FormData, siteId?: string): Promise<AssetResponse> {
+		const path = siteId ? `sites/${siteId}/files` : 'files';
 		return await apiService
-			.post('files', {
+			.post(path, {
 				body: formData,
 				timeout: 30000, // Up the timeout for uploading large files
 			})
@@ -32,10 +33,14 @@ export class AssetsApiService {
 
 	public async generateCrops(
 		assetId: string,
-		crops: AssetCropsRequest
+		crops: AssetCropsRequest,
+		siteId?: string
 	): Promise<AssetCropsResponse> {
+		const path = siteId
+			? `sites/${siteId}/assets/${assetId}/generate-crops`
+			: `assets/${assetId}/generate-crops`;
 		return await apiService
-			.post(`assets/${assetId}/generate-crops`, {
+			.post(path, {
 				json: crops,
 			})
 			.json<AssetCropsResponse>();

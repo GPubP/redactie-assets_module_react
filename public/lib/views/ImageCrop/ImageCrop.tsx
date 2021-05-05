@@ -1,6 +1,6 @@
 import { Alert, Button } from '@acpaas-ui/react-components';
 import { NavList } from '@acpaas-ui/react-editorial-components';
-import { useDetectValueChanges } from '@redactie/utils';
+import { useDetectValueChanges, useSiteContext } from '@redactie/utils';
 import classnames from 'classnames';
 import kebabCase from 'lodash.kebabcase';
 import { equals, isEmpty } from 'ramda';
@@ -60,6 +60,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const [tempCrop, setTempCrop] = useState<TemporaryCrop | null>(null);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(true, crops);
 	const [t] = useCoreTranslation();
+	const { siteId } = useSiteContext();
 
 	const currentAsset = useMemo(() => {
 		return data.imageFieldValue?.original?.asset || null;
@@ -302,7 +303,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 		const cropsRequest = parseCropsRequest(crops);
 
 		assetsApiService
-			.generateCrops(currentAsset.uuid, cropsRequest)
+			.generateCrops(currentAsset.uuid, cropsRequest, siteId)
 			.then(response => {
 				if (!response?.crops) {
 					return;
