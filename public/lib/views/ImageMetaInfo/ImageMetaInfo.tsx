@@ -5,6 +5,7 @@ import {
 	FormikOnChangeHandler,
 	LoadingState,
 	useDetectValueChanges,
+	useSiteContext,
 } from '@redactie/utils';
 import React, { FC, useMemo, useState } from 'react';
 
@@ -65,6 +66,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const [formValues, setFormValues] = useState<ImageMetaFormState>(initialValues);
 	const isSaving = useMemo(() => creatingState === LoadingState.Loading, [creatingState]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(true, formValues);
+	const { siteId } = useSiteContext();
 
 	/**
 	 * Function
@@ -104,7 +106,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			const formData = filesToFormData(data.queuedFiles, formValues);
 
 			assetsFacade
-				.createAsset(formData)
+				.createAsset(formData, siteId)
 				.then(response => {
 					if (!response.data) {
 						showUploadError();

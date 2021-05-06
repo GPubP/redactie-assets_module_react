@@ -37,11 +37,11 @@ export class AssetsFacade extends BaseEntityFacade<AssetsStore, AssetsApiService
 			});
 	}
 
-	public createAsset(formData: FormData): Promise<AssetResponse> {
+	public createAsset(formData: FormData, siteId?: string): Promise<AssetResponse> {
 		this.store.setIsCreating(true);
 
 		return this.service
-			.createAsset(formData)
+			.createAsset(formData, siteId)
 			.then(response => {
 				if (response) {
 					this.store.setIsCreating(false);
