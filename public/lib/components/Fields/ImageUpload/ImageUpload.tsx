@@ -199,17 +199,25 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 								/>
 							</>
 						) : (
-							<ImageItem
-								source={getAssetUrl(imageFieldValue.original.asset.uuid)}
-								meta={imageFieldValue.meta}
-								onImageClick={() => {
-									onModalViewChange(
-										ModalViewTarget.EDIT_CROP,
-										ModalViewMode.EDIT
-									);
-									setShowModal(true);
-								}}
-							/>
+							<>
+								<ImageItem
+									source={getAssetUrl(imageFieldValue.original.asset.uuid)}
+									meta={imageFieldValue.meta}
+									onImageClick={() => {
+										onModalViewChange(
+											ModalViewTarget.EDIT_CROP,
+											ModalViewMode.EDIT
+										);
+										setShowModal(true);
+									}}
+								/>
+								<ValidationList
+									messages={options?.messages}
+									ariaLabelRemove="Verwijder"
+									invalidFiles={invalidFiles}
+									removeInvalidFile={handleRemoveInvalidFile}
+								/>
+							</>
 						)}
 
 						<ControlledModal
