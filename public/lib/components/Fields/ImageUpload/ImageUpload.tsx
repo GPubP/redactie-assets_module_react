@@ -143,6 +143,10 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		closeModal();
 	};
 
+	// If no crops are present, remove everything in the field value
+	// This will prevent metadata and original assets being sent to the server
+	const onCloseModal = hasCrops ? closeModal : onDelete;
+
 	/**
 	 * Render
 	 */
@@ -222,7 +226,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 
 						<ControlledModal
 							className={cx('o-image-upload__modal')}
-							onClose={closeModal}
+							onClose={onCloseModal}
 							overlayClassName={cx('o-image-upload__overlay')}
 							show={showModal}
 						>
@@ -238,7 +242,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 									}}
 									config={MODAL_VIEW_MODE_MAP}
 									mode={mode}
-									onCancel={closeModal}
+									onCancel={onCloseModal}
 									onDelete={onDelete}
 									onViewChange={onModalViewChange}
 									target={target || ''}
