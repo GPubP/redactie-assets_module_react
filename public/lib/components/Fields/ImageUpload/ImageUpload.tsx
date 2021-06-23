@@ -33,7 +33,7 @@ import {
 import { InvalidFile, Uploader } from './Uploader';
 
 const cx = classnames.bind(styles);
-console.log('1')
+
 const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelperProps }) => {
 	const { field } = fieldProps;
 	const { config = IMAGE_SETTINGS_DEFAULT_CONFIG } = fieldSchema;
@@ -154,7 +154,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	};
 
 	/**
-	 * Renders
+	 * Render
 	 */
 
 	if (!uploader) {
