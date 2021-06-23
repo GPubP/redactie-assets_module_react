@@ -333,7 +333,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 					}, {}),
 				});
 				// Close modal
-				onCancel();
+				onCancel(true);
 			})
 			.catch(error => {
 				console.error('crop error', error);
@@ -416,7 +416,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 						<Button onClick={onReplaceImg}>Vervangen</Button>
 					</div>
 					<div>
-						<Button className="u-margin-right-xs" negative onClick={onCancel}>
+						<Button className="u-margin-right-xs" negative onClick={() => onCancel(false)}>
 							{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 						</Button>
 						{cropOptions.length > 1 ? (

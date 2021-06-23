@@ -33,7 +33,7 @@ import {
 import { InvalidFile, Uploader } from './Uploader';
 
 const cx = classnames.bind(styles);
-
+console.log('1')
 const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelperProps }) => {
 	const { field } = fieldProps;
 	const { config = IMAGE_SETTINGS_DEFAULT_CONFIG } = fieldSchema;
@@ -145,10 +145,16 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 
 	// If no crops are present, remove everything in the field value
 	// This will prevent metadata and original assets being sent to the server
-	const onCloseModal = hasCrops ? closeModal : onDelete;
+	const onCloseModal = (isSaving: boolean = false) => {
+		if (!hasCrops && !(isSaving === true)) {
+			return onDelete();
+		}
+
+		return closeModal();
+	};
 
 	/**
-	 * Render
+	 * Renders
 	 */
 
 	if (!uploader) {
