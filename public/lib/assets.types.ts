@@ -20,7 +20,7 @@ export interface Tab<Data> {
 }
 
 export interface ModalViewComponentProps<Data> {
-	onCancel: () => void;
+	onCancel: (isSaving?: boolean) => void;
 	onDelete: () => void;
 	onViewChange: (target: string, mode?: string, data?: Partial<Data>) => void;
 	data: Data;

@@ -145,7 +145,13 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 
 	// If no crops are present, remove everything in the field value
 	// This will prevent metadata and original assets being sent to the server
-	const onCloseModal = hasCrops ? closeModal : onDelete;
+	const onCloseModal = (isSaving: boolean = false) => {
+		if (!hasCrops && !(isSaving === true)) {
+			return onDelete();
+		}
+
+		return closeModal();
+	};
 
 	/**
 	 * Render
