@@ -22,9 +22,10 @@ export class Uploader {
 		// Placeholder function
 	}
 
-	validateFiles(files: File[] = []): ValidatedFiles {
+	async validateFiles(files: File[] = []): Promise<ValidatedFiles> {
 		return files.reduce(
-			(acc, file) => {
+			async (acc, file) => {
+				const resolvedAcc = await acc;
 				const errors = [];
 
 				if (!this.validateFileType(file)) {
@@ -35,24 +36,33 @@ export class Uploader {
 					errors.push('INVALID_FILE_SIZE');
 				}
 
+				if (!(await this.validateImageWidth(file))) {
+					errors.push('INVALID_IMAGE_WIDTH');
+				}
+
+				if (!(await this.validateImageHeight(file))) {
+					errors.push('INVALID_IMAGE_HEIGHT');
+				}
+
 				if (!this.validateMimeType(file)) {
 					errors.push('INVALID_MIME_TYPE');
 				}
 
 				if (errors.length === 0) {
-					acc.validFiles.push(file);
+					resolvedAcc.validFiles.push(file);
 				} else {
-					acc.invalidFiles.push({
+					resolvedAcc.invalidFiles.push({
 						reasons: errors,
 						file,
 					});
 				}
+
 				return acc;
 			},
-			{
+			Promise.resolve({
 				validFiles: [],
 				invalidFiles: [],
-			} as ValidatedFiles
+			} as ValidatedFiles)
 		);
 	}
 
@@ -81,6 +91,40 @@ export class Uploader {
 		const { allowedFileTypes } = this.options;
 
 		return validateFileType(allowedFileTypes, file);
+	}
+
+	validateImageHeight(file: File): Promise<boolean> {
+		return new Promise(resolve => {
+			const { minHeight } = this.options;
+
+			if (!minHeight) {
+				resolve(true);
+			}
+
+			const img = new Image();
+			img.src = URL.createObjectURL(file);
+			img.onload = function() {
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				resolve(img.height >= minHeight!);
+			};
+		});
+	}
+
+	validateImageWidth(file: File): Promise<boolean> {
+		return new Promise(resolve => {
+			const { minWidth } = this.options;
+
+			if (!minWidth) {
+				resolve(true);
+			}
+
+			const img = new Image();
+			img.src = URL.createObjectURL(file);
+			img.onload = function() {
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				resolve(img.width >= minWidth!);
+			};
+		});
 	}
 
 	validateFileSize(file: File): boolean {
