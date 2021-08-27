@@ -36,11 +36,12 @@ export class Uploader {
 					errors.push('INVALID_FILE_SIZE');
 				}
 
-				if (!(await this.validateImageWidth(file))) {
+				const [hasValidHeight, hasValidWidth] = await this.validateImageDimensions(file);
+				if (!hasValidWidth) {
 					errors.push('INVALID_IMAGE_WIDTH');
 				}
 
-				if (!(await this.validateImageHeight(file))) {
+				if (!hasValidHeight) {
 					errors.push('INVALID_IMAGE_HEIGHT');
 				}
 
@@ -93,36 +94,17 @@ export class Uploader {
 		return validateFileType(allowedFileTypes, file);
 	}
 
-	validateImageHeight(file: File): Promise<boolean> {
+	validateImageDimensions(file: File): Promise<[boolean, boolean]> {
 		return new Promise(resolve => {
-			const { minHeight } = this.options;
-
-			if (!minHeight) {
-				resolve(true);
-			}
+			const { minHeight, minWidth } = this.options;
 
 			const img = new Image();
 			img.src = URL.createObjectURL(file);
 			img.onload = function() {
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				resolve(img.height >= minHeight!);
-			};
-		});
-	}
-
-	validateImageWidth(file: File): Promise<boolean> {
-		return new Promise(resolve => {
-			const { minWidth } = this.options;
-
-			if (!minWidth) {
-				resolve(true);
-			}
-
-			const img = new Image();
-			img.src = URL.createObjectURL(file);
-			img.onload = function() {
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				resolve(img.width >= minWidth!);
+				resolve([
+					minHeight ? img.height >= minHeight : true,
+					minWidth ? img.width >= minWidth : true,
+				]);
 			};
 		});
 	}
