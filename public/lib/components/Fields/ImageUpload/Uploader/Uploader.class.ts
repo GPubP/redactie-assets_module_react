@@ -22,9 +22,10 @@ export class Uploader {
 		// Placeholder function
 	}
 
-	validateFiles(files: File[] = []): ValidatedFiles {
+	async validateFiles(files: File[] = []): Promise<ValidatedFiles> {
 		return files.reduce(
-			(acc, file) => {
+			async (acc, file) => {
+				const resolvedAcc = await acc;
 				const errors = [];
 
 				if (!this.validateFileType(file)) {
@@ -35,24 +36,34 @@ export class Uploader {
 					errors.push('INVALID_FILE_SIZE');
 				}
 
+				const [hasValidHeight, hasValidWidth] = await this.validateImageDimensions(file);
+				if (!hasValidWidth) {
+					errors.push('INVALID_IMAGE_WIDTH');
+				}
+
+				if (!hasValidHeight) {
+					errors.push('INVALID_IMAGE_HEIGHT');
+				}
+
 				if (!this.validateMimeType(file)) {
 					errors.push('INVALID_MIME_TYPE');
 				}
 
 				if (errors.length === 0) {
-					acc.validFiles.push(file);
+					resolvedAcc.validFiles.push(file);
 				} else {
-					acc.invalidFiles.push({
+					resolvedAcc.invalidFiles.push({
 						reasons: errors,
 						file,
 					});
 				}
+
 				return acc;
 			},
-			{
+			Promise.resolve({
 				validFiles: [],
 				invalidFiles: [],
-			} as ValidatedFiles
+			} as ValidatedFiles)
 		);
 	}
 
@@ -81,6 +92,21 @@ export class Uploader {
 		const { allowedFileTypes } = this.options;
 
 		return validateFileType(allowedFileTypes, file);
+	}
+
+	validateImageDimensions(file: File): Promise<[boolean, boolean]> {
+		return new Promise(resolve => {
+			const { minHeight, minWidth } = this.options;
+
+			const img = new Image();
+			img.src = URL.createObjectURL(file);
+			img.onload = function() {
+				resolve([
+					minHeight ? img.height >= minHeight : true,
+					minWidth ? img.width >= minWidth : true,
+				]);
+			};
+		});
 	}
 
 	validateFileSize(file: File): boolean {

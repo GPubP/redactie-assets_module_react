@@ -9,6 +9,8 @@ export interface ImageUploadOptions {
 	allowedMimeTypes?: string[];
 	allowedFileTypes: string[];
 	maxFileSize?: number;
+	minHeight?: number;
+	minWidth?: number;
 	url?: string;
 	messages: typeof VALIDATION_MESSAGES_DEFAULT;
 	requestHeader?: { key: string; value: string };

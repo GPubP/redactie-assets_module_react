@@ -62,16 +62,20 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		const allowedFileTypes = parseAllowedFileTypes(config.allowedFileTypes);
 		const options: ImageUploadOptions = {
 			allowedFileTypes,
+			minHeight,
+			minWidth,
 			messages: {
 				INVALID_FILE_SIZE: 'Ongeldige bestandsgrootte, max. 10MB',
 				INVALID_FILE_TYPE: `Ongeldig bestandstype, volgende types zijn toegestaan: ${config.allowedFileTypes}`,
 				INVALID_MIME_TYPE: 'Ongeldig mime type',
+				INVALID_IMAGE_HEIGHT: 'Afbeelding voldoet niet aan de minimum hoogte',
+				INVALID_IMAGE_WIDTH: 'Afbeelding voldoet niet aan de minimum breedte',
 			},
 		};
 
 		setOptions(options);
 		setUploader(new Uploader(options ?? {}));
-	}, [config, config.allowedFileTypes]);
+	}, [config, config.allowedFileTypes, minHeight, minWidth]);
 
 	/**
 	 * Methods
@@ -110,9 +114,9 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 		setShowModal(true);
 	};
 
-	const handleManualUpload = (files: File[] = []): void => {
+	const handleManualUpload = async (files: File[] = []): Promise<void> => {
 		if (uploader && files.length) {
-			const uploaded = uploader.validateFiles(files);
+			const uploaded = await uploader.validateFiles(files);
 
 			if (uploaded.invalidFiles.length) {
 				setInvalidFiles(uploaded.invalidFiles);
@@ -145,7 +149,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 
 	// If no crops are present, remove everything in the field value
 	// This will prevent metadata and original assets being sent to the server
-	const onCloseModal = (isSaving: boolean = false) => {
+	const onCloseModal = (isSaving = false): void => {
 		if (!hasCrops && !(isSaving === true)) {
 			return onDelete();
 		}
