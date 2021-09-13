@@ -1,8 +1,8 @@
 import { Spinner } from '@acpaas-ui/react-components';
+import Cropper, { ReactCropperProps } from '@redactie/react-cropper';
 import classnames from 'classnames/bind';
 import React, { forwardRef, RefForwardingComponent, useState } from 'react';
-import Cropper, { ReactCropperProps } from 'react-cropper';
-import 'cropperjs/dist/cropper.css';
+import '@redactie/cropperjs/dist/cropper.css';
 
 import styles from './ImageCropper.module.scss';
 
