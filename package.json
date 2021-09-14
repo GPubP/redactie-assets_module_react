@@ -94,8 +94,8 @@
   "dependencies": {
     "@a-ui/core": "^4.2.2",
     "@mindspace-io/react": "^1.1.6",
+    "@redactie/react-cropper": "^2.1.8",
     "lodash.debounce": "^4.0.8",
-    "query-string": "6.12.1",
-    "react-cropper": "^2.1.4"
+    "query-string": "6.12.1"
   }
 }

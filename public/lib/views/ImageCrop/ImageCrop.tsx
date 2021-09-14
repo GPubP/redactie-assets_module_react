@@ -116,7 +116,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 		const cropData = crops[kebabCase(activeCrop.name)] || {};
 
 		if (cropperRef.current && isEmpty(cropData)) {
-			const { rotate, ...cropValues } = cropperRef.current.getData();
+			const { rotate, ...cropValues } = cropperRef.current.getData(true);
 			const transformValues = { grayscale: false, blur: 0, rotate };
 
 			if (activeCrop.method === CropMethods.BOUNDS) {
@@ -195,7 +195,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 			return;
 		}
 
-		const cropData = cropperRef.current.getData();
+		const cropData = cropperRef.current.getData(true);
 		// !Important note: the updated values on the crop(move) event are not scaled but based
 		// on the actual image size, so we don't have to do calculations for the crop's min size
 		const { minHeight, minWidth } = imageCropperService.getMinCropSize(activeCropRef.current);
@@ -275,6 +275,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 			}
 
 			if (newHeight || newWidth) {
+				console.log('[MODULE] SET DATA 5');
 				cropperRef.current.setData({
 					width: newWidth || cropData.width,
 					height: newHeight || cropData.height,
@@ -416,7 +417,11 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 						<Button onClick={onReplaceImg}>Vervangen</Button>
 					</div>
 					<div>
-						<Button className="u-margin-right-xs" negative onClick={() => onCancel(false)}>
+						<Button
+							className="u-margin-right-xs"
+							negative
+							onClick={() => onCancel(false)}
+						>
 							{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 						</Button>
 						{cropOptions.length > 1 ? (
