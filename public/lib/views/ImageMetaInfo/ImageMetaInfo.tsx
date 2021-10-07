@@ -138,7 +138,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 						},
 					});
 					resetDetectValueChanges();
-					onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
+					onViewChange(ModalViewTarget.EDIT_CROP, ModalViewMode.EDIT);
 				})
 				.catch(error => {
 					console.error(error);
@@ -177,7 +177,7 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		resetDetectValueChanges();
 
 		if (isCreating) {
-			onViewChange(ModalViewTarget.EDIT_META, ModalViewMode.EDIT);
+			onViewChange(ModalViewTarget.EDIT_CROP, ModalViewMode.EDIT);
 		}
 	};
 
