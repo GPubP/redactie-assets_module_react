@@ -128,7 +128,10 @@ const ImageFieldSettings: FC<InputFieldProps> = ({ fieldSchema, fieldProps, fiel
 								</Button>
 								<Button
 									className="u-margin-left-xs"
-									onClick={() => deleteCropOption(row)}
+									onClick={() => {
+										deleteCropOption(row);
+										setExpandedRows({});
+									}}
 									negative
 									size="small"
 									icon="trash"
