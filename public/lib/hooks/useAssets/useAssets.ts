@@ -1,5 +1,4 @@
-import { useObservable } from '@mindspace-io/react';
-import { LoadingState } from '@redactie/utils';
+import { LoadingState, useObservable } from '@redactie/utils';
 
 import { AssetsMetaResponse } from '../../services/assets';
 import { AssetModel, assetsFacade } from '../../store/assets';
@@ -10,11 +9,11 @@ const useAssets = (): [
 	AssetModel[],
 	AssetsMetaResponse | null | undefined
 ] => {
-	const [isFetching] = useObservable(assetsFacade.isFetching$, LoadingState.Loading);
-	const [isCreating] = useObservable(assetsFacade.isCreating$, LoadingState.Loading);
-	const [assets] = useObservable(assetsFacade.assets$, []);
-	const [meta] = useObservable(assetsFacade.meta$, null);
-	const [error] = useObservable(assetsFacade.error$, null);
+	const isFetching = useObservable(assetsFacade.isFetching$, LoadingState.Loading);
+	const isCreating = useObservable(assetsFacade.isCreating$, LoadingState.Loading);
+	const assets = useObservable(assetsFacade.assets$, []);
+	const meta = useObservable(assetsFacade.meta$, null);
+	const error = useObservable(assetsFacade.error$, null);
 
 	const loadingState = error ? LoadingState.Error : isFetching;
 	const creatingState = error ? LoadingState.Error : isCreating;
