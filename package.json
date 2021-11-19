@@ -1,6 +1,6 @@
 {
   "name": "@redactie/assets-module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "redactie assets module",
   "main": "dist/redactie-assets-module.umd.js",
   "module": "dist/redactie-assets-module.umd.js",
