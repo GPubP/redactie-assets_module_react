@@ -15,7 +15,7 @@ export const CROP_DIMENSIONS_MAP = {
 export const ALERT_MESSAGES = {
 	success: {
 		title: 'Aangemaakt',
-		message: `U hebt nieuwe crops aangemaakt.`,
+		message: `Je hebt nieuwe crops aangemaakt.`,
 		type: 'success' as const,
 	},
 	danger: {
