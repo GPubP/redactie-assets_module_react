@@ -69,7 +69,7 @@ const ImageMetaForm: FC<ImageMetaFormProps> = ({
 									required
 									name="alt"
 									label="Alt"
-									description="Bepaal de tekst die verschijnt als de afbeelding niet laadt."
+									description="Beschrijf het beeld. Deze tekst verschijnt als de afbeelding niet zichtbaar is."
 								/>
 								<ErrorMessage
 									className="u-text-danger u-margin-top-xs"
