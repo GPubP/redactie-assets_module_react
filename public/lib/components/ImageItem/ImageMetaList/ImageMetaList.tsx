@@ -19,13 +19,13 @@ const ImageMetaList: FC<ImageMetaListProps> = ({ data }) => {
 			)}
 			{data.title && (
 				<div>
-					<dt>Title:</dt>
+					<dt>Titel:</dt>
 					<dd>{data.title}</dd>
 				</div>
 			)}
 			{data.description && (
 				<div>
-					<dt>description:</dt>
+					<dt>Beschrijving:</dt>
 					<dd>{data.description}</dd>
 				</div>
 			)}
