@@ -41,6 +41,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	const { minWidth, minHeight } = imageConfig;
 	const imageFieldValue = (field.value as unknown) as ImageFieldValue;
 	const hasCrops = !!imageFieldValue?.crops && !isEmpty(imageFieldValue.crops);
+	const FormRendererFieldTitle = formRendererConnector.api.FormRendererFieldTitle;
 
 	/**
 	 * Hooks
@@ -176,9 +177,12 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 				<Card className={cx({ 'o-image-upload__card': hasCrops })}>
 					<CardBody>
 						{fieldSchema.label && (
-							<label className="a-input__label u-margin-bottom">
-								{fieldSchema.label}
-							</label>
+							<FormRendererFieldTitle
+								isRequired={!!fieldSchema.config?.required}
+								className="u-margin-bottom"
+							>
+								{fieldSchema?.label}
+							</FormRendererFieldTitle>
 						)}
 						{guideline && <p className="u-margin-bottom">{guideline}</p>}
 						{!hasCrops ? (
