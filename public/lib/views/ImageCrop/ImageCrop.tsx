@@ -112,10 +112,8 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 		let newCropData = tempCrop;
 
-		// Set initial crop if no data is present
-		const cropData = crops[kebabCase(activeCrop.name)] || {};
-
-		if (cropperRef.current && isEmpty(cropData)) {
+		// Set crop
+		if (cropperRef.current) {
 			const { rotate, ...cropValues } = cropperRef.current.getData(true);
 			const transformValues = { grayscale: false, blur: 0, rotate };
 
@@ -138,6 +136,7 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 				cropperRef.current.setData(boundCropValues);
 			} else {
 				newCropData = { cropValues, transformValues };
+				cropperRef.current.setData(cropValues);
 			}
 		}
 
