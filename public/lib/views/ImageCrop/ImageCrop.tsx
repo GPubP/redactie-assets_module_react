@@ -112,12 +112,15 @@ const ImageCrop: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 		let newCropData = tempCrop;
 
+		// Set initial crop if no data is present
+		const cropData = crops[kebabCase(activeCrop.name)] || {};
+
 		// Set crop
 		if (cropperRef.current) {
 			const { rotate, ...cropValues } = cropperRef.current.getData(true);
 			const transformValues = { grayscale: false, blur: 0, rotate };
 
-			if (activeCrop.method === CropMethods.BOUNDS) {
+			if (activeCrop.method === CropMethods.BOUNDS && isEmpty(cropData)) {
 				const { maxHeight, maxWidth } = imageCropperService.getBoundsDimensions(
 					activeCrop.boundsDimensions
 				);
