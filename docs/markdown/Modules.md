@@ -1,0 +1,1 @@
+# @redactie/assets-module

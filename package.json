@@ -19,7 +19,10 @@
     "lint:scss": "stylelint public/**/*.scss --allow-empty-input",
     "lint:ts": "eslint --cache --cache-location .eslintcache --ext .ts,.tsx public",
     "lint": "npm run lint:scss && npm run lint:ts",
-    "test": "jest ./public"
+    "test": "jest ./public",
+    "docs": "npm run docs:html && npm run docs:markdown",
+    "docs:html": "typedoc --plugin none --entryPoints ./public/index.tsx --entryPoints ./public/lib/api/index.ts --excludePrivate --out docs/html",
+    "docs:markdown": "typedoc --plugin typedoc-plugin-markdown --plugin typedoc-github-wiki-theme --entryPoints ./public/index.tsx --entryPoints ./public/lib/api/index.ts --excludePrivate --theme github-wiki --out docs/markdown"
   },
   "repository": {
     "type": "git",
@@ -74,6 +77,9 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "25.1.0",
     "ky": "0.17.0",
+    "typedoc": "^0.22.4",
+    "typedoc-github-wiki-theme": "^1.0.0",
+    "typedoc-plugin-markdown": "^3.11.14",
     "lodash.kebabcase": "^4.1.1",
     "node-sass": "4.13.1",
     "prettier": "1.19.1",
