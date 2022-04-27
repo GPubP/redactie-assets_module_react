@@ -2,9 +2,11 @@ import classnames from 'classnames';
 import { equals } from 'ramda';
 import React, { FC } from 'react';
 
+import { ImageSelectItem } from '../../assets.types';
+
 import { ImageCard } from './ImageCard';
 import styles from './ImageSelect.module.scss';
-import { ImageSelectItem, ImageSelectProps } from './ImageSelect.types';
+import { ImageSelectProps } from './ImageSelect.types';
 
 const cx = classnames.bind(styles);
 
@@ -20,6 +22,7 @@ const ImageSelect: FC<ImageSelectProps> = ({
 		if (dataKey) {
 			return selection.includes(item[dataKey]);
 		}
+
 		if (compareSelected) {
 			return compareSelected(item);
 		}

@@ -11,8 +11,10 @@ import { InputFieldProps } from '@redactie/form-renderer-module';
 import classnames from 'classnames/bind';
 import React, { FC, useEffect, useState } from 'react';
 
+import { ExternalAsset, SelectedAsset } from '../../../assets.types';
 import { formRendererConnector } from '../../../connectors';
 import { getAssetUrl, parseAllowedFileTypes } from '../../../helpers';
+import useExternalProviderFacade from '../../../hooks/useExternalProvider/useExternalProvider';
 import { ImageItem } from '../../ImageItem';
 import { ModalView } from '../../ModalView';
 
@@ -49,8 +51,10 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 
 	const [modalViewData, setModalViewData] = useState<ReactiveModalViewData>({
 		queuedFiles: [],
+		externalFiles: [],
 		selectedFiles: [],
 	});
+	const [externalProviders] = useExternalProviderFacade();
 	const [mode, setMode] = useState(ModalViewMode.EDIT);
 	const [options, setOptions] = useState<ImageUploadOptions | null>(null);
 	const [showModal, setShowModal] = useState(false);
@@ -89,9 +93,19 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	const onModalViewChange = (
 		newTarget: string,
 		newMode?: string,
-		data?: Partial<ReactiveModalViewData>
+		data?: Partial<ReactiveModalViewData>,
+		keepFiles = false
 	): void => {
-		setModalViewData({ ...modalViewData, ...data, queuedFiles: [] });
+		setModalViewData({
+			...modalViewData,
+			...data,
+			...(!keepFiles && {
+				queuedFiles: [],
+				externalFiles: [],
+				selectedFiles: [],
+			}),
+		});
+
 		setTarget(newTarget as ModalViewTarget);
 
 		if (newMode) {
@@ -127,6 +141,14 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 				setMode(ModalViewMode.CREATE);
 			}
 		}
+	};
+
+	const handleExternalSelect = async (externalFiles: ExternalAsset[] = []): Promise<void> => {
+		setModalViewData({ ...modalViewData, externalFiles });
+	};
+
+	const handleInternalSelect = (selectedFiles: SelectedAsset[]): void => {
+		setModalViewData({ ...modalViewData, selectedFiles });
 	};
 
 	const handleInvalidFiles = (invFiles: InvalidFile[]): void => {
@@ -254,11 +276,13 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 										onManualUpload: handleManualUpload,
 										setImageFieldValue: fieldHelperProps.setValue,
 									}}
-									config={MODAL_VIEW_MODE_MAP}
+									config={MODAL_VIEW_MODE_MAP(externalProviders)}
 									mode={mode}
 									onCancel={onCloseModal}
 									onDelete={onDelete}
 									onViewChange={onModalViewChange}
+									onInternalSelect={handleInternalSelect}
+									onExternalSelect={handleExternalSelect}
 									target={target || ''}
 								/>
 							) : null}

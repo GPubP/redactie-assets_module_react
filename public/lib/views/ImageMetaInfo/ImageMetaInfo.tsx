@@ -10,7 +10,7 @@ import {
 import React, { FC, useMemo, useState } from 'react';
 
 import { ALERT_CONTAINER_IDS } from '../../assets.const';
-import { ModalViewComponentProps } from '../../assets.types';
+import { ExternalAsset, ModalViewComponentProps } from '../../assets.types';
 import {
 	IMAGE_META_INITIAL_FORM_STATE,
 	ImageMetaForm,
@@ -33,13 +33,14 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	onDelete,
 	onViewChange,
 }) => {
-	const { imageFieldValue, mode, selectedFiles, config } = data;
+	const { imageFieldValue, mode, selectedFiles, config, externalFiles } = data;
 	const isCreating = mode === ModalViewMode.CREATE;
 	// When creating check if user has uploaded or selected from assets
 	// otherwise, when editing, the meta should be available from imageFieldValue
 	const currentValue = isCreating
-		? selectedFiles?.[0]?.data || imageFieldValue?.meta
+		? selectedFiles?.[0]?.data || imageFieldValue?.meta || externalFiles?.[0]
 		: imageFieldValue?.meta;
+
 	// Always use alt and title from imageFieldValue.meta for the default values
 	// if they are not avalaible use the current value's name
 
@@ -47,8 +48,16 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		? {
 				name: currentValue?.name ?? '',
 				figuratively: !!currentValue?.figuratively,
-				alt: imageFieldValue?.meta?.alt ?? currentValue?.name ?? '',
-				title: imageFieldValue?.meta?.title ?? currentValue?.name ?? '',
+				alt:
+					imageFieldValue?.meta?.alt ??
+					(currentValue as ExternalAsset)?.alt ??
+					currentValue?.name ??
+					'',
+				title:
+					imageFieldValue?.meta?.title ??
+					(currentValue as ExternalAsset)?.title ??
+					currentValue?.name ??
+					'',
 				description: currentValue?.description ?? '',
 				copyright: currentValue?.copyright ?? '',
 		  }
@@ -99,8 +108,44 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		}, new FormData());
 	};
 
+	const dataURLtoFile = (url: string, filename: string, mimeType: string): Promise<File> => {
+		return fetch(url)
+			.then(function(res) {
+				return res.arrayBuffer();
+			})
+			.then(function(buf) {
+				return new File([buf], filename, { type: mimeType });
+			});
+	};
+
+	const externalsToFormData = async (
+		files: ExternalAsset[] = [],
+		formValues: ImageMetaFormState
+	): Promise<FormData> => {
+		return await files.reduce(async (acc, file) => {
+			const formData = await acc;
+
+			const mimeType = file.content.split(';')[0].split(':')[1];
+			formData.append('file', await dataURLtoFile(file.content, formValues.name, mimeType));
+			formData.append('name', formValues.name);
+			formData.append('description', formValues.description);
+			formData.append('copyright', formValues.copyright);
+			formData.append('figuratively', (formValues.figuratively || false).toString());
+			const attributes = {
+				alt: formValues.alt,
+				title: formValues.title,
+			};
+			formData.append('attributes', JSON.stringify(attributes, null, 2));
+			formData.append('category', 'image');
+
+			return formData;
+		}, Promise.resolve(new FormData()));
+	};
+
 	const onSubmit = (formValues: ImageMetaFormState): void => {
 		const uploadNewImage = Array.isArray(data.queuedFiles) && data.queuedFiles.length > 0;
+		const parseExternalFiles =
+			Array.isArray(data.externalFiles) && data.externalFiles.length > 0;
 
 		if (uploadNewImage) {
 			const formData = filesToFormData(data.queuedFiles, formValues);
@@ -144,6 +189,53 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 					console.error(error);
 					showUploadError();
 				});
+
+			return;
+		}
+
+		if (parseExternalFiles) {
+			externalsToFormData(data.externalFiles, formValues).then(formData => {
+				assetsFacade
+					.createAsset(formData, siteId)
+					.then(response => {
+						if (!response.data) {
+							showUploadError();
+							return;
+						}
+
+						const { data: responseData } = response;
+
+						data.setImageFieldValue({
+							...data.imageFieldValue,
+							meta: {
+								name: responseData?.name,
+								alt: responseData?.attributes?.alt,
+								title: responseData?.attributes?.title,
+								description: responseData?.description,
+								copyright: responseData?.copyright,
+								figuratively: responseData?.figuratively,
+							},
+							original: {
+								asset: {
+									mime: responseData?.file?.type?.mime,
+									uuid: response.uuid,
+									size: {
+										height: responseData?.metaData?.height ?? 0,
+										width: responseData?.metaData?.width ?? 0,
+									},
+									fileName: responseData?.file?.name,
+								},
+							},
+						});
+						resetDetectValueChanges();
+						onViewChange(ModalViewTarget.EDIT_CROP, ModalViewMode.EDIT);
+					})
+					.catch(error => {
+						console.error(error);
+						showUploadError();
+					});
+			});
+
 			return;
 		}
 
