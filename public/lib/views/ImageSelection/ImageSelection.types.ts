@@ -1,4 +1,3 @@
-import { SelectedAsset } from '../../assets.types';
-import { ImageSelectItem } from '../../components';
+import { ImageSelectItem, SelectedAsset } from '../../assets.types';
 
 export type AssetSelectItem = ImageSelectItem<SelectedAsset>;

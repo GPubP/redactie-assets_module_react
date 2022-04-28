@@ -1,8 +1,4 @@
-export type ImageSelectItem<Data = { [key: string]: any }> = Data & {
-	src: string;
-	title: string;
-	disabled?: boolean;
-};
+import { ImageSelectItem } from '../../assets.types';
 
 export interface ImageSelectProps {
 	className?: string;

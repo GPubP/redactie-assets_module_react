@@ -1,6 +1,6 @@
 import { FieldSchema } from '@redactie/form-renderer-module';
 
-import { SelectedAsset } from '../../../assets.types';
+import { ExternalAsset, ImageSelectItem, SelectedAsset } from '../../../assets.types';
 import { CropOption } from '../ImageFieldSettings';
 
 import { VALIDATION_MESSAGES_DEFAULT } from './Uploader/Uploader.class.const';
@@ -32,12 +32,16 @@ export interface ModalViewData {
 	imageFieldValue?: ImageFieldValue;
 	mode: ModalViewMode;
 	queuedFiles?: File[];
+	externalFiles?: ExternalAsset[];
 	selectedFiles: SelectedAsset[];
 	onManualUpload: (files: File[]) => void;
 	setImageFieldValue: (value: any) => void;
 }
 
-export type ReactiveModalViewData = Pick<ModalViewData, 'queuedFiles' | 'selectedFiles'>;
+export type ReactiveModalViewData = Pick<
+	ModalViewData,
+	'queuedFiles' | 'selectedFiles' | 'externalFiles'
+>;
 
 export enum ModalViewMode {
 	CREATE = 'create',
