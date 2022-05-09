@@ -39,7 +39,7 @@ const cx = classnames.bind(styles);
 const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelperProps }) => {
 	const { field } = fieldProps;
 	const { config = IMAGE_SETTINGS_DEFAULT_CONFIG } = fieldSchema;
-	const { guideline, imageConfig = DEFAULT_IMAGE_CONFIG } = config as ImageUploadConfig;
+	const { guideline, imageConfig = DEFAULT_IMAGE_CONFIG, disabled } = config as ImageUploadConfig;
 	const { minWidth, minHeight } = imageConfig;
 	const imageFieldValue = (field.value as unknown) as ImageFieldValue;
 	const hasCrops = !!imageFieldValue?.crops && !isEmpty(imageFieldValue.crops);
@@ -216,9 +216,15 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 									invalidFiles={handleInvalidFiles}
 									onCustomClick={handleCustomUpload}
 									onCustomDrop={handleCustomDrop}
+									disabled={disabled}
 								>
 									<FileUploadMessage>
-										<span className="u-text-primary">
+										<span
+											className={cx({
+												'o-image-upload__text--disabled': disabled,
+												'u-text-primary': true,
+											})}
+										>
 											<Icon name="picture-o" />
 											<span className="u-block">
 												Selecteer of sleep een afbeelding

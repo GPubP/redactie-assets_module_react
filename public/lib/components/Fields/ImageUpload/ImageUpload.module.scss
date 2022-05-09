@@ -5,6 +5,10 @@
 	align-items: center;
 }
 
+.o-image-upload__text--disabled {
+	color: $state-disabled;
+}
+
 .o-image-upload__card {
 	flex-grow: 1;
 }
