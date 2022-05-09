@@ -201,6 +201,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 						{fieldSchema.label && (
 							<FormRendererFieldTitle
 								isRequired={!!fieldSchema.config?.required}
+								isSynced={config.synced}
 								className="u-margin-bottom"
 							>
 								{fieldSchema?.label}
