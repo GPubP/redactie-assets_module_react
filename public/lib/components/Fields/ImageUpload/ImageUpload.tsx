@@ -219,7 +219,12 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 									disabled={disabled}
 								>
 									<FileUploadMessage>
-										<span className="u-text-primary">
+										<span
+											className={cx({
+												'o-image-upload__text--disabled': disabled,
+												'u-text-primary': true,
+											})}
+										>
 											<Icon name="picture-o" />
 											<span className="u-block">
 												Selecteer of sleep een afbeelding
