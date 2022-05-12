@@ -17,6 +17,7 @@ export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
 	guideline: '',
 	imageConfig: DEFAULT_IMAGE_CONFIG,
 	required: false,
+	synced: false,
 };
 
 const MODAL_VIEW_SELECT_TABS = (
