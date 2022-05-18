@@ -21,7 +21,8 @@ export const IMAGE_SETTINGS_DEFAULT_CONFIG = {
 };
 
 const MODAL_VIEW_SELECT_TABS = (
-	externalProviders: ExternalProviderModel[]
+	externalProviders: ExternalProviderModel[],
+	siteId: string
 ): Tab<ModalViewData>[] => [
 	{
 		active: true,
@@ -30,7 +31,11 @@ const MODAL_VIEW_SELECT_TABS = (
 		target: ModalViewTarget.ADD_SELECTION,
 		viewComponent: ImageSelection,
 	},
-	...externalProviders,
+	...externalProviders.map(externalProvider => ({
+		...externalProvider,
+		disabled:
+			typeof externalProvider.show === 'function' ? !externalProvider.show(siteId) : false,
+	})),
 	{
 		active: false,
 		name: 'Opladen',
@@ -78,7 +83,8 @@ const MODAL_VIEW_CREATE_TABS: Tab<ModalViewData>[] = [
 ];
 
 export const MODAL_VIEW_MODE_MAP = (
-	externalProviders: ExternalProviderModel[]
+	externalProviders: ExternalProviderModel[],
+	siteId: string
 ): {
 	[key in ModalViewMode]: { title: string; tabs: Tab<ModalViewData>[] };
 } => ({
@@ -88,7 +94,7 @@ export const MODAL_VIEW_MODE_MAP = (
 	},
 	[ModalViewMode.SELECT]: {
 		title: 'Afbeelding toevoegen',
-		tabs: MODAL_VIEW_SELECT_TABS(externalProviders),
+		tabs: MODAL_VIEW_SELECT_TABS(externalProviders, siteId),
 	},
 	[ModalViewMode.EDIT]: {
 		title: 'Bewerk afbeelding',
@@ -96,6 +102,6 @@ export const MODAL_VIEW_MODE_MAP = (
 	},
 	[ModalViewMode.REPLACE]: {
 		title: 'Bewerk afbeelding',
-		tabs: MODAL_VIEW_SELECT_TABS(externalProviders),
+		tabs: MODAL_VIEW_SELECT_TABS(externalProviders, siteId),
 	},
 });

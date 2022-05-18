@@ -102,6 +102,7 @@
   "dependencies": {
     "@a-ui/core": "^4.2.2",
     "@redactie/react-cropper": "2.1.12",
+    "@redactie/sites-module": "^1.5.12",
     "lodash.debounce": "^4.0.8",
     "query-string": "6.12.1"
   }
