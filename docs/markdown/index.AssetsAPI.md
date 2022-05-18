@@ -18,16 +18,20 @@
 
 ▸ (`name`, `options`): `void`
 
+Register a external assets provider
+
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `options` | [`ExternalProviderOptions`](../wiki/index#externalprovideroptions-1) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | `string` | A unique name to identity your external assets provider |
+| `options` | [`ExternalProviderOptions`](../wiki/index#externalprovideroptions-1) | options to setup your external assets provider |
 
 ##### Returns
 
 `void`
+
+void
 
 #### Defined in
 

@@ -13,6 +13,7 @@ export interface ExternalProviderModel {
 	name: string;
 	viewComponent: React.FC<ExternalModalViewComponentProps<ModalViewData>>;
 	target: string;
+	show?: (siteId: string) => boolean;
 	type: 'external';
 }
 

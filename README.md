@@ -65,5 +65,6 @@ registerAssetsProvider('external-provider', {
 	active: true,
 	name: 'Selecteren: ExternalProvider',
 	viewComponent: ExternalProvider,
+	show: (siteId) => true
 });
 ```
