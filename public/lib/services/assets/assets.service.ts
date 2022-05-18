@@ -3,6 +3,7 @@ import { apiService, parseSearchParams } from '../api';
 import {
 	AssetCropsRequest,
 	AssetCropsResponse,
+	AssetData,
 	AssetResponse,
 	AssetsResponse,
 	AssetsSearchParams,
@@ -27,6 +28,20 @@ export class AssetsApiService {
 			.post(path, {
 				body: formData,
 				timeout: 30000, // Up the timeout for uploading large files
+			})
+			.json<AssetResponse>();
+	}
+
+	public async updateAsset(
+		assetId: string,
+		assetData: Partial<AssetData>,
+		siteId?: string
+	): Promise<AssetResponse> {
+		const path = siteId ? `sites/${siteId}/assets/${assetId}` : `assets/${assetId}`;
+
+		return await apiService
+			.put(path, {
+				json: assetData,
 			})
 			.json<AssetResponse>();
 	}

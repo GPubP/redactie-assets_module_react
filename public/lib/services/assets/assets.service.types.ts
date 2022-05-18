@@ -14,24 +14,37 @@ export interface AssetsMetaResponse {
 	number: number;
 }
 
-export interface AssetResponse {
-	_id: string;
-	data: {
-		attributes: {
+export interface AssetData {
+	attributes: {
+		alt: string;
+		title: string;
+	};
+	name: string;
+	category: string;
+	description: string;
+	copyright: string;
+	file: AssetFile;
+	parent: any;
+	thumbnail: string | null;
+	metaData: AssetMetaData;
+	type: string;
+	figuratively?: boolean;
+	translations?: {
+		lang: string;
+		data: {
+			name: string;
+			description: string;
+			copyright: string;
 			alt: string;
 			title: string;
+			figuratively: boolean;
 		};
-		name: string;
-		category: string;
-		description: string;
-		copyright: string;
-		file: AssetFile;
-		parent: any;
-		thumbnail: string | null;
-		metaData: AssetMetaData;
-		type: string;
-		figuratively?: boolean;
-	};
+	}[];
+}
+
+export interface AssetResponse {
+	_id: string;
+	data: AssetData;
 	meta: {
 		deleted: boolean;
 		lastEditor: string;
