@@ -7,7 +7,8 @@ import {
 	useDetectValueChanges,
 	useSiteContext,
 } from '@redactie/utils';
-import React, { FC, useMemo, useState } from 'react';
+import { pick } from 'ramda';
+import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 
 import { ALERT_CONTAINER_IDS } from '../../assets.const';
 import { ExternalAsset, ModalViewComponentProps } from '../../assets.types';
@@ -21,8 +22,9 @@ import {
 	ModalViewMode,
 	ModalViewTarget,
 } from '../../components';
+import { formRendererConnector } from '../../connectors';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
-import { useAssets } from '../../hooks';
+import { useAsset, useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
 
 import { ALERT_MESSAGES } from './ImageMetaInfo.const';
@@ -33,49 +35,69 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	onDelete,
 	onViewChange,
 }) => {
+	const { activeLanguage } = useContext(formRendererConnector.api.FormContext);
+
 	const { imageFieldValue, mode, selectedFiles, config, externalFiles } = data;
 	const isCreating = mode === ModalViewMode.CREATE;
-	// When creating check if user has uploaded or selected from assets
-	// otherwise, when editing, the meta should be available from imageFieldValue
-	const currentValue = isCreating
-		? selectedFiles?.[0]?.data || imageFieldValue?.meta || externalFiles?.[0]
-		: imageFieldValue?.meta;
-
-	// Always use alt and title from imageFieldValue.meta for the default values
-	// if they are not avalaible use the current value's name
-
-	const initialValues = currentValue
-		? {
-				name: currentValue?.name ?? '',
-				figuratively: !!currentValue?.figuratively,
-				alt:
-					imageFieldValue?.meta?.alt ??
-					(currentValue as ExternalAsset)?.alt ??
-					currentValue?.name ??
-					'',
-				title:
-					imageFieldValue?.meta?.title ??
-					(currentValue as ExternalAsset)?.title ??
-					currentValue?.name ??
-					'',
-				description: currentValue?.description ?? '',
-				copyright: currentValue?.copyright ?? '',
-		  }
-		: {
-				...IMAGE_META_INITIAL_FORM_STATE,
-				figuratively: !!config?.figuratively,
-		  };
 
 	/**
 	 * Hooks
 	 */
 
+	// When creating check if user has uploaded or selected from assets
+	// otherwise, when editing, the meta should be available from imageFieldValue
+	const currentValue = useMemo(() => {
+		return isCreating
+			? selectedFiles?.[0]?.data.translations?.find(trans => trans.lang === activeLanguage)
+					?.data ||
+					selectedFiles?.[0]?.data ||
+					imageFieldValue?.meta ||
+					externalFiles?.[0]
+			: imageFieldValue?.meta;
+	}, [activeLanguage, externalFiles, imageFieldValue, isCreating, selectedFiles]);
+
+	// Always use alt and title from imageFieldValue.meta for the default values
+	// if they are not avalaible use the current value's name
+	const initialValues = useMemo(() => {
+		return currentValue
+			? {
+					name: currentValue?.name ?? '',
+					figuratively: !!currentValue?.figuratively,
+					alt:
+						imageFieldValue?.meta?.alt ??
+						(currentValue as ExternalAsset)?.alt ??
+						currentValue?.name ??
+						'',
+					title:
+						imageFieldValue?.meta?.title ??
+						(currentValue as ExternalAsset)?.title ??
+						currentValue?.name ??
+						'',
+					description: currentValue?.description ?? '',
+					copyright: currentValue?.copyright ?? '',
+			  }
+			: {
+					...IMAGE_META_INITIAL_FORM_STATE,
+					figuratively: !!config?.figuratively,
+			  };
+	}, [config, currentValue, imageFieldValue]);
+
 	const [t] = useCoreTranslation();
 	const [, creatingState] = useAssets();
+	const [, asset] = useAsset();
 	const [formValues, setFormValues] = useState<ImageMetaFormState>(initialValues);
 	const isSaving = useMemo(() => creatingState === LoadingState.Loading, [creatingState]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(true, formValues);
 	const { siteId } = useSiteContext();
+
+	useEffect(() => {
+		if (
+			imageFieldValue?.original?.asset?.uuid &&
+			asset?.uuid !== imageFieldValue?.original?.asset?.uuid
+		) {
+			assetsFacade.getAsset(imageFieldValue?.original.asset.uuid, siteId);
+		}
+	}, [asset, imageFieldValue, siteId]);
 
 	/**
 	 * Function
@@ -90,7 +112,11 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		);
 	};
 
-	const filesToFormData = (files: File[] = [], formValues: ImageMetaFormState): FormData => {
+	const filesToFormData = (
+		files: File[] = [],
+		formValues: ImageMetaFormState,
+		lang?: string
+	): FormData => {
 		return files.reduce((formData, file) => {
 			formData.append('file', file);
 			formData.append('name', formValues.name);
@@ -103,6 +129,25 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			};
 			formData.append('attributes', JSON.stringify(attributes, null, 2));
 			formData.append('category', 'image');
+
+			if (lang) {
+				formData.append(
+					'translations',
+					JSON.stringify([
+						{
+							lang,
+							data: {
+								name: formValues.name,
+								description: formValues.description,
+								copyright: formValues.copyright,
+								figuratively: (formValues.figuratively || false).toString(),
+								title: formValues.title,
+								alt: formValues.alt,
+							},
+						},
+					])
+				);
+			}
 
 			return formData;
 		}, new FormData());
@@ -120,7 +165,8 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	const externalsToFormData = async (
 		files: ExternalAsset[] = [],
-		formValues: ImageMetaFormState
+		formValues: ImageMetaFormState,
+		lang?: string
 	): Promise<FormData> => {
 		return await files.reduce(async (acc, file) => {
 			const formData = await acc;
@@ -138,63 +184,132 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 			formData.append('attributes', JSON.stringify(attributes, null, 2));
 			formData.append('category', 'image');
 
+			if (lang) {
+				formData.append(
+					'translations',
+					JSON.stringify([
+						{
+							lang,
+							data: {
+								name: formValues.name,
+								description: formValues.description,
+								copyright: formValues.copyright,
+								figuratively: (formValues.figuratively || false).toString(),
+								title: formValues.title,
+								alt: formValues.alt,
+							},
+						},
+					])
+				);
+			}
+
 			return formData;
 		}, Promise.resolve(new FormData()));
 	};
 
 	const onSubmit = (formValues: ImageMetaFormState): void => {
 		const uploadNewImage = Array.isArray(data.queuedFiles) && data.queuedFiles.length > 0;
+		const editImage = Array.isArray(data.selectedFiles) && data.selectedFiles.length > 0;
 		const parseExternalFiles =
 			Array.isArray(data.externalFiles) && data.externalFiles.length > 0;
 
-		if (uploadNewImage) {
-			const formData = filesToFormData(data.queuedFiles, formValues);
+		const activeLanguageTranslation = (
+			data.selectedFiles[0]?.data.translations ||
+			asset?.data?.translations ||
+			[]
+		).find(trans => trans.lang === activeLanguage);
 
-			assetsFacade
-				.createAsset(formData, siteId)
-				.then(response => {
-					if (!response.data) {
-						showUploadError();
-						return;
-					}
+		if (uploadNewImage || (editImage && !activeLanguageTranslation && activeLanguage)) {
+			let upsertPromise = undefined;
 
-					const { data: responseData } = response;
+			if (uploadNewImage) {
+				upsertPromise = assetsFacade.createAsset(
+					filesToFormData(data.queuedFiles, formValues, activeLanguage),
+					siteId
+				);
+			}
 
-					data.setImageFieldValue({
-						...data.imageFieldValue,
-						meta: {
-							name: responseData?.name,
-							alt: responseData?.attributes?.alt,
-							title: responseData?.attributes?.title,
-							description: responseData?.description,
-							copyright: responseData?.copyright,
-							figuratively: responseData?.figuratively,
-						},
-						original: {
-							asset: {
-								mime: responseData?.file?.type?.mime,
-								uuid: response.uuid,
-								size: {
-									height: responseData?.metaData?.height ?? 0,
-									width: responseData?.metaData?.width ?? 0,
+			if (editImage) {
+				upsertPromise = assetsFacade.updateAsset(
+					data.selectedFiles[0].uuid,
+					{
+						...pick(
+							['name', 'description', 'copyright', 'thumbnail', 'attributes'],
+							data.selectedFiles[0].data
+						),
+						translations: [
+							...(data.selectedFiles[0].data.translations || []),
+							{
+								lang: activeLanguage as string,
+								data: {
+									name: formValues.name,
+									description: formValues.description,
+									copyright: formValues.copyright,
+									figuratively: !!formValues.figuratively,
+									title: formValues.title,
+									alt: formValues.alt,
 								},
-								fileName: responseData?.file?.name,
 							},
-						},
+						],
+					},
+					siteId
+				);
+			}
+
+			upsertPromise &&
+				upsertPromise
+					.then(response => {
+						if (!response.data) {
+							showUploadError();
+							return;
+						}
+
+						const { data: responseData } = response;
+
+						const translationData = responseData.translations?.find(
+							trans => trans.lang === activeLanguage
+						);
+
+						data.setImageFieldValue({
+							...data.imageFieldValue,
+							meta: {
+								name: translationData?.data.name || responseData?.name,
+								alt: translationData?.data.alt || responseData?.attributes?.alt,
+								title:
+									translationData?.data.title || responseData?.attributes?.title,
+								description:
+									translationData?.data.description || responseData?.description,
+								copyright:
+									translationData?.data.copyright || responseData?.copyright,
+								figuratively:
+									translationData?.data.figuratively ||
+									responseData?.figuratively,
+							},
+							original: {
+								asset: {
+									mime: responseData?.file?.type?.mime,
+									uuid: response.uuid,
+									size: {
+										height: responseData?.metaData?.height ?? 0,
+										width: responseData?.metaData?.width ?? 0,
+									},
+									fileName: responseData?.file?.name,
+								},
+							},
+						});
+						resetDetectValueChanges();
+						onViewChange(ModalViewTarget.EDIT_CROP, ModalViewMode.EDIT);
+					})
+					.catch(error => {
+						console.error(error);
+						showUploadError();
 					});
-					resetDetectValueChanges();
-					onViewChange(ModalViewTarget.EDIT_CROP, ModalViewMode.EDIT);
-				})
-				.catch(error => {
-					console.error(error);
-					showUploadError();
-				});
 
 			return;
 		}
 
 		if (parseExternalFiles) {
-			externalsToFormData(data.externalFiles, formValues).then(formData => {
+			externalsToFormData(data.externalFiles, formValues, activeLanguage).then(formData => {
 				assetsFacade
 					.createAsset(formData, siteId)
 					.then(response => {
@@ -205,15 +320,24 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 						const { data: responseData } = response;
 
+						const translationData = responseData.translations?.find(
+							trans => trans.lang === activeLanguage
+						);
+
 						data.setImageFieldValue({
 							...data.imageFieldValue,
 							meta: {
-								name: responseData?.name,
-								alt: responseData?.attributes?.alt,
-								title: responseData?.attributes?.title,
-								description: responseData?.description,
-								copyright: responseData?.copyright,
-								figuratively: responseData?.figuratively,
+								name: translationData?.data.name || responseData?.name,
+								alt: translationData?.data.alt || responseData?.attributes?.alt,
+								title:
+									translationData?.data.title || responseData?.attributes?.title,
+								description:
+									translationData?.data.description || responseData?.description,
+								copyright:
+									translationData?.data.copyright || responseData?.copyright,
+								figuratively:
+									translationData?.data.figuratively ||
+									responseData?.figuratively,
 							},
 							original: {
 								asset: {

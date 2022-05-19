@@ -1,6 +1,7 @@
 import { BaseEntityFacade } from '@redactie/utils';
 
 import {
+	AssetData,
 	AssetResponse,
 	AssetsApiService,
 	assetsApiService,
@@ -37,6 +38,27 @@ export class AssetsFacade extends BaseEntityFacade<AssetsStore, AssetsApiService
 			});
 	}
 
+	public getAsset(assetId: string, siteId?: string): void {
+		this.store.setIsFetchingOne(true);
+
+		this.service
+			.getAsset(assetId, siteId)
+			.then(response => {
+				if (response) {
+					this.store.update({
+						asset: response,
+						isFetchingOne: false,
+					});
+				}
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isFetchingOne: false,
+				});
+			});
+	}
+
 	public createAsset(formData: FormData, siteId?: string): Promise<AssetResponse> {
 		this.store.setIsCreating(true);
 
@@ -52,6 +74,30 @@ export class AssetsFacade extends BaseEntityFacade<AssetsStore, AssetsApiService
 				this.store.update({
 					error,
 					isCreating: false,
+				});
+				return error;
+			});
+	}
+
+	public updateAsset(
+		assetId: string,
+		assetData: Partial<AssetData>,
+		siteId?: string
+	): Promise<AssetResponse> {
+		this.store.setIsUpdating(true);
+
+		return this.service
+			.updateAsset(assetId, assetData, siteId)
+			.then(response => {
+				if (response) {
+					this.store.setIsUpdating(false);
+				}
+				return response;
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isUpdating: false,
 				});
 				return error;
 			});
