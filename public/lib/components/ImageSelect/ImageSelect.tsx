@@ -10,6 +10,72 @@ import { ImageSelectProps } from './ImageSelect.types';
 
 const cx = classnames.bind(styles);
 
+/**
+ * Renders a list of selectable images
+ *
+ * ```tsx
+ * export const wrapperComponent = () => {
+ * 	const assets = [{
+ *		data: {
+ *			"name": "Het eiland",
+ *			"category": "image",
+ *			"description": "",
+ *			"copyright": "",
+ *			"file": {
+ *				"type": {
+ *					"mime": "image/jpeg",
+ *					"extension": "jpeg"
+ *				},
+ *				"size": 152560,
+ *				"reference": "19374b49-ae12-4638-8a13-bd6f78bb5257",
+ *				"name": "eiland.jpeg"
+ *			},
+ *			"parent": null,
+ *			"thumbnail": "01485c10-a6ef-4209-96d2-6565fc760975",
+ *			"metaData": {
+ *				"width": 1400,
+ *				"height": 788
+ *			},
+ *			"type": "source",
+ *			"attributes": {
+ *				"alt": "Het eiland",
+ *				"title": "Het eiland"
+ *			},
+ *			"figuratively": false,
+ *			"translations": [
+ *				{
+ *					"data": {
+ *						"name": "Het eiland",
+ *						"description": "",
+ *						"copyright": "",
+ *						"figuratively": false,
+ *						"title": "Het eiland",
+ *						"alt": "Het eiland"
+ *					},
+ *					"lang": "nl"
+ *				}
+ *			]
+ *		},
+ * 		src: `${baseUrl}/${assetId}/file?x-tenant-id=${CoreConfig.tenantId}`;
+ *		title: "Het eiland";
+ *		disabled: false;
+ *		uuid: "939620e9-8599-4cdf-829b-bf496836a939"
+ * 	}];
+ * 	const selectedAssets = [];
+ *
+ * 	const onImageSelect = (item: ImageSelectItem): void => {
+ * 		// ...
+ * 	}
+ * 	return (
+ * 		<ImageSelect
+ *			items={assets}
+ *			selection={selectedAssets}
+ *			onSelect={onImageSelect}
+ *		/>
+ * 	);
+ * };
+ * ```
+ */
 const ImageSelect: FC<ImageSelectProps> = ({
 	className,
 	compareSelected,

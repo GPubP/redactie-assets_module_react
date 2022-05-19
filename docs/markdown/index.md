@@ -13,6 +13,7 @@
 - [ExternalAsset](../wiki/index.ExternalAsset)
 - [ExternalModalViewComponentProps](../wiki/index.ExternalModalViewComponentProps)
 - [ExternalProviderProps](../wiki/index.ExternalProviderProps)
+- [ImageSelectProps](../wiki/index.ImageSelectProps)
 - [ModalViewComponentProps](../wiki/index.ModalViewComponentProps)
 - [ModalViewData](../wiki/index.ModalViewData)
 - [NavListItem](../wiki/index.NavListItem)

@@ -6,3 +6,5 @@ export interface AssetsAPI {
 	registerAssetsProvider: typeof registerAssetsProvider;
 	ImageSelect: typeof ImageSelect;
 }
+
+export { ImageSelectProps } from '../components';
