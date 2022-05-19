@@ -8,6 +8,7 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { isEmpty } from '@datorama/akita';
 import { InputFieldProps } from '@redactie/form-renderer-module';
+import { useSiteContext } from '@redactie/utils';
 import classnames from 'classnames/bind';
 import React, { FC, useEffect, useState } from 'react';
 
@@ -44,6 +45,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 	const imageFieldValue = (field.value as unknown) as ImageFieldValue;
 	const hasCrops = !!imageFieldValue?.crops && !isEmpty(imageFieldValue.crops);
 	const FormRendererFieldTitle = formRendererConnector.api.FormRendererFieldTitle;
+	const { siteId } = useSiteContext();
 
 	/**
 	 * Hooks
@@ -283,7 +285,7 @@ const ImageUpload: FC<InputFieldProps> = ({ fieldProps, fieldSchema, fieldHelper
 										onManualUpload: handleManualUpload,
 										setImageFieldValue: fieldHelperProps.setValue,
 									}}
-									config={MODAL_VIEW_MODE_MAP(externalProviders)}
+									config={MODAL_VIEW_MODE_MAP(externalProviders, siteId)}
 									mode={mode}
 									onCancel={onCloseModal}
 									onDelete={onDelete}

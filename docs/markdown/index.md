@@ -37,7 +37,7 @@
 
 #### Defined in
 
-lib/store/api/externalProviders/externalProviders.model.ts:19
+lib/store/api/externalProviders/externalProviders.model.ts:20
 
 ___
 
