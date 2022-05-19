@@ -6,9 +6,20 @@
 
 ### Properties
 
+- [ImageSelect](../wiki/index.AssetsAPI#imageselect-1)
 - [registerAssetsProvider](../wiki/index.AssetsAPI#registerassetsprovider-1)
 
 ## Properties
+
+### ImageSelect
+
+• **ImageSelect**: `FC`<[`ImageSelectProps`](../wiki/index.ImageSelectProps)\>
+
+#### Defined in
+
+lib/api/api.types.ts:7
+
+___
 
 ### registerAssetsProvider
 
@@ -35,4 +46,4 @@ void
 
 #### Defined in
 
-lib/api/api.types.ts:4
+lib/api/api.types.ts:6
