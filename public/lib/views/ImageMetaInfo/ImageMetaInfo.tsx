@@ -39,6 +39,11 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	const { imageFieldValue, mode, selectedFiles, config, externalFiles } = data;
 	const isCreating = mode === ModalViewMode.CREATE;
+
+	/**
+	 * Hooks
+	 */
+
 	// When creating check if user has uploaded or selected from assets
 	// otherwise, when editing, the meta should be available from imageFieldValue
 	const currentValue = useMemo(() => {
@@ -76,10 +81,6 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 					figuratively: !!config?.figuratively,
 			  };
 	}, [config, currentValue, imageFieldValue]);
-
-	/**
-	 * Hooks
-	 */
 
 	const [t] = useCoreTranslation();
 	const [, creatingState] = useAssets();
