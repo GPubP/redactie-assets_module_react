@@ -22,6 +22,11 @@ export class AssetsApiService {
 			.json<AssetsResponse>();
 	}
 
+	public async getAsset(assetId: string, siteId?: string): Promise<AssetResponse> {
+		const path = siteId ? `sites/${siteId}/assets/${assetId}` : `assets/${assetId}`;
+		return await apiService.get(path).json<AssetResponse>();
+	}
+
 	public async createAsset(formData: FormData, siteId?: string): Promise<AssetResponse> {
 		const path = siteId ? `sites/${siteId}/files` : 'files';
 		return await apiService

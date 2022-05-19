@@ -8,7 +8,7 @@ import {
 	useSiteContext,
 } from '@redactie/utils';
 import { pick } from 'ramda';
-import React, { FC, useContext, useMemo, useState } from 'react';
+import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 
 import { ALERT_CONTAINER_IDS } from '../../assets.const';
 import { ExternalAsset, ModalViewComponentProps } from '../../assets.types';
@@ -24,7 +24,7 @@ import {
 } from '../../components';
 import { formRendererConnector } from '../../connectors';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
-import { useAssets } from '../../hooks';
+import { useAsset, useAssets } from '../../hooks';
 import { assetsFacade } from '../../store/assets';
 
 import { ALERT_MESSAGES } from './ImageMetaInfo.const';
@@ -80,10 +80,20 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	const [t] = useCoreTranslation();
 	const [, creatingState] = useAssets();
+	const [, asset] = useAsset();
 	const [formValues, setFormValues] = useState<ImageMetaFormState>(initialValues);
 	const isSaving = useMemo(() => creatingState === LoadingState.Loading, [creatingState]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(true, formValues);
 	const { siteId } = useSiteContext();
+
+	useEffect(() => {
+		if (
+			imageFieldValue?.original.asset.uuid &&
+			asset?.uuid !== imageFieldValue?.original.asset.uuid
+		) {
+			assetsFacade.getAsset(imageFieldValue?.original.asset.uuid, siteId);
+		}
+	}, [asset, imageFieldValue, siteId]);
 
 	/**
 	 * Function
@@ -199,9 +209,11 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 		const parseExternalFiles =
 			Array.isArray(data.externalFiles) && data.externalFiles.length > 0;
 
-		const activeLanguageTranslation = (data.selectedFiles[0].data.translations || []).find(
-			trans => trans.lang === activeLanguage
-		);
+		const activeLanguageTranslation = (
+			data.selectedFiles[0]?.data.translations ||
+			asset?.data?.translations ||
+			[]
+		).find(trans => trans.lang === activeLanguage);
 
 		if (uploadNewImage || (editImage && !activeLanguageTranslation && activeLanguage)) {
 			let upsertPromise = undefined;
