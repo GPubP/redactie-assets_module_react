@@ -41,38 +41,41 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 	const isCreating = mode === ModalViewMode.CREATE;
 	// When creating check if user has uploaded or selected from assets
 	// otherwise, when editing, the meta should be available from imageFieldValue
-	const currentValue = isCreating
-		? selectedFiles?.[0]?.data.translations?.find(trans => trans.lang === activeLanguage)
-				?.data ||
-		  selectedFiles?.[0]?.data ||
-		  imageFieldValue?.meta ||
-		  externalFiles?.[0]
-		: imageFieldValue?.meta;
+	const currentValue = useMemo(() => {
+		return isCreating
+			? selectedFiles?.[0]?.data.translations?.find(trans => trans.lang === activeLanguage)
+					?.data ||
+					selectedFiles?.[0]?.data ||
+					imageFieldValue?.meta ||
+					externalFiles?.[0]
+			: imageFieldValue?.meta;
+	}, [activeLanguage, externalFiles, imageFieldValue, isCreating, selectedFiles]);
 
 	// Always use alt and title from imageFieldValue.meta for the default values
 	// if they are not avalaible use the current value's name
-
-	const initialValues = currentValue
-		? {
-				name: currentValue?.name ?? '',
-				figuratively: !!currentValue?.figuratively,
-				alt:
-					imageFieldValue?.meta?.alt ??
-					(currentValue as ExternalAsset)?.alt ??
-					currentValue?.name ??
-					'',
-				title:
-					imageFieldValue?.meta?.title ??
-					(currentValue as ExternalAsset)?.title ??
-					currentValue?.name ??
-					'',
-				description: currentValue?.description ?? '',
-				copyright: currentValue?.copyright ?? '',
-		  }
-		: {
-				...IMAGE_META_INITIAL_FORM_STATE,
-				figuratively: !!config?.figuratively,
-		  };
+	const initialValues = useMemo(() => {
+		return currentValue
+			? {
+					name: currentValue?.name ?? '',
+					figuratively: !!currentValue?.figuratively,
+					alt:
+						imageFieldValue?.meta?.alt ??
+						(currentValue as ExternalAsset)?.alt ??
+						currentValue?.name ??
+						'',
+					title:
+						imageFieldValue?.meta?.title ??
+						(currentValue as ExternalAsset)?.title ??
+						currentValue?.name ??
+						'',
+					description: currentValue?.description ?? '',
+					copyright: currentValue?.copyright ?? '',
+			  }
+			: {
+					...IMAGE_META_INITIAL_FORM_STATE,
+					figuratively: !!config?.figuratively,
+			  };
+	}, [config, currentValue, imageFieldValue]);
 
 	/**
 	 * Hooks
@@ -88,8 +91,8 @@ const ImageMetaInfo: FC<ModalViewComponentProps<ModalViewData>> = ({
 
 	useEffect(() => {
 		if (
-			imageFieldValue?.original.asset.uuid &&
-			asset?.uuid !== imageFieldValue?.original.asset.uuid
+			imageFieldValue?.original?.asset?.uuid &&
+			asset?.uuid !== imageFieldValue?.original?.asset?.uuid
 		) {
 			assetsFacade.getAsset(imageFieldValue?.original.asset.uuid, siteId);
 		}
