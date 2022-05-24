@@ -12,17 +12,17 @@
 
 ### Properties
 
-- [active](../wiki/index.Tab#active-1)
-- [disabled](../wiki/index.Tab#disabled-1)
-- [id](../wiki/index.Tab#id-1)
-- [name](../wiki/index.Tab#name-1)
-- [target](../wiki/index.Tab#target-1)
-- [type](../wiki/index.Tab#type-1)
-- [viewComponent](../wiki/index.Tab#viewcomponent-1)
+- [active](../wiki/index.Tab#active)
+- [disabled](../wiki/index.Tab#disabled)
+- [id](../wiki/index.Tab#id)
+- [name](../wiki/index.Tab#name)
+- [target](../wiki/index.Tab#target)
+- [type](../wiki/index.Tab#type)
+- [viewComponent](../wiki/index.Tab#viewcomponent)
 
 ### Methods
 
-- [onClick](../wiki/index.Tab#onclick-1)
+- [onClick](../wiki/index.Tab#onclick)
 
 ## Properties
 

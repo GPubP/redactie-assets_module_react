@@ -4,7 +4,7 @@
 
 ### Functions
 
-- [registerAssetsAPI](../wiki/lib.api#registerassetsapi-1)
+- [registerAssetsAPI](../wiki/lib.api#registerassetsapi)
 
 ## Functions
 

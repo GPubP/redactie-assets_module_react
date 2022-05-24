@@ -6,13 +6,13 @@
 
 ### Properties
 
-- [alt](../wiki/index.ExternalAsset#alt-1)
-- [content](../wiki/index.ExternalAsset#content-1)
-- [copyright](../wiki/index.ExternalAsset#copyright-1)
-- [description](../wiki/index.ExternalAsset#description-1)
-- [figuratively](../wiki/index.ExternalAsset#figuratively-1)
-- [name](../wiki/index.ExternalAsset#name-1)
-- [title](../wiki/index.ExternalAsset#title-1)
+- [alt](../wiki/index.ExternalAsset#alt)
+- [content](../wiki/index.ExternalAsset#content)
+- [copyright](../wiki/index.ExternalAsset#copyright)
+- [description](../wiki/index.ExternalAsset#description)
+- [figuratively](../wiki/index.ExternalAsset#figuratively)
+- [name](../wiki/index.ExternalAsset#name)
+- [title](../wiki/index.ExternalAsset#title)
 
 ## Properties
 

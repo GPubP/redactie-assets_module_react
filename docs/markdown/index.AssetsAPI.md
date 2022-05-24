@@ -6,8 +6,8 @@
 
 ### Properties
 
-- [ImageSelect](../wiki/index.AssetsAPI#imageselect-1)
-- [registerAssetsProvider](../wiki/index.AssetsAPI#registerassetsprovider-1)
+- [ImageSelect](../wiki/index.AssetsAPI#imageselect)
+- [registerAssetsProvider](../wiki/index.AssetsAPI#registerassetsprovider)
 
 ## Properties
 
@@ -23,7 +23,7 @@ ___
 
 ### registerAssetsProvider
 
-• **registerAssetsProvider**: (`name`: `string`, `options`: [`ExternalProviderOptions`](../wiki/index#externalprovideroptions-1)) => `void`
+• **registerAssetsProvider**: (`name`: `string`, `options`: [`ExternalProviderOptions`](../wiki/index#externalprovideroptions)) => `void`
 
 #### Type declaration
 
@@ -36,7 +36,7 @@ Register a external assets provider
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `name` | `string` | A unique name to identity your external assets provider |
-| `options` | [`ExternalProviderOptions`](../wiki/index#externalprovideroptions-1) | options to setup your external assets provider |
+| `options` | [`ExternalProviderOptions`](../wiki/index#externalprovideroptions) | options to setup your external assets provider |
 
 ##### Returns
 

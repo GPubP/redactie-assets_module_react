@@ -6,9 +6,9 @@
 
 ### Properties
 
-- [message](../wiki/index.AlertMessage#message-1)
-- [title](../wiki/index.AlertMessage#title-1)
-- [type](../wiki/index.AlertMessage#type-1)
+- [message](../wiki/index.AlertMessage#message)
+- [title](../wiki/index.AlertMessage#title)
+- [type](../wiki/index.AlertMessage#type)
 
 ## Properties
 
