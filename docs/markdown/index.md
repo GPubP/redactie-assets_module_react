@@ -2,6 +2,10 @@
 
 ## Table of contents
 
+### Namespaces
+
+- [&lt;internal\&gt;](../wiki/index.%3Cinternal%3E)
+
 ### Enumerations
 
 - [CropMethods](../wiki/index.CropMethods)
@@ -21,19 +25,19 @@
 
 ### Type aliases
 
-- [ExternalProviderOptions](../wiki/index#externalprovideroptions-1)
-- [ImageSelectItem](../wiki/index#imageselectitem-1)
-- [SelectedAsset](../wiki/index#selectedasset-1)
+- [ExternalProviderOptions](../wiki/index#externalprovideroptions)
+- [ImageSelectItem](../wiki/index#imageselectitem)
+- [SelectedAsset](../wiki/index#selectedasset)
 
 ### Variables
 
-- [ModalViewContainer](../wiki/index#modalviewcontainer-1)
+- [ModalViewContainer](../wiki/index#modalviewcontainer)
 
 ## Type aliases
 
 ### ExternalProviderOptions
 
-Ƭ **ExternalProviderOptions**: `Omit`<`ExternalProviderModel`, ``"target"`` \| ``"type"``\>
+Ƭ **ExternalProviderOptions**: `Omit`<[`ExternalProviderModel`](../wiki/index.%3Cinternal%3E.ExternalProviderModel), ``"target"`` \| ``"type"``\>
 
 #### Defined in
 
@@ -59,7 +63,7 @@ ___
 
 ### SelectedAsset
 
-Ƭ **SelectedAsset**: `Pick`<`AssetResponse`, ``"uuid"`` \| ``"data"``\>
+Ƭ **SelectedAsset**: `Pick`<[`AssetResponse`](../wiki/index.%3Cinternal%3E.AssetResponse), ``"uuid"`` \| ``"data"``\>
 
 #### Defined in
 

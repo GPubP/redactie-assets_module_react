@@ -6,13 +6,13 @@
 
 ### Properties
 
-- [description](../wiki/index.NavListItem#description-1)
-- [hasError](../wiki/index.NavListItem#haserror-1)
-- [label](../wiki/index.NavListItem#label-1)
+- [description](../wiki/index.NavListItem#description)
+- [hasError](../wiki/index.NavListItem#haserror)
+- [label](../wiki/index.NavListItem#label)
 
 ### Methods
 
-- [onClick](../wiki/index.NavListItem#onclick-1)
+- [onClick](../wiki/index.NavListItem#onclick)
 
 ## Properties
 

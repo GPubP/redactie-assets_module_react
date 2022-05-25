@@ -6,15 +6,15 @@
 
 ### Properties
 
-- [className](../wiki/index.ImageSelectProps#classname-1)
-- [dataKey](../wiki/index.ImageSelectProps#datakey-1)
-- [items](../wiki/index.ImageSelectProps#items-1)
-- [selection](../wiki/index.ImageSelectProps#selection-1)
+- [className](../wiki/index.ImageSelectProps#classname)
+- [dataKey](../wiki/index.ImageSelectProps#datakey)
+- [items](../wiki/index.ImageSelectProps#items)
+- [selection](../wiki/index.ImageSelectProps#selection)
 
 ### Methods
 
-- [compareSelected](../wiki/index.ImageSelectProps#compareselected-1)
-- [onSelect](../wiki/index.ImageSelectProps#onselect-1)
+- [compareSelected](../wiki/index.ImageSelectProps#compareselected)
+- [onSelect](../wiki/index.ImageSelectProps#onselect)
 
 ## Properties
 
@@ -44,7 +44,7 @@ ___
 
 ### items
 
-• **items**: [`ImageSelectItem`](../wiki/index#imageselectitem-1)<{ `[key: string]`: `any`;  }\>[]
+• **items**: [`ImageSelectItem`](../wiki/index#imageselectitem)<{ `[key: string]`: `any`;  }\>[]
 
 List of images
 
@@ -56,7 +56,7 @@ ___
 
 ### selection
 
-• **selection**: (`string` \| [`ImageSelectItem`](../wiki/index#imageselectitem-1)<{ `[key: string]`: `any`;  }\>)[]
+• **selection**: (`string` \| [`ImageSelectItem`](../wiki/index#imageselectitem)<{ `[key: string]`: `any`;  }\>)[]
 
 List of selected items / images
 
@@ -74,7 +74,7 @@ lib/components/ImageSelect/ImageSelect.types.ts:12
 
 | Name | Type |
 | :------ | :------ |
-| `item` | [`ImageSelectItem`](../wiki/index#imageselectitem-1)<{ `[key: string]`: `any`;  }\> |
+| `item` | [`ImageSelectItem`](../wiki/index#imageselectitem)<{ `[key: string]`: `any`;  }\> |
 
 #### Returns
 
@@ -96,7 +96,7 @@ Callback that is called when an image is selected
 
 | Name | Type |
 | :------ | :------ |
-| `item` | [`ImageSelectItem`](../wiki/index#imageselectitem-1)<{ `[key: string]`: `any`;  }\> |
+| `item` | [`ImageSelectItem`](../wiki/index#imageselectitem)<{ `[key: string]`: `any`;  }\> |
 
 #### Returns
 

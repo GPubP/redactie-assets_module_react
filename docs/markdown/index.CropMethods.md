@@ -6,10 +6,10 @@
 
 ### Enumeration members
 
-- [BOUNDS](../wiki/index.CropMethods#bounds-1)
-- [EXACT](../wiki/index.CropMethods#exact-1)
-- [FREE](../wiki/index.CropMethods#free-1)
-- [RATIO](../wiki/index.CropMethods#ratio-1)
+- [BOUNDS](../wiki/index.CropMethods#bounds)
+- [EXACT](../wiki/index.CropMethods#exact)
+- [FREE](../wiki/index.CropMethods#free)
+- [RATIO](../wiki/index.CropMethods#ratio)
 
 ## Enumeration members
 

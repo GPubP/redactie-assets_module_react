@@ -6,7 +6,7 @@
 
 ### Properties
 
-- [test](../wiki/index.ExternalProviderProps#test-1)
+- [test](../wiki/index.ExternalProviderProps#test)
 
 ## Properties
 

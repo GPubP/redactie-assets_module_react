@@ -12,11 +12,11 @@
 
 ### Properties
 
-- [data](../wiki/index.ExternalModalViewComponentProps#data-1)
+- [data](../wiki/index.ExternalModalViewComponentProps#data)
 
 ### Methods
 
-- [onSelect](../wiki/index.ExternalModalViewComponentProps#onselect-1)
+- [onSelect](../wiki/index.ExternalModalViewComponentProps#onselect)
 
 ## Properties
 

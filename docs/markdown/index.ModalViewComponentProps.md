@@ -12,14 +12,14 @@
 
 ### Properties
 
-- [data](../wiki/index.ModalViewComponentProps#data-1)
+- [data](../wiki/index.ModalViewComponentProps#data)
 
 ### Methods
 
-- [onCancel](../wiki/index.ModalViewComponentProps#oncancel-1)
-- [onDelete](../wiki/index.ModalViewComponentProps#ondelete-1)
-- [onSelect](../wiki/index.ModalViewComponentProps#onselect-1)
-- [onViewChange](../wiki/index.ModalViewComponentProps#onviewchange-1)
+- [onCancel](../wiki/index.ModalViewComponentProps#oncancel)
+- [onDelete](../wiki/index.ModalViewComponentProps#ondelete)
+- [onSelect](../wiki/index.ModalViewComponentProps#onselect)
+- [onViewChange](../wiki/index.ModalViewComponentProps#onviewchange)
 
 ## Properties
 
@@ -75,7 +75,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `assets` | [`ImageSelectItem`](../wiki/index#imageselectitem-1)<[`SelectedAsset`](../wiki/index#selectedasset-1)\>[] |
+| `assets` | [`ImageSelectItem`](../wiki/index#imageselectitem)<[`SelectedAsset`](../wiki/index#selectedasset)\>[] |
 
 #### Returns
 

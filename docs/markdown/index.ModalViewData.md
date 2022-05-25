@@ -6,23 +6,23 @@
 
 ### Properties
 
-- [config](../wiki/index.ModalViewData#config-1)
-- [externalFiles](../wiki/index.ModalViewData#externalfiles-1)
-- [imageFieldValue](../wiki/index.ModalViewData#imagefieldvalue-1)
-- [mode](../wiki/index.ModalViewData#mode-1)
-- [queuedFiles](../wiki/index.ModalViewData#queuedfiles-1)
-- [selectedFiles](../wiki/index.ModalViewData#selectedfiles-1)
+- [config](../wiki/index.ModalViewData#config)
+- [externalFiles](../wiki/index.ModalViewData#externalfiles)
+- [imageFieldValue](../wiki/index.ModalViewData#imagefieldvalue)
+- [mode](../wiki/index.ModalViewData#mode)
+- [queuedFiles](../wiki/index.ModalViewData#queuedfiles)
+- [selectedFiles](../wiki/index.ModalViewData#selectedfiles)
 
 ### Methods
 
-- [onManualUpload](../wiki/index.ModalViewData#onmanualupload-1)
-- [setImageFieldValue](../wiki/index.ModalViewData#setimagefieldvalue-1)
+- [onManualUpload](../wiki/index.ModalViewData#onmanualupload)
+- [setImageFieldValue](../wiki/index.ModalViewData#setimagefieldvalue)
 
 ## Properties
 
 ### config
 
-• `Optional` **config**: `ImageUploadConfig`
+• `Optional` **config**: [`ImageUploadConfig`](../wiki/index.%3Cinternal%3E.ImageUploadConfig)
 
 #### Defined in
 
@@ -42,7 +42,7 @@ ___
 
 ### imageFieldValue
 
-• `Optional` **imageFieldValue**: `ImageFieldValue`
+• `Optional` **imageFieldValue**: [`ImageFieldValue`](../wiki/index.%3Cinternal%3E.ImageFieldValue)
 
 #### Defined in
 
@@ -52,7 +52,7 @@ ___
 
 ### mode
 
-• **mode**: `ModalViewMode`
+• **mode**: [`ModalViewMode`](../wiki/index.%3Cinternal%3E.ModalViewMode)
 
 #### Defined in
 
@@ -72,7 +72,7 @@ ___
 
 ### selectedFiles
 
-• **selectedFiles**: [`SelectedAsset`](../wiki/index#selectedasset-1)[]
+• **selectedFiles**: [`SelectedAsset`](../wiki/index#selectedasset)[]
 
 #### Defined in
 
